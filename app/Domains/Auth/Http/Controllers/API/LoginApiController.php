@@ -166,7 +166,13 @@ class LoginApiController extends APIBaseController
 
         $countryCode = $request->input('country_code');
         $mobileNumber = $request->input('mobile_number');
-        $fullNumber = $countryCode . $mobileNumber;
+
+        // Check if the mobile number starts with 962
+        if (str_starts_with($mobileNumber, '962')) {
+            $fullNumber = $mobileNumber; // Use the mobile number as is
+        } else {
+            $fullNumber = $countryCode . $mobileNumber; // Append country code
+        }
 
         $user = User::where('mobile_number', $mobileNumber)->first();
 
@@ -185,6 +191,7 @@ class LoginApiController extends APIBaseController
 
         return response()->json(['message' => 'OTP sent successfully']);
     }
+
 
 
     public function otpAuthenticate(Request $request)
