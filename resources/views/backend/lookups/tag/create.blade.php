@@ -42,7 +42,16 @@
                     </select>
                     </div>
                 </div>
-
+                <div class="form-group mt-3 row">
+                    <label class="col-md-2 col-form-label" for="category_id">{{__("Select Category:")}}</label>
+                    <div class="col-md-10">
+                        <select class="form-control" id="category_id" name="category_id">
+                            @foreach($categories as $category)
+                                        <option value="{{ $category->id }}"> {{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
 
 
             </x-slot>

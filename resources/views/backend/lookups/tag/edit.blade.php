@@ -47,6 +47,23 @@
                         </select>
                     </div>
                 </div>
+
+
+
+                <div class="form-group mt-3 row">
+                    <label class="col-md-2 col-form-label" for="category_id">{{ __("Select Category:") }}</label>
+                    <div class="col-md-10">
+                        <select class="form-control" id="category_id" name="category_id">
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ $category->id == $tag->category_id ? 'selected' : '' }}>
+                                    - {{ $category->name }}
+                                </option>
+                            @endforeach
+
+                        </select>
+                    </div>
+                </div><!--form-group-->
             </x-slot>
             <x-slot name="footer">
                 <button class="btn btn-sm btn-primary float-right" type="submit">@lang('Update Tag')</button>

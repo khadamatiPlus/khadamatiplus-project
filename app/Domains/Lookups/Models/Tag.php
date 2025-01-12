@@ -19,7 +19,7 @@ class Tag extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = ['created_by_id', 'updated_by_id', 'name', 'name_ar', 'parent_id','created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['category_id','created_by_id', 'updated_by_id', 'name', 'name_ar', 'parent_id','created_at', 'updated_at', 'deleted_at'];
 
     public function children()
     {
@@ -36,5 +36,11 @@ class Tag extends BaseModel
     {
         return $this->belongsToMany(Service::class, 'service_tag');
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
 
 }

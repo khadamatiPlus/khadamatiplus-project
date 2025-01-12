@@ -25,6 +25,12 @@ class CategoryTransformer
                         : '',
                 ];
             }),
+            'tags' => $category->tags()->get()->transform(function ($tag) {
+                return [
+                    'id' => $tag->id,
+                    'name' => $tag->name,
+                ];
+            }),
         ];
     }
 

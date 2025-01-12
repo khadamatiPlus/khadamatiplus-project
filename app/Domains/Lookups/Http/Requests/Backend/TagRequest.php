@@ -26,6 +26,7 @@ class TagRequest extends FormRequest
                     'name' => ['required', 'max:255'],
                     'name_ar' => ['required', 'max:255'],
                     'parent_id' => 'nullable|exists:tags,id',
+                    'category_id' => 'nullable|exists:categories,id',
 
                 ];
             case self::METHOD_PATCH:
@@ -34,6 +35,7 @@ class TagRequest extends FormRequest
                     'name' => ['required', 'max:255'],
                     'name_ar' => ['required', 'max:255'],
                     'parent_id' => 'nullable|exists:tags,id',
+                    'category_id' => 'nullable|exists:categories,id',
 
                 ];
             case self::METHOD_DELETE:

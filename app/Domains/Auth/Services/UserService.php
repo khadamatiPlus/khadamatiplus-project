@@ -412,4 +412,76 @@ class UserService extends BaseService
 
         return false;
     }
+
+
+    public function authenticateUserMobileOtp($country_code,$mobile_number,$appVersionName)
+    {
+        if($appVersionName =='khadamati_merchant_app'){
+            $normalizedMobileNumber = ltrim($mobile_number, '0');
+
+            // Query the user with the modified mobile number
+            $user = $this->where('merchant_id', null, '!=')
+                ->where('mobile_number', $normalizedMobileNumber)
+                ->first();
+
+        }
+        if($appVersionName =='khadamati_customer_app'){
+
+            $user = $this->where('customer_id',null,'!=')
+                ->where('mobile_number', $mobile_number)
+                ->first();
+        }
+
+
+        if($user != null ) {
+            //TODO check if web admin
+            if(!$user->isActive()){
+                $user->tokens()->delete();
+                $resp = new \stdClass();
+                $resp->access_token = '';
+                $resp->active = false;
+                $resp->completed = true;
+                return $resp;
+            }
+
+            $resp = new \stdClass();
+
+            if($appVersionName =='khadamati_merchant_app' &&$user->isMerchantAdmin()){
+                $merchant=$user->merchant;
+                event(new UserLoggedIn($user));
+                $user->tokens->each(function ($token) {
+                    $token->delete();
+                });
+
+                // Create a permanent token (no expiration time)
+                $resp->access_token = $user->createToken('mobile')->plainTextToken;
+                $resp->user = (new UserTransformer)->transform($user);
+                $resp->active = true;
+                $resp->completed = true;
+                $resp->merchant = (new MerchantTransformer)->transform($merchant);
+                $merchantId = $merchant->id;
+
+            }
+
+
+            elseif($appVersionName =='khadamati_customer_app' &&$user->isCustomer() ){
+
+                event(new UserLoggedIn($user));
+                $user->tokens()->delete();
+                $resp->access_token = $user->createToken('mobile')->plainTextToken;
+                $resp->user = (new UserTransformer)->transform($user);
+                $resp->active = true;
+                $resp->completed = true;
+                $resp->customer = (new CustomerTransformer)->transform($user->customer);
+            }
+
+
+
+            return $resp;
+        }
+
+        return false;
+    }
+
+
 }

@@ -53,4 +53,9 @@ class Category extends BaseModel
     {
         return $this->belongsTo(Category::class, 'parent_id');
     }
+    public function tags()
+    {
+        return $this->hasMany(Tag::class);
+    }
+
 }

@@ -187,5 +187,84 @@ class LoginApiController extends APIBaseController
     }
 
 
+    public function otpAuthenticate(Request $request)
+    {
+        $request->validate([
+            'country_code' => 'nullable',
+            'mobile_number' => 'required',
+            'fcm_token' => 'nullable',
+        ]);
+
+        $country_code = $request->input('country_code');
+        $mobile_number = $request->input('mobile_number');
+        $otp_code = $request->input('otp_code');
+        $fcm_token = $request->input('fcm_token');
+
+        try {
+            // Find the user with the provided mobile number and OTP
+            $user = User::where('mobile_number', $mobile_number)->first();
+
+            if (!$user) {
+                return $this->inputValidationErrorResponse(__('Invalid or expired OTP.'));
+            }
+
+            // Clear OTP after successful login
+            $user->otp_code = null;
+            $user->otp_expires_at = null;
+            $user->save();
+
+            $login = $this->userService->authenticateUserMobileOtp(
+                $country_code,
+                $request->input('mobile_number'),
+                $request->header('App-Version-Name'),
+            );
+            if (isset($login->show_not_merchant) && $login->show_not_merchant) {
+                return $this->inputValidationErrorResponse(__('You cannot login using the merchant application'));
+            }
+            if (isset($login->show_not_captain) && $login->show_not_captain) {
+                return $this->inputValidationErrorResponse(__('You cannot login using the captain application'));
+            }
+            if (isset($login->show_not_customer) && $login->show_not_customer) {
+                return $this->inputValidationErrorResponse(__('You cannot login using the customer application'));
+            }
+
+            if ($login) {
+                // Check if login is an object or an array
+                $user = is_array($login) ? $login['user'] ?? null : $login->user ?? null;
+
+                if ($user) {
+                    // Save FCM token if provided
+                    if ($fcm_token) {
+                        if (is_array($user)) {
+                            // Handle user as an array
+                            $userModel = User::find($user['id']);
+                            if ($userModel) {
+                                $userModel->fcm_token = $fcm_token;
+                                $userModel->save();
+                            }
+                        } else {
+                            // Handle user as an object
+                            $user->fcm_token = $fcm_token;
+                            $user->save();
+                        }
+                    }
+                }
+
+                return $this->successResponse($login);
+            }
+
+            return $this->successResponse([
+                'completed' => false,
+                'access_token' => '',
+                'active' => false,
+            ]);
+        } catch (\Exception $exception) {
+            report($exception);
+            return $this->internalServerErrorResponse($exception->getMessage());
+        }
+    }
+
+
+
 
 }

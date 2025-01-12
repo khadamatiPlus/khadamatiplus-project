@@ -151,6 +151,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
 
                         // Get a specific option
                         Route::get('service/options/{id}', [ServiceApiController::class, 'show']);
+                        Route::get('/monthly-orders', [OrderApiController::class, 'getMonthlyOrderCounts']);
 
                     });
             });
@@ -192,6 +193,8 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
 
             Route::post('registerMerchant', [RegisterApiController::class, 'registerMerchant']);
             Route::post('authenticate', [LoginApiController::class, 'mobileAuthenticate']);
+            Route::post('otp-login', [LoginApiController::class, 'otpAuthenticate']);
+
             Route::post('registerCustomer', [RegisterApiController::class,'registerCustomer']);
 
 //            Route::get('generateOTP', [UserManagementApiController::class, 'generateOTP']);

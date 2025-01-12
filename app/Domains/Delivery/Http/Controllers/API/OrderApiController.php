@@ -296,6 +296,46 @@ class OrderApiController extends APIBaseController
         ]);
     }
 
+    public function getMonthlyOrderCounts(Request $request)
+    {
+        // Ensure the user is authenticated and is a merchant
+        $user = Auth::user();
+
+        if (!$user->merchant) {
+            return response()->json([
+                'error' => 'Unauthorized access. Only merchants can access this data.',
+            ], 403);
+        }
+
+        // Get the current year
+        $currentYear = now()->year;
+
+        // Query to count orders grouped by month for the merchant
+        $orderCounts = Order::query()
+            ->where('merchant_id', $user->merchant_id)
+            ->whereYear('created_at', $currentYear)
+            ->selectRaw('MONTH(created_at) as month, COUNT(*) as order_count')
+            ->groupBy('month')
+            ->orderBy('month', 'asc')
+            ->get();
+
+        // Transform the data to include all months (even those with zero orders)
+        $monthlyOrderCounts = collect(range(1, 12))->map(function ($month) use ($orderCounts) {
+            $order = $orderCounts->firstWhere('month', $month);
+            return [
+                'month' => $month,
+                'order_count' => $order ? $order->order_count : 0,
+            ];
+        });
+
+        // Return the success response
+        return response()->json([
+            'success' => true,
+            'message' => 'Monthly order counts retrieved successfully.',
+            'data' => $monthlyOrderCounts,
+            'year' => $currentYear,
+        ]);
+    }
 
 
 

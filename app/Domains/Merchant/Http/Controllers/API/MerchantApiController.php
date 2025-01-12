@@ -11,10 +11,13 @@ use App\Domains\Merchant\Models\Merchant;
 use App\Domains\Merchant\Models\MerchantAvailability;
 use App\Domains\Merchant\Services\MerchantService;
 use App\Http\Controllers\APIBaseController;
+use App\Services\SmsService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class MerchantApiController extends APIBaseController
 {
@@ -24,9 +27,10 @@ class MerchantApiController extends APIBaseController
     /**
      * @param MerchantService $merchantService
      */
-    public function __construct(MerchantService $merchantService)
+    public function __construct(MerchantService $merchantService,SmsService $smsService)
     {
         $this->merchantService = $merchantService;
+        $this->smsService = $smsService;
     }
 
 
@@ -104,7 +108,14 @@ class MerchantApiController extends APIBaseController
             return response()->json(['error' => 'User with this phone number does not exist.'], 404);
         }
 //        $otp = Str::random(6);
-        $otp = '0000';
+        $otp = rand(100000, 999999);
+        $user->otp_code = $otp;
+        $user->otp_expires_at = Carbon::now()->addMinutes(5);
+        $user->save();
+
+        $message = "Your OTP code is $otp. It expires in 5 minutes.";
+        Log::info($mobile_number);
+        $this->smsService->sendSms($mobile_number, $message);
         DB::table('password_resets')->updateOrInsert(
             ['phone_number' => $mobile_number],
             ['otp' => $otp, 'created_at' => now()]
@@ -153,16 +164,14 @@ class MerchantApiController extends APIBaseController
         $otp = $request->otp;
 
         // Check if OTP is valid
-        $resetRecord = DB::table('password_resets')
-            ->where('phone_number', $mobile_number)
-            ->where('otp', $otp)
+        $user = User::where('mobile_number', $mobile_number)
+            ->where('otp_code', $otp)
+            ->where('otp_expires_at', '>', now())
             ->first();
-
-        if (!$resetRecord) {
+        if (!$user) {
             return response()->json(['error' => 'Invalid OTP.'], 400);
         }
 
-        // OTP is valid
         return response()->json(['message' => 'OTP confirmed successfully.'], 200);
     }
 
