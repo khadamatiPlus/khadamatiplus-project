@@ -28,6 +28,7 @@ class TagApiController extends APIBaseController
         try {
             // Retrieve parent_id from the request, if it's provided
             $parentId = $request->input('parent_id');
+            $categoryId = $request->input('category_id');
 
             // Start building the query for tags
             $query = $this->tagService;
@@ -35,6 +36,9 @@ class TagApiController extends APIBaseController
             // If parent_id is provided, filter by it
             if ($parentId) {
                 $query->where('parent_id', $parentId);
+            }
+            if ($categoryId) {
+                $query->where('category_id', $categoryId);
             }
 
             // Paginate the query with filtering and return the transformed results
