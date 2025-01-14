@@ -222,6 +222,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
         Route::get('merchants/{id}', [MerchantApiController::class, 'getMerchantById']);
 
         Route::post('/auth/send-otp', [LoginApiController::class, 'sendOtp']);
+        Route::post('/auth/send-otp-register', [LoginApiController::class, 'sendOtpRegister']);
 
 
     });

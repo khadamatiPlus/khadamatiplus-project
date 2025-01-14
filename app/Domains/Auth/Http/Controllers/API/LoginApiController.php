@@ -191,6 +191,26 @@ class LoginApiController extends APIBaseController
 
         return response()->json(['message' => 'OTP sent successfully']);
     }
+    public function sendOtpRegister(Request $request)
+    {
+        $request->validate([
+            'country_code' => 'required',
+            'mobile_number' => 'required',
+        ]);
+        $countryCode = $request->input('country_code');
+        $mobileNumber = $request->input('mobile_number');
+        if (str_starts_with($mobileNumber, '962')) {
+            $fullNumber = $mobileNumber; // Use the mobile number as is
+        } else {
+            $fullNumber = $countryCode . $mobileNumber; // Append country code
+        }
+        $otp = rand(100000, 999999);
+        $message = "Your OTP code is $otp. It expires in 5 minutes.";
+        Log::info($fullNumber);
+        $this->smsService->sendSms($fullNumber, $message);
+
+        return response()->json(['message' => 'OTP sent successfully']);
+    }
 
 
 
