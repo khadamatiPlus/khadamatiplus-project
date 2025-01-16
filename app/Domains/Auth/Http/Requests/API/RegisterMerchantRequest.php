@@ -84,6 +84,7 @@ class RegisterMerchantRequest extends JsonRequest
             'latitude' => ['required', 'max:350'],
             'longitude' => ['required', 'max:350'],
             'password' => ['required'],
+            'id_image' => ['nullable'],
             'fcm_token' => ['nullable'],
 //            'firebase_auth_token' => ['required', 'string'],
         ];

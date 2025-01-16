@@ -307,14 +307,18 @@ class ServiceApiController extends APIBaseController
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
+        // Store the image in the 'public' disk
         $imagePath = $request->file('image')->store('uploads', 'public');
-        $imageUrl = asset($imagePath);
+
+        // Correct the URL to point to 'storage' instead of 'uploads'
+        $imageUrl = asset('storage/' . $imagePath);
 
         return response()->json([
             'success' => true,
             'url' => $imageUrl,
         ]);
     }
+
 
 
     public function getAllServices(Request $request)

@@ -84,7 +84,7 @@ class CustomerService extends BaseService
         } catch (\Exception $e) {
             report($e);
             DB::rollBack();
-            throw new GeneralException(__('There was a problem registering the captain. Please try again.'));
+            throw new GeneralException(__('There was a problem registering the Customer. Please try again.'));
         }
 
         event(new UserCreated($customerUser));

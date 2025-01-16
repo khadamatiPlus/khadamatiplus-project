@@ -22,7 +22,7 @@
                     $serviceMainImage=\App\Domains\Service\Models\ServiceImage::query()->where('service_id',$service->id)->where('is_main',1)->first();
                     @endphp
                     @if(isset($serviceMainImage->image))
-                        <img src="{{storageBaseLink($serviceMainImage->image)}}" width="100"  loading="lazy" />
+                        <img src="{{$serviceMainImage->image}}" width="100"  loading="lazy" />
                     @else
                         ----------------
                     @endif

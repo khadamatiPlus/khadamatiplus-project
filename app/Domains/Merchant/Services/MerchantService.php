@@ -4,7 +4,6 @@ namespace App\Domains\Merchant\Services;
 use App\Domains\Auth\Events\User\UserCreated;
 use App\Domains\Auth\Models\User;
 use App\Domains\Auth\Services\UserService;
-use App\Domains\Merchant\Events\MerchantApproved;
 use App\Domains\Merchant\Models\Merchant;
 use App\Exceptions\GeneralException;
 use App\Services\BaseService;
@@ -57,6 +56,7 @@ class MerchantService extends BaseService
         DB::beginTransaction();
 
         try {
+            // Register the user (merchant admin)
             $merchantAdmin = $this->userService->registerUser([
                 'type' => User::TYPE_USER,
                 'name' => $data['name'] ?? null,
@@ -65,31 +65,37 @@ class MerchantService extends BaseService
                 'mobile_number' => $data['mobile_number'],
                 'merchant_id' => $data['merchant_id'] ?? null,
                 'fcm_token' => $data['fcm_token'] ?? null,
-                'timezone' => $data['timezone'] ?? env('DEFAULT_TIMEZONE','Asia/Amman')
+                'timezone' => $data['timezone'] ?? env('DEFAULT_TIMEZONE', 'Asia/Amman'),
             ]);
-//            if(!empty($data['profile_pic']) && request()->hasFile('profile_pic')){
-//                try {
-//
-//                    $this->upload($data,'profile_pic');
-//                } catch (\Exception $e) {
-//                    throw $e;
-//                }
-//            }
+
+            // Assign a role to the merchantAdmin
             $merchantAdmin->syncRoles([2]);
 
-            if(!auth()->check()){
+            // Log in the user if they are not authenticated
+            if (!auth()->check()) {
                 auth()->loginUsingId($merchantAdmin->id);
             }
 
-            $data['profile_id'] = $merchantAdmin->id;
+            // Handle the id_image upload
+            $idImage = null;
+            if (isset($data['id_image'])) {
+                // Handle file upload, storing it and assigning the path
+                $idImage = $data['id_image']->store('merchant_id_images', 'public'); // You can change the storage disk if needed
+            }
 
+            // Store the merchant details
+            $data['profile_id'] = $merchantAdmin->id;
             $merchant = $this->store($data);
 
+            // Save the merchant id_image
+            $merchant->id_image = $idImage;
+            $merchant->save();
 
-            $merchantAdmin->fill([
-                'merchant_id' => $merchant->id ?? null,
-            ])->save();
+            // Associate the merchant id with the merchantAdmin
+            $merchantAdmin->merchant_id = $merchant->id;
+            $merchantAdmin->save();
 
+            // Refresh the merchantAdmin model
             $merchantAdmin = $merchantAdmin->refresh();
 
         } catch (\Exception $e) {
@@ -98,11 +104,13 @@ class MerchantService extends BaseService
             throw new GeneralException(__('There was a problem registering the merchant. Please try again.'));
         }
 
+        // Trigger an event after the user is created
         event(new UserCreated($merchantAdmin));
 
         DB::commit();
         return $merchant;
     }
+
 
     /**
      * @param array $data
@@ -123,6 +131,7 @@ class MerchantService extends BaseService
 
         $merchant = parent::store($data);
 
+
         return $merchant;
     }
 
@@ -137,7 +146,7 @@ class MerchantService extends BaseService
     {
         $data = array_filter($data);
         $merchant = $this->getById($entity);
-         $user=User::query()->where('id',$merchant->profile_id)->firstOrFail();
+        $user=User::query()->where('id',$merchant->profile_id)->firstOrFail();
         if (isset($data['name'])){
             $user->name = $data['name'];
         }

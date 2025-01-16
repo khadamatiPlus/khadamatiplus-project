@@ -27,15 +27,12 @@ class ServiceRequest extends FormRequest
             case self::METHOD_POST:
                 return [
                     'title' => ['required', 'max:350'],
-//                    'title_ar' => ['required', 'max:350'],
                     'description' => ['required'],
-//                    'description_ar' => ['required'],
-//                    'mobile_number' => ['required', 'max:350'],
+
                     'price' => ['required', 'max:350'],
                     'new_price' => ['nullable', 'max:350'],
                     'order' => ['nullable'],
                     'duration' => ['nullable'],
-//                    'category_id' => ['required','exists:categories,id'],
                     'sub_category_id' => ['required','exists:categories,id'],
                     'merchant_id' => ['required','exists:merchants,id'],
                     'video' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedVideos)],
@@ -55,23 +52,19 @@ class ServiceRequest extends FormRequest
                 return [
                     'id' => ['required', 'exists:services,id'],
                     'title' => ['required', 'max:350'],
-//                    'title_ar' => ['required', 'max:350'],
                     'description' => ['required'],
-//                    'description_ar' => ['required'],
-//                    'mobile_number' => ['required', 'max:350'],
                     'price' => ['required', 'max:350'],
                     'new_price' => ['nullable', 'max:350'],
                     'order' => ['nullable'],
                     'duration' => ['nullable'],
-//                    'category_id' => ['required','exists:categories,id'],
                     'sub_category_id' => ['required','exists:categories,id'],
                     'merchant_id' => ['required','exists:merchants,id'],
                     'video' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedVideos)],
                     'tags' => 'required|array',
                     'images' => 'nullable|array',
                     'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg',
-                    'main_image' => 'nullable',  // Main image index
-                    'products' => 'nullable|array', // Validate products as an array
+                    'main_image' => 'nullable',
+                    'products' => 'nullable|array',
                     'products.*.title' => 'required|string|max:255',
                     'products.*.price' => 'required|numeric',
                     'products.*.duration' => 'required|string|max:100',

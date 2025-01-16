@@ -9,6 +9,7 @@
         <thead>
         <tr>
             <th>{{ __('Name') }}</th>
+            <th>{{ __('ID Image') }}</th>
             <th>{{ __('Phone Number') }}</th>
             <th>{{ __('Country') }}</th>
             <th>{{ __('City') }}</th>
@@ -21,6 +22,7 @@
         @foreach($merchants as $merchant)
             <tr>
                 <td>{{ $merchant->name }}</td>
+                <td><img width="100" src="{{asset('storage/'.$merchant->id_image)}}"></td>
                 <td>
                     @if(!empty($merchant->profile->mobile_number))
                         <a href = "tel: {{ $merchant->profile->mobile_number }}">{{ $merchant->profile->mobile_number }}</a>

@@ -30,6 +30,7 @@ class MerchantTransformer
             'area_name' => $merchant->area->name,
             'longitude' => $merchant->longitude,
             'latitude' => $merchant->latitude,
+            'id_image' => asset('storage/'.$merchant->id_image),
             'rating' => $merchant->services()->with('reviews')->get()->avg(function ($service) {
                 return $service->reviews()->avg('rating'); // Average rating for all services
             }),

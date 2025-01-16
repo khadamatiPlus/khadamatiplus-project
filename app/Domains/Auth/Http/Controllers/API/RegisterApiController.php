@@ -109,27 +109,26 @@ class RegisterApiController extends APIBaseController
      */
     public function registerMerchant(RegisterMerchantRequest $request): \Illuminate\Http\JsonResponse
     {
-        echo $request->input('fcm_token');exit();
         try{
             $country_code = env('DEFAULT_COUNTRY_CODE','962');
             $fullNumber = $country_code.$request->input('mobile_number');
             $password = $request->input('password');
-
+            $fcm_token = $request->input('fcm_token');
 
 
 //            if($verifyResult = $this->firebaseIntegration->verifyToken($request->input('firebase_auth_token'),$fullNumber)){
-                if(app()->environment(['local', 'testing'])){
+            if(app()->environment(['local', 'testing'])){
 //                    $verifyResult->verified = true;
-                    $verifyResult = true;
-                }
-                if($verifyResult){
-                    $this->merchantService->register($request->validated());
+                $verifyResult = true;
+            }
+            if($verifyResult){
+                $this->merchantService->register($request->validated());
 
-                    $login = $this->userService->authenticateUserMobile($country_code,$request->input('mobile_number'),$request->header('App-Version-Name'),$password, $fcm_token);
-                    if($login && $login->active === true){
-                        return $this->successResponse($login);
-                    }
+                $login = $this->userService->authenticateUserMobile($country_code,$request->input('mobile_number'),$request->header('App-Version-Name'),$password, $fcm_token);
+                if($login && $login->active === true){
+                    return $this->successResponse($login);
                 }
+            }
 //            }
             return $this->successResponse([
                 'completed' => false,
@@ -137,7 +136,7 @@ class RegisterApiController extends APIBaseController
                 'active' => false
             ]);
 //        }
-    }
+        }
 
         catch (\Exception $exception)
         {
@@ -213,16 +212,16 @@ class RegisterApiController extends APIBaseController
             $fcm_token = $request->input('fcm_token');
 //            if($verifyResult = $this->firebaseIntegration->verifyToken($request->input('firebase_auth_token'),$fullNumber)){
 
-                if(app()->environment(['local', 'testing'])){
+            if(app()->environment(['local', 'testing'])){
 //                    $verifyResult->verified = true;
-                    $verifyResult = true;
-                }
+                $verifyResult = true;
+            }
 
-                if($verifyResult){
-                    $this->customerService->register($request->validated());
-                    $login = $this->userService->authenticateUserMobile($country_code,$request->input('mobile_number'),$request->header('App-Version-Name'),$password,$fcm_token);
-                    return $this->successResponse($login);
-                }
+            if($verifyResult){
+                $this->customerService->register($request->validated());
+                $login = $this->userService->authenticateUserMobile($country_code,$request->input('mobile_number'),$request->header('App-Version-Name'),$password,$fcm_token);
+                return $this->successResponse($login);
+            }
 //            }
             return $this->successResponse([
                 'completed' => false,

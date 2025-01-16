@@ -29,7 +29,7 @@ class ServiceTable extends Component
         $services = Service::query()
             ->where(function ($query) {
                 $query->where('title', 'like', '%' . $this->search . '%');
-            })
+            })->orderByDesc('id')
             ->paginate(10);
 
         return view('livewire.services-table', compact('services'));

@@ -32,7 +32,7 @@ class Merchant extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = ['city_id', 'created_by_id', 'updated_by_id', 'name','latitude','country_id','area_id','longitude' ,'profile_pic', 'is_verified', 'created_at', 'updated_at', 'deleted_at','profile_id'];
+    protected $fillable = ['id_image','city_id', 'created_by_id', 'updated_by_id', 'name','latitude','country_id','area_id','longitude' ,'profile_pic', 'is_verified', 'created_at', 'updated_at', 'deleted_at','profile_id'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
