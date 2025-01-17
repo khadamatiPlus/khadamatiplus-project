@@ -76,14 +76,13 @@ class MerchantService extends BaseService
                 auth()->loginUsingId($merchantAdmin->id);
             }
 
-            // Handle the id_image upload
+            // Handle the id_image as a URL
             $idImage = null;
             if (isset($data['id_image'])) {
-                // Handle file upload, storing it and assigning the path
-                $idImage = $data['id_image']->store('merchant_id_images', 'public'); // You can change the storage disk if needed
+                $idImage = $data['id_image'];
             }
 
-            // Store the merchant details
+            // Store the merchant detailssss
             $data['profile_id'] = $merchantAdmin->id;
             $merchant = $this->store($data);
 

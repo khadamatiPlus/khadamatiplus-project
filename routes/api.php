@@ -131,7 +131,6 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
                         Route::get('getServiceDetails/{id}', [ServiceApiController::class, 'getServiceDetails']);
                         Route::delete('deleteService/{id}', [ServiceApiController::class, 'deleteService']);
                         Route::get('getServices', [ServiceApiController::class, 'getServices']);
-                        Route::post('uploadImage', [ServiceApiController::class, 'uploadImage']);
                         Route::post('availability', [MerchantApiController::class, 'storeOrUpdate']);
                         Route::post('updateOrderStatusByMerchant', [OrderApiController::class, 'updateOrderStatusByMerchant']);
                         Route::get('/has-availability', [MerchantApiController::class, 'hasAvailability']);
@@ -223,6 +222,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
 
         Route::post('/auth/send-otp', [LoginApiController::class, 'sendOtp']);
         Route::post('/auth/send-otp-register', [LoginApiController::class, 'sendOtpRegister']);
+        Route::post('merchant/uploadImage', [ServiceApiController::class, 'uploadImage']);
 
 
     });
