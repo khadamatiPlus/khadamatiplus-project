@@ -34,7 +34,7 @@ class Category extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = ['created_by_id','parent_id','name','name_ar','is_featured','updated_by_id', 'summary','summary_ar','status', 'image','created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['sort_order','created_by_id','parent_id','name','name_ar','is_featured','updated_by_id', 'summary','summary_ar','status', 'image','created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -57,5 +57,8 @@ class Category extends BaseModel
     {
         return $this->hasMany(Tag::class);
     }
-
+    public function scopeSorted($query)
+    {
+        return $query->orderBy('sort_order', 'asc')->orderBy('name', 'asc');
+    }
 }

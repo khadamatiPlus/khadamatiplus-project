@@ -31,6 +31,7 @@ class CategoryRequest extends FormRequest
                     'summary_ar' => ['nullable'],
                     'parent_id' => ['nullable'],
                     'is_featured' => ['nullable'],
+                    'sort_order' => ['nullable'],
                     'image' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedImages)],
                 ];
             case self::METHOD_PATCH:
@@ -42,6 +43,7 @@ class CategoryRequest extends FormRequest
                     'summary_ar' => ['nullable'],
                     'parent_id' => ['nullable'],
                     'is_featured' => ['nullable'],
+                    'sort_order' => ['nullable'],
                     'image' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedImages)],
                 ];
             case self::METHOD_DELETE:

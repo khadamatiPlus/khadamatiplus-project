@@ -4,8 +4,10 @@ use App\Domains\Banner\Http\Requests\Backend\BannerRequest;
 use App\Domains\Banner\Models\Banner;
 use App\Domains\Banner\Services\BannerService;
 use App\Domains\FirebaseIntegration\FirebaseIntegration;
+use App\Domains\Merchant\Services\MerchantService;
 use App\Domains\Notification\Http\Requests\Backend\NotificationRequest;
 use App\Domains\Lookups\Services\CategoryService;
+use App\Domains\Service\Services\ServiceService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -15,9 +17,12 @@ class BannerController extends Controller
     private BannerService $bannerService;
 
 
-    public function __construct(BannerService $bannerService)
+    public function __construct(BannerService $bannerService,CategoryService $categoryService, MerchantService $merchantService, ServiceService $serviceService)
     {
         $this->bannerService = $bannerService;
+        $this->categoryService = $categoryService;
+        $this->merchantService = $merchantService;
+        $this->serviceService = $serviceService;
     }
     /**
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
@@ -31,7 +36,10 @@ class BannerController extends Controller
      */
     public function create()
     {
-        return view('backend.banner.create');
+        $categories=$this->categoryService->get();
+        $merchants=$this->merchantService->get();
+        $services=$this->serviceService->get();
+        return view('backend.banner.create',compact('services','categories','merchants'));
     }
 
     /**
@@ -52,7 +60,10 @@ class BannerController extends Controller
      */
     public function edit(Banner $banner)
     {
-        return view('backend.banner.edit')
+        $categories=$this->categoryService->get();
+        $merchants=$this->merchantService->get();
+        $services=$this->serviceService->get();
+        return view('backend.banner.edit',compact('services','categories','merchants'))
             ->withBanner($banner);
     }
 

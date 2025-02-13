@@ -14,28 +14,79 @@
                     <label for="image" class="col-md-2 col-form-label">@lang('Image')</label>
                     <div class="col-md-10">
                         <input type="file" name="image" id="image" class="form-control" required />
-                        <img class="mt-2 d-none" id="blah" height="100px" width="100px"  alt="{{old('image')}}" />
+                        <img class="mt-2 d-none" id="blah" height="100px" width="100px" alt="{{old('image')}}" />
                     </div>
                 </div><!--form-group-->
+
                 <div class="form-group row">
                     <label for="title" class="col-md-2 col-form-label">@lang('Title (English)')</label>
                     <div class="col-md-10">
                         <input type="text" value="{{old('title')}}" name="title" id="title" class="form-control" required />
                     </div>
                 </div><!--form-group-->
+
                 <div class="form-group row">
                     <label for="title_ar" class="col-md-2 col-form-label">@lang('Title (Arabic)')</label>
                     <div class="col-md-10">
                         <input type="text" value="{{old('title_ar')}}" name="title_ar" id="title_ar" class="form-control" required />
                     </div>
                 </div><!--form-group-->
+
                 <div class="form-group row">
-                    <label for="link" class="col-md-2 col-form-label">@lang('Link')</label>
+                    <label for="type" class="col-md-2 col-form-label">@lang('Type')</label>
                     <div class="col-md-10">
-                        <input type="text" value="{{old('link')}}" name="link" id="link" class="form-control" required />
+                        <select name="type" id="type" class="form-control" required>
+                            <option value="">{{ __('Select Type') }}</option>
+                            <option value="category">Category</option>
+                            <option value="service">Service</option>
+                            <option value="merchant">Merchant</option>
+                            <option value="link">Custom Link</option>
+                        </select>
                     </div>
                 </div><!--form-group-->
 
+                <div class="form-group row d-none" id="category-field">
+                    <label for="category_id" class="col-md-2 col-form-label">@lang('Category')</label>
+                    <div class="col-md-10">
+                        <select name="category_id" id="category_id" class="form-control">
+                            <option value="">{{ __('Select Category') }}</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div><!--form-group-->
+
+                <div class="form-group row d-none" id="service-field">
+                    <label for="service_id" class="col-md-2 col-form-label">@lang('Service')</label>
+                    <div class="col-md-10">
+                        <select name="service_id" id="service_id" class="form-control">
+                            <option value="">{{ __('Select Service') }}</option>
+                            @foreach($services as $service)
+                                <option value="{{ $service->id }}">{{ $service->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div><!--form-group-->
+
+                <div class="form-group row d-none" id="merchant-field">
+                    <label for="merchant_id" class="col-md-2 col-form-label">@lang('Merchant')</label>
+                    <div class="col-md-10">
+                        <select name="merchant_id" id="merchant_id" class="form-control">
+                            <option value="">{{ __('Select Merchant') }}</option>
+                            @foreach($merchants as $merchant)
+                                <option value="{{ $merchant->id }}">{{ $merchant->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div><!--form-group-->
+
+                <div class="form-group row d-none" id="link-field">
+                    <label for="link" class="col-md-2 col-form-label">@lang('Link')</label>
+                    <div class="col-md-10">
+                        <input type="text" value="{{old('link')}}" name="link" id="link" class="form-control" />
+                    </div>
+                </div><!--form-group-->
 
             </x-slot>
             <x-slot name="footer">
@@ -44,6 +95,7 @@
         </x-backend.card>
     </x-forms.post>
 @endsection
+
 @push('after-scripts')
     <script>
         function readURL(input) {
@@ -58,6 +110,22 @@
         $("#image").change(function(){
             $('#blah').removeClass('d-none');
             readURL(this);
+        });
+
+        // Show/hide fields based on type selection
+        $("#type").change(function() {
+            let type = $(this).val();
+            $("#category-field, #service-field, #merchant-field, #link-field").addClass('d-none');
+
+            if (type === "category") {
+                $("#category-field").removeClass('d-none');
+            } else if (type === "service") {
+                $("#service-field").removeClass('d-none');
+            } else if (type === "merchant") {
+                $("#merchant-field").removeClass('d-none');
+            } else if (type === "link") {
+                $("#link-field").removeClass('d-none');
+            }
         });
     </script>
 @endpush

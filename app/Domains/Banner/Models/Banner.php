@@ -1,5 +1,8 @@
 <?php
 namespace App\Domains\Banner\Models;
+use App\Domains\Lookups\Models\Category;
+use App\Domains\Merchant\Models\Merchant;
+use App\Domains\Service\Models\Service;
 use App\Models\BaseModel;
 use App\Domains\Auth\Models\User;
 
@@ -15,7 +18,7 @@ class Banner extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = [ 'status','created_by_id', 'updated_by_id', 'title', 'title_ar' , 'image','link','created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = [ 'type','category_id','service_id','merchant_id','status','created_by_id', 'updated_by_id', 'title', 'title_ar' , 'image','link','created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -23,5 +26,19 @@ class Banner extends BaseModel
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class, 'service_id');
+    }
+
+    public function merchant()
+    {
+        return $this->belongsTo(Merchant::class, 'merchant_id');
     }
 }

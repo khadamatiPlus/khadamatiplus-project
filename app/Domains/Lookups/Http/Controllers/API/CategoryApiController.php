@@ -29,7 +29,7 @@ class CategoryApiController extends APIBaseController
     {
         try {
             // Filter to get only top-level categories where parent_id is null
-            $categories = Category::query()
+            $categories = Category::sorted()
                  // Start a query builder instance
                 ->whereNull('parent_id') // Add filter for parent_id = null
                 ->get() // Execute the query

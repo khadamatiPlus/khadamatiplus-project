@@ -5,7 +5,6 @@ use App\Domains\Auth\Http\Requests\API\RegisterCustomerRequest;
 use App\Domains\Auth\Http\Transformers\UserTransformer;
 use App\Domains\Auth\Services\UserService;
 use App\Domains\FirebaseIntegration\FirebaseIntegration;
-use App\Domains\Auth\Http\Requests\API\RegisterCaptainRequest;
 use App\Domains\Merchant\Services\MerchantService;
 use App\Domains\Customer\Services\CustomerService;
 use App\Http\Controllers\APIBaseController;
@@ -25,10 +24,7 @@ class RegisterApiController extends APIBaseController
     protected $merchantService;
 
     protected $customerService;
-    /**
-     * @var CustomerService $captainService
-     */
-    protected $captainService;
+
 
     /**
      * @var FirebaseIntegration $firebaseIntegration
@@ -145,64 +141,6 @@ class RegisterApiController extends APIBaseController
         }
     }
 
-    /**
-     * @OA\Post(
-     * path="/api/auth/registerCaptain",
-     * summary="Register Captain",
-     * description="",
-     * operationId="registerCaptain",
-     * tags={"Auth"},
-     *     @OA\Parameter(
-     *         name="Accept-Language",
-     *         in="header",
-     *         description="Set language parameter by RFC2616 <https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4>",
-     *         @OA\Schema(
-     *             type="string",
-     *             default="en"
-     *         )
-     *     ),
-     *        @OA\Parameter(
-     *         name="App-Version-Name",
-     *         in="header",
-     *         description="Set language parameter by RFC2616 <https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4>",
-     *         @OA\Schema(
-     *             type="string",
-     *             default="hayat_delivery_captain_app"
-     *         )
-     *     ),
-     * @OA\RequestBody(
-     *    required=true,
-     *    description="pass authetication data in addition to captain details",
-     *       @OA\MediaType(
-     *           mediaType="multipart/form-data",
-     *           @OA\Schema(
-     *               required={"mobile_number", "name", "vehicle_type_id","is_instant_delivery", "profile_pic","driving_license_card","car_id_card","firebase_auth_token"},
-     *              @OA\Property(property="mobile_number", type="string"),
-     *              @OA\Property(property="name", type="string"),
-     *              @OA\Property(property="vehicle_type_id", type="integer"),
-     *              @OA\Property(property="is_instant_delivery", type="boolean"),
-     *              @OA\Property(property="firebase_auth_token", type="string"),
-     *              @OA\Property(property="cities", type="string"),
-     *              @OA\Property(property="profile_pic", type="file"),
-     *              @OA\Property(property="driving_license_card", type="file"),
-     *              @OA\Property(property="car_id_card", type="file"),
-     *           ),
-     *       )
-     * ),
-     * @OA\Response(
-     *    response=400,
-     *    description="input validation errors"
-     * ),
-     * @OA\Response(
-     *    response=500,
-     *    description="internal server error"
-     * ),
-     *     @OA\Response(
-     *    response=200,
-     *    description="success"
-     * )
-     * )
-     */
     public function registerCustomer(RegisterCustomerRequest $request): \Illuminate\Http\JsonResponse
     {
         try{

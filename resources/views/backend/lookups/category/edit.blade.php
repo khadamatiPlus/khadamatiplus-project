@@ -48,6 +48,12 @@
                         <input name="name_ar" id="name_ar" value="{{old('name_ar') ?? $category->name_ar}}" class="form-control" required/>
                     </div>
                 </div><!--form-group-->
+                <div class="form-group row" >
+                    <label for="sort_order" class="col-md-2 col-form-label">@lang('Sort Order')</label>
+                    <div class="col-md-10">
+                        <input name="sort_order" id="sort_order" value="{{old('sort_order') ?? $category->sort_order}}" class="form-control" required/>
+                    </div>
+                </div><!--form-group-->
 {{--                <div class="form-group row" id="hide1">--}}
 {{--                    <label for="summary" class="col-md-2 col-form-label">@lang('Summary (EN)')</label>--}}
 {{--                    <div class="col-md-10">--}}
