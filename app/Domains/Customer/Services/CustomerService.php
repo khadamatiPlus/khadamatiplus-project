@@ -54,7 +54,8 @@ class CustomerService extends BaseService
             $customerUser = $this->userService->registerUser([
                 'type' => User::TYPE_USER,
                 'name' => $data['name'],
-                'password' => $data['password'],
+
+                'password' => $data['password']??null,
                 'email' => $data['email'] ?? null,
                 'mobile_number' => $data['mobile_number'],
                 'customer_id' => $data['customer_id'] ?? null,
@@ -105,7 +106,7 @@ class CustomerService extends BaseService
     public function store(array $data = [])
     {
 
-        $data['is_verified'] = false;
+        $data['is_verified'] = true;
 
         if(!empty($data['personal_photo']) && request()->hasFile('personal_photo')){
             try {
@@ -117,7 +118,7 @@ class CustomerService extends BaseService
 
         if(!empty($data['profile_pic']) && request()->hasFile('profile_pic')){
             try {
-                $data = $this->upload($data,'profile_pic', 'captain/identity_cards/profile_pic');
+                $data = $this->upload($data,'profile_pic', 'customer/identity_cards/profile_pic');
             } catch (\Exception $e) {
                 throw $e;
             }

@@ -2,10 +2,7 @@
 
 namespace App\Domains\Customer\Http\Controllers\Backend;
 
-use App\Domains\Captain\Models\CaptainWallet;
-use App\Domains\Captain\Models\CaptainWalletTransaction;
 use App\Domains\Lookups\Services\CityService;
-use App\Domains\Lookups\Services\VehicleTypeService;
 use App\Domains\Customer\Http\Requests\Backend\CustomerRequest;
 use App\Domains\Customer\Models\Customer;
 use App\Domains\Customer\Services\CustomerService;
@@ -75,15 +72,10 @@ class CustomerController extends Controller
         return redirect()->back()->withFlashSuccess(__('The Customer was successfully updated'));
     }
 
-    /**
-     * @param $captain
-     * @return mixed
-     * @throws \App\Exceptions\GeneralException
-     * @throws \Throwable
-     */
-    public function destroy($captain)
+
+    public function destroy($customer)
     {
-        $this->customerService->destroy($captain);
+        $this->customerService->destroy($customer);
         return redirect()->back()->withFlashSuccess(__('The Customer was successfully deleted.'));
     }
 
@@ -103,53 +95,5 @@ class CustomerController extends Controller
             ->withCustomer($customer);
     }
 
-    /**
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function UpdateIsPausedStatus(Request $request)
-    {
-        $this->captainService->UpdateIsPausedStatus($request);
-        //$captain = Captain::query()->findOrFail($request->input('captainId'));
-        return response()->json(true);
-    }
-    public function updatePercentage(Request $request)
-    {
-        $percentage=$request->input('percentage');
-        $captainId=$request->input('captainId');
-        DB::table('captains')
-            ->where('id', '=', $captainId)
-            ->update([
-                'percentage' => $percentage
-            ]);
-        return   redirect()->back()->withFlashSuccess(__('The Percentage was successfully updated'));
-    }
-    public function showCaptainWallet(Captain $captain)
-    {
-        $wallet=CaptainWallet::query()->where('captain_id',$captain->id)->first();
-        return view('backend.captain.wallet',compact('wallet'))
-            ->withCaptain($captain);
-    }
 
-
-    public function addAmount(Request $request)
-    {
-        $captainId = $request->input('captainId'); // Get the authenticated user
-        $amount = $request->input('amount');
-        // Add the amount to the user's wallet
-        $wallet = CaptainWallet::updateOrCreate(
-            ['captain_id' => $captainId],
-            ['available_balance' => \DB::raw("available_balance + $amount")]
-        );
-
-        // Record the transaction in wallet_transactions table
-        $transaction = CaptainWalletTransaction::create([
-            'captain_wallet_id' => $wallet->id,
-            'amount' => $amount,
-            'type' => 'deposit', // Assuming it's a deposit
-        ]);
-        return   redirect()->back()->withFlashSuccess(__('Amount added successfully'));
-
-//        return response()->json(['message' => 'Amount added successfully', 'wallet' => $wallet, 'transaction' => $transaction]);
-    }
 }

@@ -34,7 +34,7 @@ class CustomerRequest extends FormRequest
                     'mobile_number' => [
                         'required',
                         Rule::unique('users')->where(function ($query) {
-                            return $query->whereNotNull('captain_id');
+                            return $query->whereNotNull('customer_id');
                         }),
                         'regex:/^7[789]\\d{7}$/'
                     ],
