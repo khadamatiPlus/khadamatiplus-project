@@ -155,7 +155,107 @@ class PermissionRoleSeeder extends Seeder
                 'sort' => 4,
             ]),
         ]);
+
+        //Banner
+        $banner= Permission::create([
+            'type' => User::TYPE_ADMIN,
+            'name' => 'admin.banner',
+            'description' => __('All Banner Permissions'),
+        ]);
+
+        $banner->children()->saveMany([
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.banner.list',
+                'description' => __('View Banners'),
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.banner.store',
+                'description' => __('Create Banners'),
+                'sort' => 2,
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.banner.update',
+                'description' => __('Update Banners'),
+                'sort' => 3,
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.banner.delete',
+                'description' => __('Delete Banners'),
+                'sort' => 4,
+            ]),
+        ]);
+
+
+        //Introduction
+        $introduction= Permission::create([
+            'type' => User::TYPE_ADMIN,
+            'name' => 'admin.introduction',
+            'description' => __('All Introduction Permissions'),
+        ]);
+
+        $introduction->children()->saveMany([
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.introduction.list',
+                'description' => __('View Introductions'),
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.introduction.store',
+                'description' => __('Create Introduction'),
+                'sort' => 2,
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.introduction.update',
+                'description' => __('Update Introductions'),
+                'sort' => 3,
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.introduction.delete',
+                'description' => __('Delete Introductions'),
+                'sort' => 4,
+            ]),
+        ]);
         //
+        //Notification
+        $notification= Permission::create([
+            'type' => User::TYPE_ADMIN,
+            'name' => 'admin.notification',
+            'description' => __('All Notification Permissions'),
+        ]);
+
+        $notification->children()->saveMany([
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.notification.list',
+                'description' => __('View Notifications'),
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.notification.store',
+                'description' => __('Create Notification'),
+                'sort' => 2,
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.notification.update',
+                'description' => __('Update Notifications'),
+                'sort' => 3,
+            ]),
+            new Permission([
+                'type' => User::TYPE_ADMIN,
+                'name' => 'admin.notification.delete',
+                'description' => __('Delete Notification'),
+                'sort' => 4,
+            ]),
+        ]);
+
             //Order
             $order= Permission::create([
                 'type' => User::TYPE_ADMIN,
