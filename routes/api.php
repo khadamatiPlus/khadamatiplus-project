@@ -194,6 +194,9 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
             Route::post('authenticate', [LoginApiController::class, 'mobileAuthenticate']);
             Route::post('otp-login', [LoginApiController::class, 'otpAuthenticate']);
 
+            Route::post('/loginUsingEmail', [LoginApiController::class, 'loginUsingEmail']);
+            Route::post('/registerUsingEmail', [RegisterApiController::class, 'registerUsingEmail']);
+
             Route::post('registerCustomer', [RegisterApiController::class,'registerCustomer']);
 
 //            Route::get('generateOTP', [UserManagementApiController::class, 'generateOTP']);

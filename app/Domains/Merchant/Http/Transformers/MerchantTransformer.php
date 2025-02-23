@@ -25,12 +25,12 @@ class MerchantTransformer
             'city_id' => $merchant->city_id,
             'country_id' => $merchant->country_id,
             'area_id' => $merchant->area_id,
-            'city_name' => $merchant->city->name,
-            'country_name' => $merchant->country->name,
-            'area_name' => $merchant->area->name,
-            'longitude' => $merchant->longitude,
-            'latitude' => $merchant->latitude,
-            'id_image' =>$merchant->id_image,
+            'city_name' => $merchant->city->name??null,
+            'country_name' => $merchant->country->name??null,
+            'area_name' => $merchant->area->name??null,
+            'longitude' => $merchant->longitude??null,
+            'latitude' => $merchant->latitude??null,
+            'id_image' =>$merchant->id_image??null,
             'rating' => $merchant->services()->with('reviews')->get()->avg(function ($service) {
                 return $service->reviews()->avg('rating'); // Average rating for all services
             }),
