@@ -14,7 +14,7 @@ Route::get('/', [HomeController::class, 'index'])
     ->breadcrumbs(function (Trail $trail) {
         $trail->push(__('Home'), route('frontend.index'));
     });
-
+Route::get('provider', [HomeController::class, 'providerIndex'])->name('provider.index');
 Route::get('terms', [TermsController::class, 'index'])
     ->name('pages.terms')
     ->breadcrumbs(function (Trail $trail) {

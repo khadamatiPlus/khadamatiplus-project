@@ -46,6 +46,7 @@
         <nav class="nav-menu d-none d-lg-block">
             <ul>
                 <li class="active"><a href="/">{{__("Home")}}</a></li>
+                <li ><a href="{{route('frontend.provider.index')}}">{{__("Providers")}}</a></li>
                 <li><a href="#features">{{__("App Features")}}</a></li>
                 <li><a href="#gallery">{{__("Gallery")}}</a></li>
                 <li><a href="#faq">{{__("F.A.Q")}}</a></li>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Database\Seeders\Lookups\AreasSeeder;
 use Database\Seeders\Lookups\CitiesSeeder;
 use Database\Seeders\Lookups\CountriesSeeder;
 use Database\Seeders\Traits\TruncateTable;
@@ -30,6 +31,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AuthSeeder::class);
         $this->call(CountriesSeeder::class);
         $this->call(CitiesSeeder::class);
+        $this->call(AreasSeeder::class);
 
         Model::reguard();
     }

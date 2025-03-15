@@ -14,4 +14,8 @@ class HomeController
     {
         return view('frontend.index');
     }
+    public function providerIndex()
+    {
+        return view('frontend.index-provider');
+    }
 }
