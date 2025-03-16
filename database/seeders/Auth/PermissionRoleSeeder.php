@@ -222,39 +222,6 @@ class PermissionRoleSeeder extends Seeder
                 'sort' => 4,
             ]),
         ]);
-        //
-        //Notification
-        $notification= Permission::create([
-            'type' => User::TYPE_ADMIN,
-            'name' => 'admin.notification',
-            'description' => __('All Notification Permissions'),
-        ]);
-
-        $notification->children()->saveMany([
-            new Permission([
-                'type' => User::TYPE_ADMIN,
-                'name' => 'admin.notification.list',
-                'description' => __('View Notifications'),
-            ]),
-            new Permission([
-                'type' => User::TYPE_ADMIN,
-                'name' => 'admin.notification.store',
-                'description' => __('Create Notification'),
-                'sort' => 2,
-            ]),
-            new Permission([
-                'type' => User::TYPE_ADMIN,
-                'name' => 'admin.notification.update',
-                'description' => __('Update Notifications'),
-                'sort' => 3,
-            ]),
-            new Permission([
-                'type' => User::TYPE_ADMIN,
-                'name' => 'admin.notification.delete',
-                'description' => __('Delete Notification'),
-                'sort' => 4,
-            ]),
-        ]);
 
             //Order
             $order= Permission::create([

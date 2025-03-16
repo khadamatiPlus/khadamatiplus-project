@@ -128,7 +128,7 @@
                     <div class="download-buttons">
                         <a href="https://play.google.com/store/apps/details?id=com.khadamati_plus.service_provider" target="_blank" class="download-btn"><i class="bx bxl-play-store"></i> {{__('Google Play')}}</a>
                         <a href="https://apps.apple.com/us/app/%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%D9%8A-%D8%A8%D9%84%D8%B3-%D8%A7%D9%84%D8%B4%D8%B1%D9%83%D8%A7%D8%A1/id6736589491" target="_blank" class="download-btn"><i class="bx bxl-apple"></i> {{__('App Store')}}</a>
-                        <a href="#" class="download-btn"><i class="bx bx-mobile"></i> {{__('Huawei AppGallery')}}</a>
+                        <a href="https://appgallery.huawei.com/app/C113100565" target="_blank" class="download-btn"><i class="bx bx-mobile"></i> {{__('Huawei AppGallery')}}</a>
                     </div>
                 </div>
             </div>
