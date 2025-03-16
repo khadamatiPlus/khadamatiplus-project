@@ -403,8 +403,8 @@
                     <div class="contact-info">
                         <h3>{{__('Our Office')}}</h3>
                         <p><strong>{{__('Location:')}}</strong> {{__('Amman, Jordan')}}</p>
-                        <p><strong>{{__('Phone:')}}</strong> +962 6 123 4567</p>
-                        <p><strong>{{__('Email:')}}</strong> contact@yourcompany.com</p>
+                        <p><strong>{{__('Phone:')}}</strong> +962796667820</p>
+                        <p><strong>{{__('Email:')}}</strong>info@futurespioneers.com</p>
                         <p><strong>{{__('Working Hours:')}}</strong> {{__('Sunday - Thursday, 9:00 AM - 5:00 PM')}}</p>
                         <p>{{__('Drop by or contact us—we’re excited to help you succeed as a provider!')}}</p>
                     </div>

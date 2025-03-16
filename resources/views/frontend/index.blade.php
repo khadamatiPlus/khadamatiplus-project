@@ -497,8 +497,8 @@
                     <div class="contact-info">
                         <h3>{{__("Our Office")}}</h3>
                         <p><strong>{{__("Location:")}}</strong> {{__("Amman, Jordan")}}</p>
-                        <p><strong>{{__("Phone:")}}</strong> +962 6 123 4567</p>
-                        <p><strong>{{__("Email:")}}</strong> contact@yourcompany.com</p>
+                        <p><strong>{{__('Phone:')}}</strong> +962796667820</p>
+                        <p><strong>{{__('Email:')}}</strong>info@futurespioneers.com</p>
                         <p><strong>{{__("Working Hours:")}}</strong> {{__("Sunday - Thursday, 9:00 AM - 5:00 PM")}}</p>
                         <p>{{__("Feel free to visit us during business hours or reach out by phone or email. We’ll be happy to assist you!")}}</p>
                     </div>
