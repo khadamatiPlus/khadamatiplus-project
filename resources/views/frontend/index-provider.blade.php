@@ -128,12 +128,37 @@
                     <div class="download-buttons">
                         <a href="https://play.google.com/store/apps/details?id=com.khadamati_plus.service_provider" target="_blank" class="download-btn"><i class="bx bxl-play-store"></i> {{__('Google Play')}}</a>
                         <a href="https://apps.apple.com/us/app/%D8%AE%D8%AF%D9%85%D8%A7%D8%AA%D9%8A-%D8%A8%D9%84%D8%B3-%D8%A7%D9%84%D8%B4%D8%B1%D9%83%D8%A7%D8%A1/id6736589491" target="_blank" class="download-btn"><i class="bx bxl-apple"></i> {{__('App Store')}}</a>
-                        <a href="https://appgallery.huawei.com/app/C113100565" target="_blank" class="download-btn"><i class="bx bx-mobile"></i> {{__('Huawei AppGallery')}}</a>
+                        <a href="https://appgallery.huawei.com/app/C112154125" target="_blank" class="download-btn"><i class="bx bx-mobile"></i> {{__('Huawei AppGallery')}}</a>
+                        <!-- Added Learn How to Register Button -->
+                        <button type="button" class="download-btn" data-toggle="modal" data-target="#registerVideoModal">
+                            <i class="bx bx-video"></i> {{__('Learn How to Register')}}
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
                 <img src="{{asset('assets/img/hero-img.png')}}" class="img-fluid" alt="">
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Video -->
+    <div class="modal fade" id="registerVideoModal" tabindex="-1" aria-labelledby="registerVideoModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="registerVideoModalLabel">{{__('How to Register on Khadamati')}}</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close">x</button>
+                </div>
+                <div class="modal-body">
+                    <video width="100%" height="auto" controls>
+                        <source src="{{asset('assets/videos/register-tutorial.mp4')}}" type="video/mp4">
+                        {{__('Your browser does not support the video tag.')}}
+                    </video>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">{{__('Close')}}</button>
+                </div>
             </div>
         </div>
     </div>
