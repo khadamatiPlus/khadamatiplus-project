@@ -559,11 +559,10 @@
                 <div class="col-lg-4 col-md-6 footer-contact" data-aos="fade-up">
                     <h3>{{__("Kadamati App")}}</h3>
                     <p>
-                        {{__("123 Main Street, Tabarbur")}} <br>
-                        {{__("Amman, Jordan 11118")}}<br>
+                        {{__("Amman, Jordan")}}<br>
                         {{__("Jordan")}} <br><br>
-                        <strong>{{__("Phone:")}}</strong> +962 6 123 4567<br>
-                        <strong>{{__("Email:")}}</strong> contact@yourcompany.com<br>
+                        <strong>{{__("Phone:")}}</strong> +962796667820<br>
+                        <strong>{{__("Email:")}}</strong> info@futurespioneers.com<br>
                     </p>
                 </div>
 
