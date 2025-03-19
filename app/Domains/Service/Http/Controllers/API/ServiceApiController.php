@@ -304,7 +304,7 @@ class ServiceApiController extends APIBaseController
     public function uploadImage(Request $request)
     {
         $validated = $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'required',
         ]);
 
         // Store the image in the 'public' disk

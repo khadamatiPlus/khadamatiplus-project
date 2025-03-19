@@ -32,7 +32,7 @@
                 </td>
                 <td>  {{ $merchant->country->name??'------------' }}</td>
                 <td>
-                    {{ $merchant->city->name }}
+                    {{ $merchant->city->name??"" }}
                 </td>
                 <td>
                     @if(isset($merchant->profile_pic))
