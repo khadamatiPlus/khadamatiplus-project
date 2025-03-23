@@ -265,7 +265,7 @@ class MerchantApiController extends APIBaseController
         // Validate the incoming request
         $validated = $request->validate([
             'days' => 'required|array',
-            'days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+            'days.*' => 'required',
             'times' => 'required|array',
             'times.*' => 'required',
         ]);
