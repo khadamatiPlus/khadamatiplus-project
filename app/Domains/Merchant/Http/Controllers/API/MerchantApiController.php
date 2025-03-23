@@ -262,6 +262,7 @@ class MerchantApiController extends APIBaseController
 
     public function storeOrUpdate(Request $request)
     {
+        // Validate the incoming request
         $validated = $request->validate([
             'days' => 'required|array',
             'days.*' => 'in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
@@ -269,44 +270,36 @@ class MerchantApiController extends APIBaseController
             'times.*' => 'required',
         ]);
 
-        // Map Arabic times to English equivalents
-        $arabicToEnglishTimes = [
-            '١٢:٠٠ ص' => '12:00 AM',
-            '٠١:٠٠ ص' => '01:00 AM',
-            '٠٢:٠٠ ص' => '02:00 AM',
-            '٠٣:٠٠ ص' => '03:00 AM',
-            '٠٤:٠٠ ص' => '04:00 AM',
-            '٠٥:٠٠ ص' => '05:00 AM',
-            '٠٦:٠٠ ص' => '06:00 AM',
-            '٠٧:٠٠ ص' => '07:00 AM',
-            '٠٨:٠٠ ص' => '08:00 AM',
-            '٠٩:٠٠ ص' => '09:00 AM',
-            '١٠:٠٠ ص' => '10:00 AM',
-            '١١:٠٠ ص' => '11:00 AM',
-            '١٢:٠٠ م' => '12:00 PM',
-            '٠١:٠٠ م' => '01:00 PM',
-            '٠٢:٠٠ م' => '02:00 PM',
-            '٠٣:٠٠ م' => '03:00 PM',
-            '٠٤:٠٠ م' => '04:00 PM',
-            '٠٥:٠٠ م' => '05:00 PM',
-            '٠٦:٠٠ م' => '06:00 PM',
-            '٠٧:٠٠ م' => '07:00 PM',
-            '٠٨:٠٠ م' => '08:00 PM',
-            '٠٩:٠٠ م' => '09:00 PM',
-            '١٠:٠٠ م' => '10:00 PM',
-            '١١:٠٠ م' => '11:00 PM',
+        // Conversion for Arabic numerals to English numerals (for times)
+        $arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        $englishNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        // Conversion for Arabic day names to English day names
+        $arabicDays = [
+            'الإثنين' => 'Monday',
+            'الثلاثاء' => 'Tuesday',
+            'الأربعاء' => 'Wednesday',
+            'الخميس' => 'Thursday',
+            'الجمعة' => 'Friday',
+            'السبت' => 'Saturday',
+            'الأحد' => 'Sunday'
         ];
 
-        // Normalize times to English
-        $normalizedTimes = array_map(function ($time) use ($arabicToEnglishTimes) {
-            return $arabicToEnglishTimes[$time] ?? $time;
+        // Normalize days (convert Arabic day names to English)
+        $normalizedDays = array_map(function ($day) use ($arabicDays) {
+            return $arabicDays[$day] ?? $day; // If not found in $arabicDays, keep original (assumes it's already English)
+        }, $validated['days']);
+
+        // Normalize times (convert Arabic numerals to English numerals)
+        $normalizedTimes = array_map(function ($time) use ($arabicNumerals, $englishNumerals) {
+            return str_replace($arabicNumerals, $englishNumerals, $time);
         }, $validated['times']);
 
         $merchantId = Auth::user()->merchant_id; // Assuming merchants are authenticated.
         MerchantAvailability::where('merchant_id', $merchantId)->delete();
 
-        // Iterate over days and normalized times to update or create records.
-        foreach ($validated['days'] as $day) {
+        // Iterate over normalized days and times to update or create records
+        foreach ($normalizedDays as $day) {
             foreach ($normalizedTimes as $time) {
                 MerchantAvailability::updateOrCreate(
                     [
@@ -314,7 +307,7 @@ class MerchantApiController extends APIBaseController
                         'day' => $day,
                         'time' => $time,
                     ],
-                    [] // No additional fields to update in this case.
+                    [] // No additional fields to update in this case
                 );
             }
         }
