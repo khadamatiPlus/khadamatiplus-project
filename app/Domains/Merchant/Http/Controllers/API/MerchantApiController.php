@@ -272,21 +272,28 @@ class MerchantApiController extends APIBaseController
         $merchantId = Auth::user()->merchant_id; // Assuming merchants are authenticated.
         MerchantAvailability::where('merchant_id', $merchantId)->delete();
 
-        // Iterate over days and times to update or create records.
+        // Arabic to Western numeral conversion map
+        $arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+        $westernNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+
+        // Convert times if they contain Arabic numerals
+        $convertedTimes = array_map(function ($time) use ($arabicNumerals, $westernNumerals) {
+            return str_replace($arabicNumerals, $westernNumerals, $time);
+        }, $validated['times']);
+
+        // Iterate over days and converted times to update or create records
         foreach ($validated['days'] as $day) {
-            foreach ($validated['times'] as $time) {
+            foreach ($convertedTimes as $time) {
                 MerchantAvailability::updateOrCreate(
                     [
                         'merchant_id' => $merchantId,
                         'day' => $day,
                         'time' => $time,
                     ],
-                    [] // No additional fields to update in this case.
+                    [] // No additional fields to update in this case
                 );
             }
         }
-
-        return response()->json(['message' => 'Availability updated successfully.'], 200);
     }
 
     public function hasAvailability()
