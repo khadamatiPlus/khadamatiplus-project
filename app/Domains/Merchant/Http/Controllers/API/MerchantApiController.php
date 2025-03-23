@@ -269,31 +269,57 @@ class MerchantApiController extends APIBaseController
             'times.*' => 'required',
         ]);
 
+        // Map Arabic times to English equivalents
+        $arabicToEnglishTimes = [
+            '١٢:٠٠ ص' => '12:00 AM',
+            '٠١:٠٠ ص' => '01:00 AM',
+            '٠٢:٠٠ ص' => '02:00 AM',
+            '٠٣:٠٠ ص' => '03:00 AM',
+            '٠٤:٠٠ ص' => '04:00 AM',
+            '٠٥:٠٠ ص' => '05:00 AM',
+            '٠٦:٠٠ ص' => '06:00 AM',
+            '٠٧:٠٠ ص' => '07:00 AM',
+            '٠٨:٠٠ ص' => '08:00 AM',
+            '٠٩:٠٠ ص' => '09:00 AM',
+            '١٠:٠٠ ص' => '10:00 AM',
+            '١١:٠٠ ص' => '11:00 AM',
+            '١٢:٠٠ م' => '12:00 PM',
+            '٠١:٠٠ م' => '01:00 PM',
+            '٠٢:٠٠ م' => '02:00 PM',
+            '٠٣:٠٠ م' => '03:00 PM',
+            '٠٤:٠٠ م' => '04:00 PM',
+            '٠٥:٠٠ م' => '05:00 PM',
+            '٠٦:٠٠ م' => '06:00 PM',
+            '٠٧:٠٠ م' => '07:00 PM',
+            '٠٨:٠٠ م' => '08:00 PM',
+            '٠٩:٠٠ م' => '09:00 PM',
+            '١٠:٠٠ م' => '10:00 PM',
+            '١١:٠٠ م' => '11:00 PM',
+        ];
+
+        // Normalize times to English
+        $normalizedTimes = array_map(function ($time) use ($arabicToEnglishTimes) {
+            return $arabicToEnglishTimes[$time] ?? $time;
+        }, $validated['times']);
+
         $merchantId = Auth::user()->merchant_id; // Assuming merchants are authenticated.
         MerchantAvailability::where('merchant_id', $merchantId)->delete();
 
-        // Arabic to Western numeral conversion map
-        $arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-        $westernNumerals = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-
-        // Convert times if they contain Arabic numerals
-        $convertedTimes = array_map(function ($time) use ($arabicNumerals, $westernNumerals) {
-            return str_replace($arabicNumerals, $westernNumerals, $time);
-        }, $validated['times']);
-
-        // Iterate over days and converted times to update or create records
+        // Iterate over days and normalized times to update or create records.
         foreach ($validated['days'] as $day) {
-            foreach ($convertedTimes as $time) {
+            foreach ($normalizedTimes as $time) {
                 MerchantAvailability::updateOrCreate(
                     [
                         'merchant_id' => $merchantId,
                         'day' => $day,
                         'time' => $time,
                     ],
-                    [] // No additional fields to update in this case
+                    [] // No additional fields to update in this case.
                 );
             }
         }
+
+        return response()->json(['message' => 'Availability updated successfully.'], 200);
     }
 
     public function hasAvailability()
