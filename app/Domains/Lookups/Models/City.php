@@ -42,11 +42,4 @@ class City extends BaseModel
         return $this->belongsTo(Country::class);
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function users(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(User::class);
-    }
 }
