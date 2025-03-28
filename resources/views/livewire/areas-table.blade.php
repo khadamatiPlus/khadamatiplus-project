@@ -17,7 +17,7 @@
         @foreach($areas as $area)
             <tr>
                 <td>{{ $area->name }}</td>
-                <td>{{ $area->city->name }}</td>
+                <td>{{ $area->city->name??"" }}</td>
                 <td>
                     @if ($logged_in_user->hasAllAccess() || $logged_in_user->can('admin.lookups.area.update'))
                         <x-utils.edit-button :href="route('admin.lookups.area.edit', $area)" />
