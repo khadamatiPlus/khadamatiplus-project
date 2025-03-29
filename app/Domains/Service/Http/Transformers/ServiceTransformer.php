@@ -96,7 +96,8 @@ class ServiceTransformer
                 ];
             }),
 
-            'tags' => $service->tags->pluck('name'),
+            'tags' => $service->tags->isEmpty() ? [] : $service->tags->pluck('name'),
+
             'is_favorite' => $isFavorite,
 
             'images' => ($service->images ?? collect())->map(function ($image) {
