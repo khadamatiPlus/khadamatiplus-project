@@ -29,7 +29,7 @@
                 <div class="form-group row">
                     <label for="email" class="col-md-2 col-form-label">@lang('E-mail Address')</label>
                     <div class="col-md-10">
-                        <input type="email" name="email" class="form-control" placeholder="{{ __('E-mail Address') }}" value="{{ old('email')?? $merchant->profile->email }}" maxlength="255" required />
+                        <input type="email" name="email" class="form-control" placeholder="{{ __('E-mail Address') }}" value="{{ old('email')?? $merchant->profile->email??"" }}" maxlength="255" required />
                     </div>
                 </div><!--form-group-->
                 <div class="form-group row">
