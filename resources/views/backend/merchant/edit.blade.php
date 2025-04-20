@@ -22,7 +22,7 @@
                 <div class="form-group row">
                     <label for="mobile_number" class="col-md-2 col-form-label">@lang('Mobile Number')</label>
                     <div class="col-md-10">
-                        <input placeholder="{{ __('Mobile Number') }}" name="mobile_number" id="mobile_number" class="form-control"  value="{{old('mobile_number')?? $merchant->profile->mobile_number}}" required/>
+                        <input placeholder="{{ __('Mobile Number') }}" name="mobile_number" id="mobile_number" class="form-control"  value="{{old('mobile_number')?? $merchant->profile->mobile_number??""}}" required/>
                     </div>
                 </div><!--form-group-->
 
