@@ -350,4 +350,51 @@ class MerchantApiController extends APIBaseController
             'availability' => $availability,
         ]);
     }
+    public function getStatus()
+    {
+        $merchant = Auth::user()->merchant;
+
+        return response()->json([
+            'status' => $merchant->status
+        ]);
+    }
+
+    // Update merchant status
+    public function updateStatus(Request $request)
+    {
+        $request->validate([
+            'status' => 'required|in:active,inactive'
+        ]);
+
+        $merchant = Auth::user()->merchant;
+        $merchant->update(['status' => $request->status]);
+
+        return response()->json([
+            'message' => 'Status updated successfully',
+            'status' => $merchant->status
+        ]);
+    }
+
+    // Update merchant location
+    public function updateLocation(Request $request)
+    {
+        $request->validate([
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180'
+        ]);
+
+        $merchant = Auth::user()->merchant;
+        $merchant->update([
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude
+        ]);
+
+        return response()->json([
+            'message' => 'Location updated successfully',
+            'location' => [
+                'latitude' => $merchant->latitude,
+                'longitude' => $merchant->longitude
+            ]
+        ]);
+    }
 }

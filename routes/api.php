@@ -135,7 +135,9 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
                         Route::post('updateOrderStatusByMerchant', [OrderApiController::class, 'updateOrderStatusByMerchant']);
                         Route::get('/has-availability', [MerchantApiController::class, 'hasAvailability']);
                         Route::get('getAvailability', [MerchantApiController::class, 'getAvailability']);
-
+                        Route::get('/status', [MerchantApiController::class, 'getStatus']);
+                        Route::put('/status', [MerchantApiController::class, 'updateStatus']);
+                        Route::put('/location', [MerchantApiController::class, 'updateLocation']);
 
                         Route::post('service/options', [ServiceApiController::class, 'store']);
 
