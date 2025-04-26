@@ -46,7 +46,6 @@ class MerchantRequest extends FormRequest
                         Rule::unique('users')->where(function ($query) {
                             return $query->whereNotNull('merchant_id');
                         }),
-                        'regex:/^7[789]\\d{7}$/'
                     ],
                     'email' => [
                         'required','email',
@@ -91,7 +90,6 @@ class MerchantRequest extends FormRequest
                         Rule::unique('users')->ignore($this->owner_id)->where(function ($query) {
                             return $query->whereNotNull('merchant_id');
                         }),
-                        'regex:/^7[789]\\d{7}$/'
                     ],
                     'password' => ['nullable', 'confirmed'],
 
