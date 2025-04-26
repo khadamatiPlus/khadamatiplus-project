@@ -11,6 +11,13 @@
                 @endforeach
             </select>
         </div>
+
+        <div class="mb-3">
+            <button class="btn btn-success" wire:click="export">
+                {{ __('Export to Excel') }}
+            </button>
+        </div>
+
     </div>
     <table class="table table-striped">
         <thead>

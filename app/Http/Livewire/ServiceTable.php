@@ -1,10 +1,14 @@
 <?php
+
 namespace App\Http\Livewire;
 
 use App\Domains\Service\Models\Service;
 use App\Domains\Merchant\Models\Merchant;
+use App\Exports\ServicesExport;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Str;
 
 class ServiceTable extends Component
 {
@@ -15,13 +19,11 @@ class ServiceTable extends Component
 
     protected $paginationTheme = 'bootstrap';
 
-    // Ensure search query string is synced with URL
     protected $queryString = [
         'search' => ['except' => ''],
         'merchantFilter' => ['except' => '']
     ];
 
-    // Reset pagination when search input changes
     public function updatingSearch()
     {
         $this->resetPage();
@@ -32,11 +34,31 @@ class ServiceTable extends Component
         $this->resetPage();
     }
 
+    public function export()
+    {
+        $services = Service::with(['merchant.profile', 'reviews', 'tags'])
+            ->when($this->merchantFilter != '', function ($query) {
+                $query->where('merchant_id', $this->merchantFilter);
+            })
+            ->when($this->search != '', function ($query) {
+                $query->where(function($query) {
+                    $query->where('title', 'like', '%' . $this->search . '%')
+                        ->orWhereHas('merchant', function($q) {
+                            $q->where('name', 'like', '%' . $this->search . '%');
+                        });
+                });
+            })
+            ->get();
+
+        $filename = 'services_' . now()->format('Y_m_d_His') . '.xlsx';
+
+        return Excel::download(new ServicesExport($services), $filename);
+    }
+
     public function render()
     {
         $merchants = Merchant::orderBy('name')->get();
 
-        // Build query based on search input
         $services = Service::query()
             ->with(['merchant', 'merchant.profile'])
             ->where(function ($query) {
