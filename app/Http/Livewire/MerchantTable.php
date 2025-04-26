@@ -1,14 +1,19 @@
 <?php
 namespace App\Http\Livewire;
+
 use App\Domains\Merchant\Models\Merchant;
 use Livewire\Component;
 use Livewire\WithPagination;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MerchantsExport;
 
 class MerchantTable extends Component
 {
     use WithPagination;
 
     public $search = '';
+    public $exportStartDate;
+    public $exportEndDate;
 
     protected $paginationTheme = 'bootstrap';
 
@@ -23,14 +28,36 @@ class MerchantTable extends Component
         $this->resetPage();
     }
 
+    public function export()
+    {
+        $query = $this->getFilteredQuery();
+
+        return Excel::download(
+            new MerchantsExport($query->get()),
+            'merchants_' . now()->format('Y-m-d') . '.xlsx'
+        );
+    }
+
+    protected function getFilteredQuery()
+    {
+        return Merchant::query()
+            ->where(function ($query) {
+                $query->where('name', 'like', '%' . $this->search . '%')
+                    ->orWhereHas('profile', function($q) {
+                        $q->where('mobile_number', 'like', '%' . $this->search . '%');
+                    });
+            })
+            ->when($this->exportStartDate, function ($query) {
+                $query->whereDate('created_at', '>=', $this->exportStartDate);
+            })
+            ->when($this->exportEndDate, function ($query) {
+                $query->whereDate('created_at', '<=', $this->exportEndDate);
+            });
+    }
+
     public function render()
     {
-        // Build query based on search input
-        $merchants = Merchant::query()
-            ->where(function ($query) {
-                $query->where('name', 'like', '%' . $this->search . '%');
-            })
-            ->paginate(10);
+        $merchants = $this->getFilteredQuery()->paginate(10);
 
         return view('livewire.merchants-table', compact('merchants'));
     }

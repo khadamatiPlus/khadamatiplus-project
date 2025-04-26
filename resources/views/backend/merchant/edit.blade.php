@@ -62,6 +62,13 @@
                     </div>
                 </div><!--form-group-->
                 <div class="form-group row">
+                    <label for="id_image" class="col-md-2 col-form-label">@lang('Image ID')</label>
+                    <div class="col-md-10">
+                        <input type="file" name="id_image" id="id_image" class="form-control"/>
+                        <img id="id_image_blah" src="{{storageBaseLink($merchant->id_image)}}" class="@if(!isset($merchant->id_image)) d-none @endif mt-2" width="100" height="100" loading="lazy" />
+                    </div>
+                </div><!--form-group-->
+                <div class="form-group row">
                     <label for="country_id" class="col-md-2 col-form-label">@lang('Country')</label>
                     <div class="col-md-10">
                         <select  name="country_id" id="country_id" class="form-control " required>

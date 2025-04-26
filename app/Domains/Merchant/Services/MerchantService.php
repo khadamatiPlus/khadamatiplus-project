@@ -127,6 +127,18 @@ class MerchantService extends BaseService
                 throw $e;
             }
         }
+        if(!empty($data['id_image']) && request()->hasFile('id_image')){
+
+            try {
+                $this->upload($data,'id_image','uploads');
+
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
+        if(!empty($data['id_image']) && request()->hasFile('id_image')){
+            $data['id_image']='uploads/'.$data['id_image'];
+        }
 
         $merchant = parent::store($data);
 
@@ -164,6 +176,19 @@ class MerchantService extends BaseService
                 throw $e;
             }
         }
+        if(!empty($data['id_image']) && request()->hasFile('id_image')){
+            try {
+                $this->storageManagerService->deletePublicFile($merchant->id_image,'uploads');
+                $this->upload($data,'id_image','uploads',$merchant->id_image);
+
+            } catch (\Exception $e) {
+                throw $e;
+            }
+        }
+        if(!empty($data['id_image']) && request()->hasFile('id_image')){
+        $data['id_image']='uploads/'.$data['id_image'];
+        }
+
         if(isset($data['is_verified'])){
             $data['is_verified'] = 1;
         }

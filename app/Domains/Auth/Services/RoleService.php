@@ -40,8 +40,6 @@ class RoleService extends BaseService
 
         try {
             $role = $this->model::create(['type' => $data['type'], 'name' => $data['name']]);
-
-            // Convert permission IDs to names if necessary
             $permissions = Permission::whereIn('id', $data['permissions'] ?? [])->pluck('name')->toArray();
             $role->syncPermissions($permissions);
         } catch (Exception $e) {

@@ -58,6 +58,13 @@
                         <img  class="mt-2 d-none" id="profile_pic_blah" height="100px" width="100px"  alt="{{old('profile_pic')}}" />
                     </div>
                 </div><!--form-group-->
+                <div class="form-group row">
+                    <label for="id_image" class="col-md-2 col-form-label">@lang('ID Image')</label>
+                    <div class="col-md-10">
+                        <input placeholder="{{ __('ID Image') }}" onchange="readURL2(this)" type="file" name="id_image" id="id_image" class="form-control"  accept="image/*" />
+                        <img  class="mt-2 d-none" id="id_image_blah" height="100px" width="100px"  alt="{{old('id_image')}}" />
+                    </div>
+                </div><!--form-group-->
 
                 <div class="form-group row">
                     <label for="country_id" class="col-md-2 col-form-label">@lang('Country')</label>
@@ -158,6 +165,19 @@
             $("#profile_pic").change(function(){
                 $('#profile_pic_blah').removeClass('d-none');
                 readURL(this);
+            });
+            function readURL2(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        $('#id_image_blah').attr('src', e.target.result);
+                    }
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+            $("#id_image").change(function(){
+                $('#id_image_blah').removeClass('d-none');
+                readURL2(this);
             });
 
             $('select[name="country_id"]').on('change', function() {

@@ -60,6 +60,7 @@ class MerchantRequest extends FormRequest
                     'area_id' => ['required','exists:areas,id'],
                     'is_verified' => ['sometimes','in:0,1'],
                     'profile_pic' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedImages)],
+                    'id_image' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedImages)],
                     'latitude' => ['required', 'max:350'],
                     'longitude' => ['required', 'max:350'],
                     'password' => ['required', 'confirmed'],
@@ -75,6 +76,7 @@ class MerchantRequest extends FormRequest
                     'area_id' => ['required','exists:areas,id'],
                     'is_verified' => ['sometimes','in:0,1'],
                     'profile_pic' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedImages)],
+                    'id_image' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedImages)],
                     'latitude' => ['required', 'max:350'],
                     'longitude' => ['required', 'max:350'],
                     'email' => [
