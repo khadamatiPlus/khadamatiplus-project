@@ -31,27 +31,28 @@ class ServiceApiController extends APIBaseController
             'sub_category_id' => 'required|exists:categories,id',
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'price' => 'required|numeric',
-            'new_price' => 'nullable|numeric',
             'duration' => 'nullable|string',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
             'images' => 'nullable|array',
-            'images.*.image' => 'required|url', // Validate image as a URL
-            'images.*.is_main' => 'required|boolean', // Validate the 'is_main' flag
+            'images.*.image' => 'required|url',
+            'images.*.is_main' => 'required|boolean',
+            'service_prices' => 'required|array|min:1',
+            'service_prices.*.title' => 'required|string|max:255',
+            'service_prices.*.amount' => 'required|numeric|min:0',
             'products' => 'nullable|array',
             'products.*.title' => 'required|string',
             'products.*.price' => 'required|numeric',
             'products.*.description' => 'nullable|string',
             'products.*.images' => 'nullable|array',
-            'products.*.images.*.image' => 'required|url', // Validate product image as a URL
-            'products.*.images.*.is_main' => 'required|boolean', // Validate the 'is_main' flag
+            'products.*.images.*.image' => 'required|url',
+            'products.*.images.*.is_main' => 'required|boolean',
         ]);
 
         // Find the category and parent category
         $category = Category::query()->where('id', $validated['sub_category_id'])->first();
 
-        // Create the service
+        // Create the service without price fields
         $service = Service::create([
             'merchant_id' => auth()->user()->merchant_id,
             'sub_category_id' => $validated['sub_category_id'],
@@ -59,10 +60,17 @@ class ServiceApiController extends APIBaseController
             'title' => $validated['title'],
             'title_ar' => $validated['title'],
             'description' => $validated['description'],
-            'price' => $validated['price'],
-            'new_price' => $validated['new_price'] ?? null,
-            'duration' => $validated['duration']??null,
+            'duration' => $validated['duration'] ?? null,
+            // Removed price and new_price fields
         ]);
+
+        // Create service prices
+        foreach ($validated['service_prices'] as $priceData) {
+            $service->prices()->create([
+                'title' => $priceData['title'],
+                'amount' => $priceData['amount'],
+            ]);
+        }
 
         // Attach tags to the service if any
         if (isset($validated['tags'])) {
@@ -74,7 +82,7 @@ class ServiceApiController extends APIBaseController
             $images = [];
             foreach ($validated['images'] as $imageData) {
                 $images[] = [
-                    'image' => $imageData['image'], // Store the URL
+                    'image' => $imageData['image'],
                     'is_main' => $imageData['is_main'],
                 ];
             }
@@ -96,7 +104,7 @@ class ServiceApiController extends APIBaseController
                     $productImages = [];
                     foreach ($productData['images'] as $productImageData) {
                         $productImages[] = [
-                            'image' => $productImageData['image'], // Use the URL directly
+                            'image' => $productImageData['image'],
                             'is_main' => $productImageData['is_main'],
                         ];
                     }
@@ -113,7 +121,6 @@ class ServiceApiController extends APIBaseController
     }
 
 
-
     public function updateService(Request $request, $id)
     {
         // Validate incoming request
@@ -121,21 +128,23 @@ class ServiceApiController extends APIBaseController
             'sub_category_id' => 'nullable|exists:categories,id',
             'title' => 'nullable|string|max:255',
             'description' => 'nullable|string',
-            'price' => 'nullable|numeric',
-            'new_price' => 'nullable|numeric',
             'duration' => 'nullable|string',
             'tags' => 'nullable|array',
             'tags.*' => 'exists:tags,id',
             'images' => 'nullable|array',
-            'images.*.image' => 'nullable|url', // Allow URL or null
+            'images.*.image' => 'nullable|url',
             'images.*.is_main' => 'nullable|boolean',
+            'service_prices' => 'nullable|array',
+            'service_prices.*.id' => 'nullable|exists:service_prices,id',
+            'service_prices.*.title' => 'required_with:service_prices|string|max:255',
+            'service_prices.*.amount' => 'required_with:service_prices|numeric|min:0',
             'products' => 'nullable|array',
             'products.*.id' => 'nullable|exists:service_products,id',
             'products.*.title' => 'nullable|string',
             'products.*.price' => 'nullable|numeric',
             'products.*.description' => 'nullable|string',
             'products.*.images' => 'nullable|array',
-            'products.*.images.*.image' => 'nullable|url', // Allow URL for product images
+            'products.*.images.*.image' => 'nullable|url',
             'products.*.images.*.is_main' => 'nullable|boolean',
         ]);
 
@@ -143,36 +152,63 @@ class ServiceApiController extends APIBaseController
         $service = Service::findOrFail($id);
 
         // Update the service details if they are provided
-        $service->update([
+        $updateData = [
             'merchant_id' => auth()->user()->merchant_id,
             'sub_category_id' => $validated['sub_category_id'] ?? $service->sub_category_id,
             'category_id' => $validated['sub_category_id'] ? Category::find($validated['sub_category_id'])->parent_id : $service->category_id,
             'title' => $validated['title'] ?? $service->title,
             'description' => $validated['description'] ?? $service->description,
-            'price' => $validated['price'] ?? $service->price,
-            'new_price' => $validated['new_price'] ?? $service->new_price,
             'duration' => $validated['duration'] ?? $service->duration,
-        ]);
+        ];
+
+        // Remove price fields if they exist in the model
+        if (isset($service->price)) {
+            $updateData['price'] = null;
+        }
+        if (isset($service->new_price)) {
+            $updateData['new_price'] = null;
+        }
+
+        $service->update($updateData);
+
+        // Handle service prices
+        if (isset($validated['service_prices'])) {
+            $existingPriceIds = $service->prices()->pluck('id')->toArray();
+            $updatedPriceIds = [];
+
+            foreach ($validated['service_prices'] as $priceData) {
+                $price = $service->prices()->updateOrCreate(
+                    ['id' => $priceData['id'] ?? null],
+                    [
+                        'title' => $priceData['title'],
+                        'amount' => $priceData['amount'],
+                    ]
+                );
+                $updatedPriceIds[] = $price->id;
+            }
+
+            // Delete prices that weren't included in the update
+            $pricesToDelete = array_diff($existingPriceIds, $updatedPriceIds);
+            if (!empty($pricesToDelete)) {
+                $service->prices()->whereIn('id', $pricesToDelete)->delete();
+            }
+        }
 
         // Attach or update tags if any
         if (isset($validated['tags'])) {
             $service->tags()->sync($validated['tags']);
         }
 
-        // Handle service images (URL-based or uploaded)
+        // Handle service images
         if (isset($validated['images'])) {
-            // Delete existing images (if needed, depending on your use case)
             $service->images()->delete();
-
             $images = [];
             foreach ($validated['images'] as $imageData) {
                 $images[] = [
-                    'image' => $imageData['image'], // Assume URL is directly passed
+                    'image' => $imageData['image'],
                     'is_main' => $imageData['is_main'] ?? false,
                 ];
             }
-
-            // Store new images in the service's image relationship
             $service->images()->createMany($images);
         }
 
@@ -180,7 +216,7 @@ class ServiceApiController extends APIBaseController
         if (isset($validated['products'])) {
             foreach ($validated['products'] as $productData) {
                 $product = ServiceProduct::updateOrCreate(
-                    ['id' => $productData['id'] ?? null, 'service_id' => $service->id], // Find or create by product ID
+                    ['id' => $productData['id'] ?? null, 'service_id' => $service->id],
                     [
                         'title' => $productData['title'] ?? null,
                         'price' => $productData['price'] ?? null,
@@ -188,26 +224,23 @@ class ServiceApiController extends APIBaseController
                     ]
                 );
 
-                // Handle product images (URL-based or uploaded)
                 if (isset($productData['images'])) {
-                    $product->images()->delete(); // Delete existing images
-
+                    $product->images()->delete();
                     $productImages = [];
                     foreach ($productData['images'] as $productImageData) {
                         $productImages[] = [
-                            'image' => $productImageData['image'], // Assume URL is directly passed
+                            'image' => $productImageData['image'],
                             'is_main' => $productImageData['is_main'] ?? false,
                         ];
                     }
-
-                    $product->images()->createMany($productImages); // Store new product images
+                    $product->images()->createMany($productImages);
                 }
             }
         }
 
         return response()->json([
             'success' => true,
-            'data' => (new ServiceTransformer)->transform($service),
+            'data' => (new ServiceTransformer())->transform($service),
         ]);
     }
 

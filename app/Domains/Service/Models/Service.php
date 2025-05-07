@@ -119,4 +119,8 @@ class Service extends BaseModel
     {
         return $this->hasMany(ServiceOption::class);
     }
+    public function prices()
+    {
+        return $this->hasMany(ServicePrice::class);
+    }
 }

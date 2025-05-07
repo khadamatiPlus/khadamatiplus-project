@@ -14,13 +14,20 @@ class ServiceTransformer
     public function transform(Service $service): array
     {
         $isFavorite = auth()->check() && $service->favoritedBy()->where('customer_id', auth()->user()->customer_id)->exists();
-
+        $prices = $service->prices ? $service->prices->map(function($price) {
+            return [
+                'id' => $price->id,
+                'title' => $price->title,
+                'amount' => $price->amount,
+            ];
+        }) : [];
         return [
             'id' => $service->id,
             'title' => $service->title,
             'description' => $service->description,
             'price' => $service->price,
             'new_price' => $service->new_price??null,
+            'service_prices' => $prices,
             'duration' => $service->duration??null,
 
             'rating' => $service->reviews()->avg('rating'),
@@ -71,6 +78,13 @@ class ServiceTransformer
 
     public function transformMerchant(Service $service): array
     {
+        $prices = $service->prices ? $service->prices->map(function($price) {
+            return [
+                'id' => $price->id,
+                'title' => $price->title,
+                'amount' => $price->amount,
+            ];
+        }) : [];
         $isFavorite = auth()->check() && $service->favoritedBy()->where('customer_id', auth()->user()->customer_id)->exists();
 
         return [
@@ -80,7 +94,7 @@ class ServiceTransformer
             'price' => $service->price,
             'new_price' => $service->new_price ?? null,
             'duration' => $service->duration ?? null,
-
+            'service_prices' => $prices,
             'rating' => $service->reviews()->avg('rating'),
             'user_ratings_count' => $service->reviews()->count(),
             'reviews' => $service->reviews->map(function ($review) {
@@ -122,16 +136,6 @@ class ServiceTransformer
                 ];
             }),
 
-            // Adding the service options here
-//            'options' => $service->options->map(function ($option) {
-//                return [
-//                    'id' => $option->id,
-//                    'title' => $option->title,
-//                    'value' => $option->value,
-//                    'type' => $option->type,
-//                    'value_type' => $option->value_type,
-//                ];
-//            }),
         ];
     }
 
