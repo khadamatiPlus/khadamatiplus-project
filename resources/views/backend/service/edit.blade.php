@@ -349,7 +349,7 @@
                                 <div class="image-preview-container">
                                     @foreach($service->images as $image)
                                         <div class="existing-image" data-image-id="{{ $image->id }}">
-                                            <img src="{{ storageBaseLink($image->image) }}" class="image-preview" alt="Service Image">
+                                            <img src="{{ $image->image }}" class="image-preview" alt="Service Image">
                                             <input type="hidden" name="existing_images[]" value="{{ $image->id }}">
                                             <input type="checkbox" name="deleted_images[{{ $image->id }}]" value="1" class="d-none delete-flag">
                                             <button type="button" class="delete-existing-image" data-id="{{ $image->id }}">
@@ -363,7 +363,7 @@
                                                        value="{{ $image->id }}"
                                                     {{ $image->is_main ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="main-image-{{ $image->id }}">
-                                                    Main Image {{ $image->id }}
+                                                    Main Image
                                                 </label>
                                             </div>
                                         </div>

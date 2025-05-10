@@ -54,7 +54,7 @@
                         <div class="d-flex flex-wrap">
                             @foreach($service->images as $image)
                                 <div class="mr-2 mb-2" style="position: relative;">
-                                    <img src="{{ storageBaseLink($image->image) }}" width="100" height="100" class="img-thumbnail" loading="lazy" onerror="this.src='{{ asset('img/brand/default.png') }}'" />
+                                    <img src="{{ $image->image }}" width="100" height="100" class="img-thumbnail" loading="lazy" onerror="this.src='{{ asset('img/brand/default.png') }}'" />
                                     @if($image->is_main)
                                         <span class="badge badge-success" style="position: absolute; top: 5px; left: 5px;">Main</span>
                                     @endif

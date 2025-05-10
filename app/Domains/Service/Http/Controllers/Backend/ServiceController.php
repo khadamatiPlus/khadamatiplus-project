@@ -133,15 +133,15 @@ class ServiceController extends Controller
 
         foreach ($request->file('service_images') as $index => $file) {
             $path = $file->store('services/' . $service->id, 'public');
+            $fullPath = storageBaseLink( $path);
 
             $service->images()->create([
-                'image' => $path,
+                'image' => $fullPath,
                 'is_main' => $index == $mainImageIndex,
                 'order' => $index,
             ]);
         }
     }
-
     protected function createServiceProducts(Service $service, array $products)
     {
         foreach ($products as $productData) {
@@ -271,8 +271,10 @@ class ServiceController extends Controller
         if ($request->hasFile('service_images')) {
             foreach ($request->file('service_images') as $file) {
                 $path = $file->store('services/' . $service->id, 'public');
+                $fullPath =storageBaseLink( $path);
+
                 $service->images()->create([
-                    'image' => $path,
+                    'image' => $fullPath,
                     'is_main' => false
                 ]);
             }
@@ -292,6 +294,7 @@ class ServiceController extends Controller
             $service->images()->orderBy('id')->first()->update(['is_main' => true]);
         }
     }
+
     protected function updateServicePrices(Service $service, array $prices)
     {
         // Get existing price IDs from request
