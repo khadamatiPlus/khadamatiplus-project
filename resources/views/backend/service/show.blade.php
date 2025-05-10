@@ -3,7 +3,7 @@
 @section('content')
     <x-backend.card>
         <x-slot name="header">
-            @lang('View Service')
+            @lang('View Service') - {{ $service->title }}
         </x-slot>
         <x-slot name="headerActions">
             <x-utils.link class="card-header-action" :href="route('admin.service.index')" :text="__('Back')" />
@@ -11,88 +11,96 @@
         <x-slot name="body">
             <table class="table table-hover">
                 <tr>
-                    <th>@lang('Title')</th>
-                    <td>{{$service->title}}</td>
+                    <th>@lang('Service Title')</th>
+                    <td>{{ $service->title }}</td>
                 </tr>
                 <tr>
                     <th>@lang('Merchant')</th>
-                    <td>{{$service->merchant->name}}</td>
+                    <td>{{ $service->merchant->name }}</td>
                 </tr>
                 <tr>
                     <th>@lang('Category')</th>
-                    <td>{{$service->category->name}}</td>
-                </tr>
-                <tr>
-                    <th>@lang('Sub Category')</th>
-                    <td>{{$service->category->name}}</td>
-                </tr>
-                <tr>
-                    <th>@lang('Main Image')</th>
-                    <td>
-                        @php
-                            $serviceMainImage=\App\Domains\Service\Models\ServiceImage::query()->where('service_id',$service->id)->where('is_main',1)->first();
-                        @endphp
-                        @if(isset($serviceMainImage->image))
-                            <img src="{{storageBaseLink($serviceMainImage->image)}}" width="100"  loading="lazy" />
-                        @else
-                            ----------------
-                        @endif
-                    </td>
+                    <td>{{ $service->category->name }} > {{ $service->subCategory->name }}</td>
                 </tr>
                 <tr>
                     <th>@lang('Description')</th>
                     <td>{!! $service->description !!}</td>
                 </tr>
                 <tr>
-                    <th>@lang('Price')</th>
-                    <td>{{$service->price}}</td>
-                </tr>
-                <tr>
-                    <th>@lang('New Price')</th>
-                    <td>{{$service->new_price}}</td>
-                </tr>
-                <tr>
                     <th>@lang('Duration')</th>
-                    <td>{{$service->duration}}</td>
+                    <td>{{ $service->duration }} minutes</td>
                 </tr>
                 <tr>
-                    <th>@lang('Order')</th>
-                    <td>{{$service->order}}</td>
+                    <th>@lang('Price Options')</th>
+                    <td>
+                        <ul class="list-unstyled">
+                            @foreach($service->prices as $price)
+                                <li>{{ $price->title }}: ${{ number_format($price->amount, 2) }}</li>
+                            @endforeach
+                        </ul>
+                    </td>
                 </tr>
                 <tr>
                     <th>@lang('Tags')</th>
                     <td>
                         @foreach($service->tags as $tag)
-
-                            <span class="badge badge-primary"> {{$tag->name}}</span>
-
+                            <span class="badge badge-primary">{{ $tag->name }}</span>
                         @endforeach
                     </td>
                 </tr>
                 <tr>
-                    <th>@lang('Products')</th>
+                    <th>@lang('Service Images')</th>
                     <td>
-                        @foreach($service->products as $index=> $product)
-
-                            <h4>{{__("Product")}} {{$index+1}}</h4>
-                             <b>{{__("Title:")}}</b> {{$product->title}}
-                             <b>{{__("Price:")}}</b> {{$product->price}}
-                             <b>{{__("Duration:")}}</b> {{$product->duration}}
-                             <b>{{__("Description:")}}</b> {{$product->description}}
-                             <b>{{__("order:")}}</b> {{$product->order}}
-                             <b>{{__("Image:")}}</b>
-                            @if(!empty($product->image))
-                                <img src="{{storageBaseLink($product->image)}}" width="50" height="50" loading="lazy" onerror="this.src='{{ asset('img/brand/default.png') }}'" />
-                            @else
-                                @lang('No Service Image')
-                            @endif
-
-                        @endforeach
+                        <div class="d-flex flex-wrap">
+                            @foreach($service->images as $image)
+                                <div class="mr-2 mb-2" style="position: relative;">
+                                    <img src="{{ storageBaseLink($image->image) }}" width="100" height="100" class="img-thumbnail" loading="lazy" onerror="this.src='{{ asset('img/brand/default.png') }}'" />
+                                    @if($image->is_main)
+                                        <span class="badge badge-success" style="position: absolute; top: 5px; left: 5px;">Main</span>
+                                    @endif
+                                </div>
+                            @endforeach
+                        </div>
                     </td>
                 </tr>
                 <tr>
-                    <th>@lang('Created By')</th>
-                    <td>{{$service->createdById->name??"Not Found"}}</td>
+                    <th>@lang('Included Products')</th>
+                    <td>
+                        @if($service->products->count() > 0)
+                            <div class="accordion" id="productsAccordion">
+                                @foreach($service->products as $product)
+                                    <div class="card">
+                                        <div class="card-header" id="heading{{ $product->id }}">
+                                            <h5 class="mb-0">
+                                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapse{{ $product->id }}" aria-expanded="true" aria-controls="collapse{{ $product->id }}">
+                                                    {{ $product->title }} - ${{ number_format($product->price, 2) }}
+                                                </button>
+                                            </h5>
+                                        </div>
+                                        <div id="collapse{{ $product->id }}" class="collapse" aria-labelledby="heading{{ $product->id }}" data-parent="#productsAccordion">
+                                            <div class="card-body">
+                                                <p>{{ $product->description }}</p>
+                                                @if($product->images->count() > 0)
+                                                    <div class="d-flex flex-wrap">
+                                                        @foreach($product->images as $image)
+                                                            <div class="mr-2 mb-2" style="position: relative;">
+                                                                <img src="{{ Storage::url($image->path) }}" width="80" height="80" class="img-thumbnail" loading="lazy" onerror="this.src='{{ asset('img/brand/default.png') }}'" />
+                                                                @if($image->is_main)
+                                                                    <span class="badge badge-success" style="position: absolute; top: 5px; left: 5px;">Main</span>
+                                                                @endif
+                                                            </div>
+                                                        @endforeach
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            @lang('No products included')
+                        @endif
+                    </td>
                 </tr>
             </table>
         </x-slot>
@@ -101,10 +109,9 @@
                 <strong>@lang('Service Created'):</strong> {{ $service->created_at->format('Y-m-d H:i:s') }} ({{ $service->created_at->diffForHumans() }}),
                 <strong>@lang('Last Updated'):</strong> {{ $service->updated_at->format('Y-m-d H:i:s') }} ({{ $service->updated_at->diffForHumans() }})
                 @if($service->trashed())
-                    <strong>@lang('Account Deleted'):</strong> {{ $service->deleted_at->format('Y-m-d H:i:s') }} ({{ $service->deleted_at->diffForHumans() }})
+                    <strong>@lang('Service Deleted'):</strong> {{ $service->deleted_at->format('Y-m-d H:i:s') }} ({{ $service->deleted_at->diffForHumans() }})
                 @endif
             </small>
-
         </x-slot>
     </x-backend.card>
 @endsection

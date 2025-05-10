@@ -42,6 +42,7 @@ class ServiceService extends BaseService
      */
     public function store(array $data = [])
     {
+
         if(!empty($data['main_image']) && request()->hasFile('main_image')){
             try {
                 $this->upload($data,'main_image');
@@ -61,6 +62,8 @@ class ServiceService extends BaseService
         $category=Category::query()->where('id',$data['sub_category_id'])->first();
 
         $data['category_id']=$category->parent_id;
+        $data['price']=10;
+
         $service= parent::store($data);
         $service->tags()->attach($data['tags']);
 
@@ -78,6 +81,14 @@ class ServiceService extends BaseService
                 'service_id' =>$service->id, // Make sure to get the service ID
                 'is_main' => $index == $mainImageIndex ? 1 : 0, // Set is_main based on the selected main image
             ]);
+
+
+            foreach ($data['prices'] as $priceData) {
+                $service->prices()->create([
+                    'title' => $priceData['title'],
+                    'amount' => $priceData['amount']
+                ]);
+            }
         }
 
         // Handle product details
@@ -127,6 +138,36 @@ class ServiceService extends BaseService
                 throw $e;
             }
         }
+
+        $existingPriceIds = $service->prices->pluck('id')->toArray();
+        $updatedPriceIds = [];
+
+        // Update or create prices
+        foreach ($data['prices'] as $priceData) {
+            if (isset($priceData['id']) && in_array($priceData['id'], $existingPriceIds)) {
+                // Update existing price
+                $price = $service->prices()->find($priceData['id']);
+                $price->update([
+                    'title' => $priceData['title'],
+                    'amount' => $priceData['amount']
+                ]);
+                $updatedPriceIds[] = $priceData['id'];
+            } else {
+                // Create new price
+                $service->prices()->create([
+                    'title' => $priceData['title'],
+                    'amount' => $priceData['amount']
+                ]);
+            }
+        }
+
+        // Delete prices that were removed
+        $pricesToDelete = array_diff($existingPriceIds, $updatedPriceIds);
+        if (!empty($pricesToDelete)) {
+            $service->prices()->whereIn('id', $pricesToDelete)->delete();
+        }
+
+
         if(!empty($data['video']) && request()->hasFile('video')){
             try {
                 $this->storageManagerService->deletePublicFile($service->video,'service/files');

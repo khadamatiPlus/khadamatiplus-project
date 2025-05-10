@@ -10,6 +10,7 @@ use App\Services\BaseService;
 use App\Services\StorageManagerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 
 
@@ -157,45 +158,48 @@ class MerchantService extends BaseService
     {
         $data = array_filter($data);
         $merchant = $this->getById($entity);
-        $user=User::query()->where('id',$merchant->profile_id)->firstOrFail();
-        if (isset($data['name'])){
+        $user = User::query()->where('id', $merchant->profile_id)->firstOrFail();
+
+        // Update user fields
+        if (isset($data['name'])) {
             $user->name = $data['name'];
         }
-        if (isset($data['password'])){
-            $user->email = $data['password'];
+        if (isset($data['email'])) {
+            $user->email = $data['email'];
         }
-        if (isset($data['password'])){
-            $user->password = $data['password'];
+        if (isset($data['mobile_number'])) {
+            $user->mobile_number = $data['mobile_number'];
+        }
+        if (isset($data['password'])) {
+            $user->password = Hash::make($data['password']);
         }
         $user->save();
-        if(!empty($data['profile_pic']) && request()->hasFile('profile_pic')){
+
+        // Handle profile picture
+        if (!empty($data['profile_pic']) && request()->hasFile('profile_pic')) {
             try {
-                $this->storageManagerService->deletePublicFile($merchant->profile_pic,'merchants/profile_pics');
-                $this->upload($data,'profile_pic','merchants/profile_pic',$merchant->logo);
+                $this->storageManagerService->deletePublicFile($merchant->profile_pic, 'merchants/profile_pics');
+                $this->upload($data, 'profile_pic', 'merchants/profile_pic', $merchant->logo);
             } catch (\Exception $e) {
                 throw $e;
             }
         }
-        if(!empty($data['id_image']) && request()->hasFile('id_image')){
-            try {
-                $this->storageManagerService->deletePublicFile($merchant->id_image,'uploads');
-                $this->upload($data,'id_image','uploads',$merchant->id_image);
 
+        // Handle ID image
+        if (!empty($data['id_image']) && request()->hasFile('id_image')) {
+            try {
+                $this->storageManagerService->deletePublicFile($merchant->id_image, 'uploads');
+                $this->upload($data, 'id_image', 'uploads', $merchant->id_image);
             } catch (\Exception $e) {
                 throw $e;
             }
-        }
-        if(!empty($data['id_image']) && request()->hasFile('id_image')){
-        $data['id_image']='uploads/'.$data['id_image'];
+            $data['id_image'] = 'uploads/'.$data['id_image'];
         }
 
-        if(isset($data['is_verified'])){
-            $data['is_verified'] = 1;
-        }
-        else{
-            $data['is_verified'] =  $merchant->is_verified;
-        }
+        // Handle verification status
+        $data['is_verified'] = isset($data['is_verified']) ? 1 : $merchant->is_verified;
         $data['profile_id'] = $merchant->profile_id;
+
         return parent::update($entity, $data);
     }
 

@@ -29,8 +29,9 @@ class ServiceRequest extends FormRequest
                     'title' => ['required', 'max:350'],
                     'description' => ['required'],
 
-                    'price' => ['required', 'max:350'],
-                    'new_price' => ['nullable', 'max:350'],
+//                    'prices' => 'required|array|min:1',
+//                    'prices.*.title' => 'required|string|max:255',
+//                    'prices.*.amount' => 'required|numeric|min:0',
                     'order' => ['nullable'],
                     'duration' => ['nullable'],
                     'sub_category_id' => ['required','exists:categories,id'],
@@ -53,8 +54,9 @@ class ServiceRequest extends FormRequest
                     'id' => ['required', 'exists:services,id'],
                     'title' => ['required', 'max:350'],
                     'description' => ['required'],
-                    'price' => ['required', 'max:350'],
-                    'new_price' => ['nullable', 'max:350'],
+                    'prices' => 'required|array|min:1',
+                    'prices.*.title' => 'required|string|max:255',
+                    'prices.*.amount' => 'required|numeric|min:0',
                     'order' => ['nullable'],
                     'duration' => ['nullable'],
                     'sub_category_id' => ['required','exists:categories,id'],
@@ -85,6 +87,10 @@ class ServiceRequest extends FormRequest
     public function messages()
     {
         return [
+            'prices.required' => 'At least one price option is required.',
+            'prices.*.title.required' => 'Each price option must have a title.',
+            'prices.*.amount.required' => 'Each price option must have an amount.',
+
         ];
     }
 

@@ -8,9 +8,12 @@ use App\Domains\Lookups\Services\CountryService;
 use App\Domains\Lookups\Services\TagService;
 use App\Domains\Merchant\Services\MerchantService;
 use App\Domains\Service\Http\Requests\Backend\ServiceRequest;
+use App\Domains\Service\Http\Requests\Backend\StoreServiceRequest;
+use App\Domains\Service\Http\Requests\Backend\UpdateServiceRequest;
 use App\Domains\Service\Http\Transformers\ServiceTransformer;
 use App\Domains\Service\Models\Service;
 use App\Domains\Service\Models\ServiceImage;
+use App\Domains\Service\Models\ServicePrice;
 use App\Domains\Service\Models\ServiceProduct;
 use App\Domains\Service\Services\ServiceService;
 use App\Domains\Lookups\Services\CityService;
@@ -60,105 +63,138 @@ class ServiceController extends Controller
 
 
 
-    public function store(Request $request)
+    public function store(StoreServiceRequest $request)
     {
-        // Validate incoming request
-        $validated = $request->validate([
-            'merchant_id' => 'required|exists:merchants,id',
-            'sub_category_id' => 'required|exists:categories,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric',
-            'new_price' => 'nullable|numeric',
-            'duration' => 'nullable|string',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
-            'images' => 'nullable|array',
-            'images.*.image' => 'required', // Validate image as a URL
-            'images.*.is_main' => 'required|boolean', // Validate the 'is_main' flag
-            'products' => 'nullable|array',
-            'products.*.title' => 'required|string',
-            'products.*.price' => 'required|numeric',
-            'products.*.description' => 'nullable|string',
-            'products.*.images' => 'nullable|array',
-            'products.*.images.*.image' => 'required', // Validate product image as a URL
-            'products.*.images.*.is_main' => 'required|boolean', // Validate the 'is_main' flag
-        ]);
 
-        // Find the category and parent category
-        $category = Category::query()->where('id', $validated['sub_category_id'])->first();
+        DB::beginTransaction();
 
-        // Create the service
-        $service = Service::create([
-            'merchant_id' => $validated['merchant_id'],
-            'sub_category_id' => $validated['sub_category_id'],
-            'category_id' => $category->parent_id??1,
-            'title' => $validated['title'],
-            'title_ar' => $validated['title'],
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'new_price' => $validated['new_price'] ?? null,
-            'duration' => $validated['duration']??null,
-        ]);
+        try {
+            // Create the service
+            $service = Service::create([
+                'merchant_id' => $request->merchant_id,
+                'sub_category_id' => $request->sub_category_id,
+                'category_id' => Category::findOrFail($request->sub_category_id)->parent_id ?? 1,
+                'title' => $request->title,
+                'title_ar' => $request->title, // Consider adding Arabic translation
+                'description' => $request->description,
+                'duration' => $request->duration,
+                 'price'=>  $request->prices[0]['amount'],
+            ]);
 
-        // Attach tags to the service if any
-        if (isset($validated['tags'])) {
-            $service->tags()->sync($validated['tags']);
-        }
+            // Create price options
+            $this->createServicePrices($service, $request->prices);
 
-        if (isset($validated['images'])) {
-            $images = [];
-            $existingImages = $service->images()->get()->toArray();
-            foreach ($validated['images'] as $imageData) {
-                if ($imageData['image']->isValid()) {
-                    $imagePath = $imageData['image']->store('uploads', 'public');
-                    $imageUrl = asset('storage/' . $imagePath);
-                    $images[] = [
-                        'image' => $imageUrl,
-                        'is_main' => $imageData['is_main'],
-                    ];
-                }
+            // Sync tags
+            if ($request->has('tags')) {
+                $service->tags()->sync($request->tags);
             }
-            $allImages = array_merge($existingImages, $images);
-            $service->images()->createMany($allImages);
+
+            // Handle service images
+            if ($request->hasFile('service_images')) {
+                $this->uploadServiceImages($service, $request);
+            }
+
+            // Handle products
+            if ($request->has('products')) {
+                $this->createServiceProducts($service, $request->products);
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.service.index')
+                ->withFlashSuccess(__('Service was successfully created'));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            logger()->error('Service creation failed: ' . $e->getMessage());
+
+            return back()
+                ->withInput()
+                ->withFlashDanger(__('Failed to create service. Please try again.'));
         }
+    }
+
+    protected function createServicePrices(Service $service, array $prices)
+    {
+        $priceModels = collect($prices)->map(function ($price) {
+            return new ServicePrice([
+                'title' => $price['title'],
+                'amount' => $price['amount'] ,
+            ]);
+        });
+
+        $service->prices()->saveMany($priceModels);
+    }
+
+    protected function uploadServiceImages(Service $service, Request $request)
+    {
+        $mainImageIndex = $request->main_service_image ?? 0;
+
+        foreach ($request->file('service_images') as $index => $file) {
+            $path = $file->store('services/' . $service->id, 'public');
+
+            $service->images()->create([
+                'image' => $path,
+                'is_main' => $index == $mainImageIndex,
+                'order' => $index,
+            ]);
+        }
+    }
+
+    protected function createServiceProducts(Service $service, array $products)
+    {
+        foreach ($products as $productData) {
+            // First validate non-file data
+            $validated = validator($productData, [
+                'title' => 'required|string|max:255',
+                'price' => 'required|numeric|min:0',
+                'description' => 'nullable|string',
+                'order' => 'integer|min:0',
+                'main_image_index' => 'nullable|integer|min:0',
+            ])->validate();
 
 
-        // Handle products and their images
-        if (isset($validated['products'])) {
-            foreach ($validated['products'] as $productData) {
-                $product = ServiceProduct::create([
-                    'service_id' => $service->id,
-                    'title' => $productData['title'],
-                    'price' => $productData['price'],
-                    'description' => $productData['description'] ?? null,
-                    'order' => $productData['order'] ?? null,
+            $product = $service->products()->create([
+                'title' => $validated['title'],
+                'price' => $validated['price'] * 100,
+                'description' => $validated['description'] ?? null,
+                'order' => $validated['order'] ?? 0,
+            ]);
+            if (isset($productData['images']))
+            {
+                $this->uploadProductImages($product, [
+                    'images' => $productData['images'],
+                    'main_image_index' => $validated['main_image_index']
                 ]);
-
-
-
-                if (isset($productData['images'])) {
-                    $images = [];
-                    foreach ($productData['images'] as $imageData) {
-                        if ($imageData['image']->isValid()) {
-                            $imagePath = $imageData['image']->store('uploads', 'public');
-                            $imageUrl = asset('storage/' . $imagePath);
-                            $images[] = [
-                                'image' => $imageUrl,
-                                'is_main' => $imageData['is_main'],
-                            ];
-                        }
-                    }
-                    $allImages = array_merge($existingImages, $images);
-                    $product->images()->createMany($allImages);
-                }
-
-
             }
+
+        }
+    }
+
+    protected function uploadProductImages(ServiceProduct $product, array $productData)
+    {
+        $mainImageIndex = $productData['main_image_index'];
+
+        // Ensure we have uploaded files
+        if (!isset($productData['images']) || !is_array($productData['images'])) {
+            return;
         }
 
-        return redirect()->route('admin.service.index')->withFlashSuccess(__('The Service was successfully added'));
+        foreach ($productData['images'] as $index => $file) {
+            // Skip if not a valid uploaded file
+            if (!($file instanceof \Illuminate\Http\UploadedFile)) {
+                continue;
+            }
 
+            $path = $file->store('products/' . $product->id, 'public');
+
+            $product->images()->create([
+                'image' => $path,
+                'is_main' => $index == $mainImageIndex,
+                'order' => $index,
+            ]);
+        }
     }
 
 
@@ -181,128 +217,230 @@ class ServiceController extends Controller
 //    }
 
 
-    public function update(Request $request, $id)
+    public function update(UpdateServiceRequest $request, Service $service)
     {
-        // Validate incoming request
-        $validated = $request->validate([
-            'merchant_id' => 'required|exists:merchants,id',
-            'sub_category_id' => 'required|exists:categories,id',
-            'title' => 'required|string|max:255',
-            'description' => 'required|string',
-            'price' => 'required|numeric',
-            'new_price' => 'nullable|numeric',
-            'duration' => 'nullable|string',
-            'tags' => 'nullable|array',
-            'tags.*' => 'exists:tags,id',
-            'images' => 'nullable|array',
-            'images.*.image' => 'nullable|file|image',
-            'images.*.is_main' => 'nullable|boolean',
-            'products' => 'nullable|array',
-            'products.*.id' => 'nullable|exists:service_products,id',
-            'products.*.title' => 'required|string',
-            'products.*.price' => 'required|numeric',
-            'products.*.description' => 'nullable|string',
-            'products.*.images' => 'nullable|array',
-            'products.*.images.*.image' => 'nullable|file|image',
-            'products.*.images.*.is_main' => 'nullable|boolean',
-        ]);
+        DB::beginTransaction();
 
-        // Find the existing service
-        $service = Service::findOrFail($id);
+        try {
+            // Update basic service info
+            $service->update([
+                'merchant_id' => $request->merchant_id,
+                'sub_category_id' => $request->sub_category_id,
+                'category_id' => Category::findOrFail($request->sub_category_id)->parent_id ?? 1,
+                'title' => $request->title,
+                'description' => $request->description,
+                'duration' => $request->duration,
+            ]);
 
-        // Update the service
-        $category = Category::query()->where('id', $validated['sub_category_id'])->first();
-        $service->update([
-            'merchant_id' => $validated['merchant_id'],
-            'sub_category_id' => $validated['sub_category_id'],
-            'category_id' => $category->parent_id ?? 1,
-            'title' => $validated['title'],
-            'title_ar' => $validated['title'],  // Assuming 'title_ar' is the Arabic title
-            'description' => $validated['description'],
-            'price' => $validated['price'],
-            'new_price' => $validated['new_price'] ?? null,
-            'duration' => $validated['duration'] ?? null,
-        ]);
+            // Handle images
+            $this->processServiceImages($service, $request);
 
-        // Attach or detach tags based on the input
-        if (isset($validated['tags'])) {
-            $service->tags()->sync($validated['tags']);
-        }
+            // Update other relationships (prices, products, etc.)
+            $this->updateServicePrices($service, $request->prices);
+            $service->tags()->sync($request->tags ?? []);
 
-        // Handle images (update existing ones and add new ones)
-        if (isset($validated['images']) && count($validated['images']) > 0) {
-            $images = [];
-            // Loop over the new images
-            foreach ($validated['images'] as $imageData) {
-                if (isset($imageData['image']) && $imageData['image']->isValid()) {
-                    $imagePath = $imageData['image']->store('uploads', 'public');
-                    $imageUrl = asset('storage/' . $imagePath);
-                    $images[] = [
-                        'image' => $imageUrl,
-                        'is_main' => $imageData['is_main'] ?? false,
-                    ];
-                }
+            if ($request->has('products')) {
+                $this->updateServiceProducts($service, $request->products);
             }
 
-            // Attach or update images (only add new ones)
-            $service->images()->createMany($images); // This will add new images without removing the old ones
+            DB::commit();
+
+            return redirect()->back()
+                ->withFlashSuccess(__('Service updated successfully'));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            logger()->error('Service update failed: ' . $e->getMessage());
+
+            return back()->withInput()
+                ->withFlashDanger(__('Failed to update service. Please try again.'));
         }
+    }
 
-        // Handle products and their images (update or add new products)
-        if (isset($validated['products'])) {
-            // Remove products that are not in the updated list
-            $existingProductIds = array_column($validated['products'], 'id');
-            $service->products()->whereNotIn('id', $existingProductIds)->delete();
-
-            foreach ($validated['products'] as $productData) {
-                // Check if product exists with the given id
-                $product = ServiceProduct::where('service_id', $service->id)
-                    ->where('id', $productData['id'] ?? null)
-                    ->first();
-
-                if ($product) {
-                    // Update existing product
-                    $product->update([
-                        'title' => $productData['title'],
-                        'price' => $productData['price'],
-                        'description' => $productData['description'] ?? null,
-                        'order' => $productData['order'] ?? null,
-                    ]);
-                } else {
-                    // Create new product
-                    $product = $service->products()->create([
-                        'title' => $productData['title'],
-                        'price' => $productData['price'],
-                        'description' => $productData['description'] ?? null,
-                        'order' => $productData['order'] ?? null,
-                    ]);
-                }
-
-                // Handle product images
-                if (isset($productData['images']) && count($productData['images']) > 0) {
-                    $images = [];
-                    foreach ($productData['images'] as $imageData) {
-                        if (isset($imageData['image']) && $imageData['image']->isValid()) {
-                            $imagePath = $imageData['image']->store('uploads', 'public');
-                            $imageUrl = asset('storage/' . $imagePath);
-                            $images[] = [
-                                'image' => $imageUrl,
-                                'is_main' => $imageData['is_main'] ?? false,
-                            ];
-                        }
-                    }
-
-                    // Attach or update images for the product
-                    $product->images()->createMany($images); // This will add new images without removing old ones
-                }
+    protected function processServiceImages(Service $service, Request $request)
+    {
+        // 1. Handle image deletions
+        if ($request->has('deleted_images')) {
+            $deletedImageIds = array_keys(array_filter($request->deleted_images));
+            if (!empty($deletedImageIds)) {
+                $service->images()->whereIn('id', $deletedImageIds)->delete();
             }
         }
 
-        return redirect()->back()->withFlashSuccess(__('The Service was successfully updated'));
+        // 2. Handle new image uploads
+        if ($request->hasFile('service_images')) {
+            foreach ($request->file('service_images') as $file) {
+                $path = $file->store('services/' . $service->id, 'public');
+                $service->images()->create([
+                    'image' => $path,
+                    'is_main' => false
+                ]);
+            }
+        }
+
+        // 3. Update main image
+        if ($request->has('main_service_image')) {
+            // First reset all images to not main
+            $service->images()->update(['is_main' => false]);
+
+            // Then set the selected one as main
+            $service->images()
+                ->where('id', $request->main_service_image)
+                ->update(['is_main' => true]);
+        } elseif ($service->images()->count() > 0) {
+            // If no main image selected but images exist, set first one as main
+            $service->images()->orderBy('id')->first()->update(['is_main' => true]);
+        }
+    }
+    protected function updateServicePrices(Service $service, array $prices)
+    {
+        // Get existing price IDs from request
+        $existingPriceIds = collect($prices)->filter(fn($price) => isset($price['id']))->pluck('id');
+
+        // Delete prices not present in the request
+        $service->prices()->whereNotIn('id', $existingPriceIds)->delete();
+
+        // Update or create prices
+        foreach ($prices as $priceData) {
+            if (isset($priceData['id'])) {
+                // Update existing price
+                $service->prices()
+                    ->where('id', $priceData['id'])
+                    ->update([
+                        'title' => $priceData['title'],
+                        'amount' => $priceData['amount'], // store in cents
+                    ]);
+            } else {
+                // Create new price
+                $service->prices()->create([
+                    'title' => $priceData['title'],
+                    'amount' => $priceData['amount'] ,
+                ]);
+            }
+        }
     }
 
 
 
+    protected function updateServiceProducts(Service $service, array $products)
+    {
+        $existingProductIds = collect($products)->filter(fn($product) => isset($product['id']))->pluck('id');
+
+        // Delete products not present in the request
+        $service->products()->whereNotIn('id', $existingProductIds)->delete();
+
+        foreach ($products as $productData) {
+            if (isset($productData['id'])) {
+                // Update existing product
+                $product = $service->products()->find($productData['id']);
+                $product->update([
+                    'title' => $productData['title'],
+                    'price' => $productData['price'] ,
+                    'description' => $productData['description'] ?? null,
+                    'order' => $productData['order'] ?? 0,
+                ]);
+
+                // Handle product images update if needed
+                if (isset($productData['images'])) {
+                    $this->updateProductImages($product, $productData);
+                }
+            } else {
+                // Create new product
+                $product = $service->products()->create([
+                    'title' => $productData['title'],
+                    'price' => $productData['price'] ,
+                    'description' => $productData['description'] ?? null,
+                    'order' => $productData['order'] ?? 0,
+                ]);
+
+                if (isset($productData['images'])) {
+                    $this->uploadProductImages($product, $productData);
+                }
+            }
+        }
+    }
+
+    protected function updateServiceImages(Service $service, Request $request)
+    {
+        // Get IDs of images to keep
+        $keepImageIds = $request->input('existing_images', []);
+
+        // Delete images not in the keep list
+        $service->images()
+            ->whereNotIn('id', $keepImageIds)
+            ->delete();
+
+        // Handle new image uploads
+        if ($request->hasFile('service_images')) {
+            foreach ($request->file('service_images') as $file) {
+                $path = $file->store('services/' . $service->id, 'public');
+
+                $image = $service->images()->create([
+                    'image' => $path,
+                    'is_main' => false
+                ]);
+
+                // Add new image ID to keep list
+                $keepImageIds[] = $image->id;
+            }
+        }
+
+        // Update main image
+        $this->updateMainImage($service, $request->main_service_image, $keepImageIds);
+    }
+
+    protected function updateMainImage(Service $service, $mainImageId, array $keepImageIds)
+    {
+        // Reset all images to not main
+        $service->images()->update(['is_main' => false]);
+
+        // If no main image selected but we have images, use first available
+        if (empty($mainImageId)) {
+            $mainImageId = $keepImageIds[0] ?? null;
+        }
+
+        // Set the selected image as main
+        if ($mainImageId) {
+            $service->images()
+                ->where('id', $mainImageId)
+                ->update(['is_main' => true]);
+        }
+    }
+
+    protected function updateProductImages(ServiceProduct $product, array $productData)
+    {
+        // Get all existing image IDs that should remain
+        $existingImageIds = $productData['existing_images'] ?? [];
+
+        // Delete images not present in the existing_images array
+        $product->images()->whereNotIn('id', $existingImageIds)->delete();
+
+        // Handle new image uploads
+        if (isset($productData['new_images'])) {
+            foreach ($productData['new_images'] as $file) {
+                $path = $file->store('products/' . $product->id, 'public');
+
+                $product->images()->create([
+                    'image' => $path,
+                    'is_main' => false, // Will be updated below
+                ]);
+            }
+        }
+
+        // Update main image
+        if (isset($productData['main_image'])) {
+            // First reset all images to not main
+            $product->images()->update(['is_main' => false]);
+
+            // Then set the selected one as main
+            $product->images()
+                ->where('id', $productData['main_image'])
+                ->update(['is_main' => true]);
+        } elseif ($product->images()->count() > 0) {
+            // If no main image selected but images exist, set first one as main
+            $product->images()->first()->update(['is_main' => true]);
+        }
+    }
 
 
     /**

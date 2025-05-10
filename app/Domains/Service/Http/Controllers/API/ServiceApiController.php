@@ -61,6 +61,7 @@ class ServiceApiController extends APIBaseController
             'title_ar' => $validated['title'],
             'description' => $validated['description'],
             'duration' => $validated['duration'] ?? null,
+            'price'=>  $validated['service_prices'][0]['amount']??0,
             // Removed price and new_price fields
         ]);
 
