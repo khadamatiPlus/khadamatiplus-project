@@ -39,7 +39,7 @@
                             ->first();
                     @endphp
                     @if(isset($serviceMainImage->image))
-                        <img src="{{ storageBaseLink($serviceMainImage->image) }}" width="100" loading="lazy" />
+                        <img src="{{ $serviceMainImage->image }}" width="100" loading="lazy" />
                     @else
                         ----------------
                     @endif
