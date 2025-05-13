@@ -365,6 +365,21 @@
                             :active="activeClass(Route::is('admin.information.*'), 'c-active')"/>
                     </li>
                 @endif
+                    @if (
+                    $logged_in_user->hasAllAccess() ||
+                    (
+                        $logged_in_user->can('admin.appVersion')
+
+                    )
+                )
+                        <li class="c-sidebar-nav-item">
+                            <x-utils.link
+                                :href="route('admin.appVersion.edit',1)"
+                                class="c-sidebar-nav-link"
+                                :text="__('Edit App Version')"
+                                :active="activeClass(Route::is('admin.appVersion.*'), 'c-active')"/>
+                        </li>
+                    @endif
 
             </ul>
         </li>

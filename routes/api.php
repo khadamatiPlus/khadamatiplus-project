@@ -25,6 +25,7 @@ use App\Domains\Introduction\Http\Controllers\API\IntroductionApiController;
 use App\Domains\Service\Http\Controllers\API\ServiceApiController;
 use App\Domains\Customer\Http\Controllers\API\CustomerAddressApiController;
 use App\Domains\Customer\Http\Controllers\API\CustomerApiController;
+use App\Domains\AppVersion\Http\Controllers\API\AppVersionApiController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -56,6 +57,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
             Route::get('getTags', [TagApiController::class, 'getTags']);
             Route::get('getInformation', [InformationApiController::class, 'getInformation']);
             Route::get('getSocial', [SocialApiController::class, 'getSocial']);
+            Route::get('getAppVersion', [AppVersionApiController::class, 'getAppVersion']);
 
             Route::get('getPageBySlug', [PageApiController::class, 'getPageBySlug']);
         });
@@ -231,4 +233,4 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
 
 
     });
-});
+   });

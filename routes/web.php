@@ -28,3 +28,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'middleware' => 'admin'], f
 });
 Route::delete('/service-images/{id}', [\App\Domains\Service\Http\Controllers\Backend\ServiceController::class, 'destroyImage'])->name('service-images.destroy');
 Route::delete('/products/{product}', [\App\Domains\Service\Http\Controllers\Backend\ServiceController::class, 'destroyProduct'])->name('products.destroy');
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    Route::get('/version', [App\Http\Controllers\Admin\AppVersionController::class, 'edit'])->name('version.edit');
+    Route::put('/version', [App\Http\Controllers\Admin\AppVersionController::class, 'update'])->name('version.update');
+});
