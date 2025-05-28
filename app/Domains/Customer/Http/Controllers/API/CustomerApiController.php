@@ -282,4 +282,26 @@ class CustomerApiController extends APIBaseController
         ], 201);
     }
 
+
+    public function updateLocation(Request $request)
+    {
+        $request->validate([
+            'latitude' => 'required|numeric|between:-90,90',
+            'longitude' => 'required|numeric|between:-180,180'
+        ]);
+
+        $customer = Auth::user()->customer;
+        $customer->update([
+            'latitude' => $request->latitude,
+            'longitude' => $request->longitude
+        ]);
+
+        return response()->json([
+            'message' => 'Location updated successfully',
+            'location' => [
+                'latitude' => $customer->latitude,
+                'longitude' => $customer->longitude
+            ]
+        ]);
+    }
 }

@@ -183,6 +183,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
                 Route::post('/storeReview', [CustomerApiController::class, 'storeReview']);
                 Route::post('/requestOrder', [OrderApiController::class, 'requestOrder']);
                 Route::post('updateOrderStatusByCustomer', [OrderApiController::class, 'updateOrderStatusByCustomer']);
+                Route::put('/location', [CustomerApiController::class, 'updateLocation']);
 
 
             });

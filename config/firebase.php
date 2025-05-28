@@ -10,7 +10,7 @@ return [
  * ------------------------------------------------------------------------
  */
     'default' => env('FIREBASE_PROJECT', 'app'),
-    'credentials' => env('FIREBASE_CREDENTIALS_PATH'),
+    'credentials' => storage_path('firebase/khadamati-firebase.json'),
 
     /*
      * ------------------------------------------------------------------------

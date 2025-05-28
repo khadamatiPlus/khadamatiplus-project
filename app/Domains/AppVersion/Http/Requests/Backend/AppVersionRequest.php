@@ -33,6 +33,9 @@ class AppVersionRequest extends FormRequest
                     'current_version_android' => ['required', 'max:255'],
                     'current_version_ios' => ['required', 'max:255'],
                     'current_version_huawei' => ['required', 'max:255'],
+                    'customer_version_android' => ['required', 'max:255'],
+                    'customer_version_ios' => ['required', 'max:255'],
+                    'customer_version_huawei' => ['required', 'max:255'],
                 ];
         }
     }
