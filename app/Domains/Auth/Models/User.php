@@ -62,7 +62,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'customer_id',
         'merchant_id'.
         'otp_code',
-        'otp_expires_at'
+        'otp_expires_at',
+        'google_id',
+        'facebook_id',
     ];
 
     /**

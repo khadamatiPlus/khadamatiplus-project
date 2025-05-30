@@ -203,6 +203,8 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
             Route::post('/registerUsingEmail', [RegisterApiController::class, 'registerUsingEmail']);
 
             Route::post('registerCustomer', [RegisterApiController::class,'registerCustomer']);
+            Route::post('/facebook', [RegisterApiController::class, 'handleFacebookCallback']);
+            Route::post('/google', [RegisterApiController::class, 'handleGoogleCallback']);
 
 //            Route::get('generateOTP', [UserManagementApiController::class, 'generateOTP']);
 //            Route::get('checkAuthEnabled', [UserManagementApiController::class, 'checkAuthEnabled']);
