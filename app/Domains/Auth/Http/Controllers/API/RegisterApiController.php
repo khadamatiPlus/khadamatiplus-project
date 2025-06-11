@@ -16,6 +16,8 @@ use App\Domains\Customer\Services\CustomerService;
 use App\Http\Controllers\APIBaseController;
 use App\Domains\Auth\Http\Requests\API\RegisterMerchantRequest;
 use Illuminate\Http\Request;
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Str;
 class RegisterApiController extends APIBaseController
 {
 
@@ -154,10 +156,8 @@ class RegisterApiController extends APIBaseController
             $fullNumber = $country_code.$request->input('mobile_number');
             $password = $request->input('password');
             $fcm_token = $request->input('fcm_token');
-//            if($verifyResult = $this->firebaseIntegration->verifyToken($request->input('firebase_auth_token'),$fullNumber)){
 
             if(app()->environment(['local', 'testing'])){
-//                    $verifyResult->verified = true;
                 $verifyResult = true;
             }
 
@@ -166,7 +166,7 @@ class RegisterApiController extends APIBaseController
                 $login = $this->userService->authenticateUserMobile($country_code,$request->input('mobile_number'),$request->header('App-Version-Name'),$password,$fcm_token);
                 return $this->successResponse($login);
             }
-//            }
+
             return $this->successResponse([
                 'completed' => false,
                 'access_token' => '',
@@ -278,5 +278,266 @@ class RegisterApiController extends APIBaseController
         }
 
         return response()->json($resp, 201);
+    }
+
+
+
+
+
+    public function handleFacebookCallback(Request $request)
+    {
+        $request->validate([
+            'access_token' => 'required|string', // Frontend sends Facebook token
+        ]);
+
+        $appVersionName = $request->header('App-Version-Name');
+
+        try {
+            // Fetch user data from Facebook
+            $facebookUser = Socialite::driver('facebook')
+                ->stateless()
+                ->userFromToken($request->access_token);
+
+            // Check if user exists by Facebook ID
+            $existingUser = User::where('facebook_id', $facebookUser->id)->first();
+
+            if ($existingUser) {
+                return $this->handleFacebookLogin($existingUser, $appVersionName);
+            }
+
+            // Check if email exists for merchant/customer role
+            if ($appVersionName === 'khadamati_merchant_app') {
+                $emailUser = User::where('email', $facebookUser->email)
+                    ->whereNotNull('merchant_id')
+                    ->first();
+            } elseif ($appVersionName === 'khadamati_customer_app') {
+                $emailUser = User::where('email', $facebookUser->email)
+                    ->whereNotNull('customer_id')
+                    ->first();
+            } else {
+                return response()->json(['message' => 'Invalid App-Version-Name'], 400);
+            }
+
+            if ($emailUser) {
+                return response()->json(['message' => 'Email already exists for this role'], 400);
+            }
+
+            // Create new user with Facebook data
+            $user = User::create([
+                'name' => $facebookUser->name ?? $facebookUser->email,
+                'email' => $facebookUser->email,
+                'facebook_id' => $facebookUser->id,
+                'password' => bcrypt(Str::random(16)), // Random password since login is via Facebook
+            ]);
+
+            // Create merchant/customer based on app type
+            if ($appVersionName === 'khadamati_merchant_app') {
+                $merchant = Merchant::create([
+                    'profile_id' => $user->id,
+                    'created_by_id' => $user->id,
+                    'name' => $facebookUser->name,
+                    'updated_by_id' => $user->id,
+                ]);
+                $user->merchant_id = $merchant->id;
+                $user->save();
+                $merchantData = (new MerchantTransformer())->transform($merchant);
+            } elseif ($appVersionName === 'khadamati_customer_app') {
+                $customer = Customer::create([
+                    'name' => $facebookUser->name,
+                    'profile_id' => $user->id,
+                    'created_by_id' => $user->id,
+                    'updated_by_id' => $user->id,
+                ]);
+                $user->customer_id = $customer->id;
+                $user->save();
+                $customerData = (new CustomerTransformer())->transform($customer);
+            }
+
+            // Log in the user
+            event(new UserLoggedIn($user));
+            $user->tokens()->delete();
+            $accessToken = $user->createToken('api')->plainTextToken;
+
+            // Prepare response
+            $resp = new \stdClass();
+            $resp->access_token = $accessToken;
+            $resp->user = (new UserTransformer)->transform($user);
+            $resp->active = true;
+            $resp->completed = true;
+
+            if ($appVersionName === 'khadamati_merchant_app') {
+                $resp->merchant = $merchantData;
+            } elseif ($appVersionName === 'khadamati_customer_app') {
+                $resp->customer = $customerData;
+            }
+
+            return response()->json($resp, 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Facebook authentication failed',
+                'error' => $e->getMessage()
+            ], 401);
+        }
+    }
+
+    private function handleFacebookLogin(User $user, $appVersionName)
+    {
+        // Verify role
+        if ($appVersionName === 'khadamati_merchant_app' && !$user->merchant_id) {
+            return response()->json(['message' => 'Account not registered as merchant'], 400);
+        }
+
+        if ($appVersionName === 'khadamati_customer_app' && !$user->customer_id) {
+            return response()->json(['message' => 'Account not registered as customer'], 400);
+        }
+
+        // Log in
+        event(new UserLoggedIn($user));
+        $user->tokens()->delete();
+        $accessToken = $user->createToken('api')->plainTextToken;
+
+        $resp = new \stdClass();
+        $resp->access_token = $accessToken;
+        $resp->user = (new UserTransformer)->transform($user);
+        $resp->active = true;
+        $resp->completed = true;
+
+        if ($appVersionName === 'khadamati_merchant_app') {
+            $resp->merchant = (new MerchantTransformer())->transform($user->merchant);
+        } elseif ($appVersionName === 'khadamati_customer_app') {
+            $resp->customer = (new CustomerTransformer())->transform($user->customer);
+        }
+
+        return response()->json($resp, 200);
+    }
+
+
+    public function handleGoogleCallback(Request $request)
+    {
+        $request->validate([
+            'access_token' => 'required|string', // Frontend sends Google token
+        ]);
+
+        $appVersionName = $request->header('App-Version-Name');
+
+        try {
+            // Fetch user data from Google
+            $googleUser = Socialite::driver('google')
+                ->stateless()
+                ->userFromToken($request->access_token);
+
+            // Check if user exists by Google ID
+            $existingUser = User::where('google_id', $googleUser->id)->first();
+
+            if ($existingUser) {
+                return $this->handleGoogleLogin($existingUser, $appVersionName);
+            }
+
+            // Check if email exists for merchant/customer role
+            if ($appVersionName === 'khadamati_merchant_app') {
+                $emailUser = User::where('email', $googleUser->email)
+                    ->whereNotNull('merchant_id')
+                    ->first();
+            } elseif ($appVersionName === 'khadamati_customer_app') {
+                $emailUser = User::where('email', $googleUser->email)
+                    ->whereNotNull('customer_id')
+                    ->first();
+            } else {
+                return response()->json(['message' => 'Invalid App-Version-Name'], 400);
+            }
+
+            if ($emailUser) {
+                return response()->json(['message' => 'Email already exists for this role'], 400);
+            }
+
+            // Create new user with Google data
+            $user = User::create([
+                'name' => $googleUser->name ?? $googleUser->email,
+                'email' => $googleUser->email,
+                'google_id' => $googleUser->id,
+                'password' => bcrypt(Str::random(16)), // Random password since login is via Google
+            ]);
+
+            // Create merchant/customer based on app type
+            if ($appVersionName === 'khadamati_merchant_app') {
+                $merchant = Merchant::create([
+                    'profile_id' => $user->id,
+                    'created_by_id' => $user->id,
+                    'name' => $googleUser->name,
+                    'updated_by_id' => $user->id,
+                ]);
+                $user->merchant_id = $merchant->id;
+                $user->save();
+                $merchantData = (new MerchantTransformer())->transform($merchant);
+            } elseif ($appVersionName === 'khadamati_customer_app') {
+                $customer = Customer::create([
+                    'name' => $googleUser->name,
+                    'profile_id' => $user->id,
+                    'created_by_id' => $user->id,
+                    'updated_by_id' => $user->id,
+                ]);
+                $user->customer_id = $customer->id;
+                $user->save();
+                $customerData = (new CustomerTransformer())->transform($customer);
+            }
+
+            // Log in the user
+            event(new UserLoggedIn($user));
+            $user->tokens()->delete();
+            $accessToken = $user->createToken('api')->plainTextToken;
+
+            // Prepare response
+            $resp = new \stdClass();
+            $resp->access_token = $accessToken;
+            $resp->user = (new UserTransformer)->transform($user);
+            $resp->active = true;
+            $resp->completed = true;
+
+            if ($appVersionName === 'khadamati_merchant_app') {
+                $resp->merchant = $merchantData;
+            } elseif ($appVersionName === 'khadamati_customer_app') {
+                $resp->customer = $customerData;
+            }
+
+            return response()->json($resp, 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Google authentication failed',
+                'error' => $e->getMessage()
+            ], 401);
+        }
+    }
+
+    private function handleGoogleLogin(User $user, $appVersionName)
+    {
+        // Verify role
+        if ($appVersionName === 'khadamati_merchant_app' && !$user->merchant_id) {
+            return response()->json(['message' => 'Account not registered as merchant'], 400);
+        }
+
+        if ($appVersionName === 'khadamati_customer_app' && !$user->customer_id) {
+            return response()->json(['message' => 'Account not registered as customer'], 400);
+        }
+
+        // Log in
+        event(new UserLoggedIn($user));
+        $user->tokens()->delete();
+        $accessToken = $user->createToken('api')->plainTextToken;
+
+        $resp = new \stdClass();
+        $resp->access_token = $accessToken;
+        $resp->user = (new UserTransformer)->transform($user);
+        $resp->active = true;
+        $resp->completed = true;
+
+        if ($appVersionName === 'khadamati_merchant_app') {
+            $resp->merchant = (new MerchantTransformer())->transform($user->merchant);
+        } elseif ($appVersionName === 'khadamati_customer_app') {
+            $resp->customer = (new CustomerTransformer())->transform($user->customer);
+        }
+
+        return response()->json($resp, 200);
     }
 }
