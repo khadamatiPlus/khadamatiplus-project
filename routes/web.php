@@ -1,7 +1,8 @@
 <?php
 
 use App\Http\Controllers\LocaleController;
-
+use App\Services\FirebaseNotificationService;
+use Illuminate\Support\Facades\Route;
 /*
  * Global Routes
  *
@@ -31,4 +32,29 @@ Route::delete('/products/{product}', [\App\Domains\Service\Http\Controllers\Back
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::get('/version', [App\Http\Controllers\Admin\AppVersionController::class, 'edit'])->name('version.edit');
     Route::put('/version', [App\Http\Controllers\Admin\AppVersionController::class, 'update'])->name('version.update');
+});
+
+
+Route::get('/test-notification', function () {
+    // Replace with a valid device token from your Firebase app
+    $deviceToken = 'dU9sO9pXRk6JCIB-6uNk1F:APA91bHk4v9J7Z...Dk3mWrqoQwYd7E2TxVfXq';
+
+    $service = new FirebaseNotificationService();
+    $result = $service->sendPushNotification(
+        $deviceToken,
+        'Test Notification',
+        'This is a test message from Laravel!'
+    );
+
+    if ($result) {
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Notification sent successfully!'
+        ]);
+    }
+
+    return response()->json([
+        'status' => 'error',
+        'message' => 'Failed to send notification'
+    ], 500);
 });
