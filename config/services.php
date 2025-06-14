@@ -47,9 +47,10 @@ return [
 
     'facebook' => [
         'active' => env('FACEBOOK_ACTIVE', false),
-        'client_id' => env('FACEBOOK_CLIENT_ID'),
-        'client_secret' => env('FACEBOOK_CLIENT_SECRET'),
-        'redirect' => env('FACEBOOK_REDIRECT'),
+        'client_id' => '2329213947453172',
+        'client_secret' => '1140d00992facd261aa5e947653be832',
+        'redirect' => 'https://khadamati-plus.com/api/auth/facebook/callback',
+        'enable_appsecret_proof' => false,
     ],
 
     'github' => [

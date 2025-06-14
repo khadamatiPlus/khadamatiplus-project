@@ -286,6 +286,7 @@ class RegisterApiController extends APIBaseController
 
     public function handleFacebookCallback(Request $request)
     {
+
         $request->validate([
             'access_token' => 'required|string', // Frontend sends Facebook token
         ]);
@@ -301,9 +302,12 @@ class RegisterApiController extends APIBaseController
             // Check if user exists by Facebook ID
             $existingUser = User::where('facebook_id', $facebookUser->id)->first();
 
+
             if ($existingUser) {
+
                 return $this->handleFacebookLogin($existingUser, $appVersionName);
             }
+
 
             // Check if email exists for merchant/customer role
             if ($appVersionName === 'khadamati_merchant_app') {
@@ -311,6 +315,7 @@ class RegisterApiController extends APIBaseController
                     ->whereNotNull('merchant_id')
                     ->first();
             } elseif ($appVersionName === 'khadamati_customer_app') {
+
                 $emailUser = User::where('email', $facebookUser->email)
                     ->whereNotNull('customer_id')
                     ->first();
@@ -319,6 +324,7 @@ class RegisterApiController extends APIBaseController
             }
 
             if ($emailUser) {
+
                 return response()->json(['message' => 'Email already exists for this role'], 400);
             }
 
