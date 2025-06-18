@@ -35,8 +35,8 @@ class OrderApiController extends APIBaseController
         // Validate the incoming data
         $validated = $request->validate([
             'service_id' => 'required|exists:services,id',
-            'day' => 'required|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
-            'time' => 'required',
+            'day' => 'nullable|in:Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday',
+            'time' => 'nullable',
         ]);
 
         // Get the authenticated customer_id
@@ -61,8 +61,8 @@ class OrderApiController extends APIBaseController
             'customer_phone' => $customer->defaultAddress->phone_number??"",
             'longitude' => $customer->defaultAddress->longitude??"",
             'latitude' => $customer->defaultAddress->latitude??"",
-            'day' => $validated['day'],
-            'time' => $validated['time'],
+            'day' => $validated['day']??now(),
+            'time' => $validated['time']??now(),
             'status' => 'pending',
             'customer_requested_at' => now(),
         ]);
