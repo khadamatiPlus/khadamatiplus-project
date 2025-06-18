@@ -16,6 +16,7 @@ use App\Domains\Customer\Services\CustomerService;
 use App\Http\Controllers\APIBaseController;
 use App\Domains\Auth\Http\Requests\API\RegisterMerchantRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
 class RegisterApiController extends APIBaseController
@@ -190,7 +191,6 @@ class RegisterApiController extends APIBaseController
         // Get the App-Version-Name from the header
         $appVersionName = $request->header('App-Version-Name');
 
-
         // Check if the email already exists for merchants or customers
         if ($appVersionName === 'khadamati_merchant_app') {
             $existingUser = User::where('email', $request->email)
@@ -201,7 +201,6 @@ class RegisterApiController extends APIBaseController
                 ->whereNotNull('customer_id')
                 ->first();
         } else {
-            // Handle invalid or missing App-Version-Name
             return response()->json(['message' => 'Invalid App-Version-Name'], 400);
         }
 
@@ -211,75 +210,85 @@ class RegisterApiController extends APIBaseController
         }
 
         // Combine name and email into a single field (optional)
-        $nameWithEmail = $request->name . ' (' . $request->email . ')';
+        $nameWithEmail = $request->name;
 
-        // Create the user
-        $user = User::create([
-            'name' => $nameWithEmail,
-            'email' => $request->email,
-            'password' => $request->email,
-        ]);
-
-        // Check the App-Version-Name and create merchant or customer
-        if ($appVersionName === 'khadamati_merchant_app') {
-            // Create a merchant
-            $merchant = Merchant::create([
-                'profile_id' => $user->id,
-                'created_by_id' => $user->id,
-                'name'=>$nameWithEmail,
-                'updated_by_id' => $user->id,
-            ]);
-
-            // Save the merchant_id in the user record
-            $user->merchant_id = $merchant->id;
-            $user->save();
-
-            // Transform merchant data for response
-            $merchantData = (new MerchantTransformer())->transform($merchant);
-        } elseif ($appVersionName === 'khadamati_customer_app') {
-            // Create a customer
-            $customer = Customer::create([
-                'name'=>$nameWithEmail,
-                'profile_id' => $user->id,
-                'created_by_id' => $user->id,
-                'updated_by_id' => $user->id,
-            ]);
-
-            // Save the customer_id in the user record
-            $user->customer_id = $customer->id;
-            $user->save();
-
-            // Transform customer data for response
-            $customerData = (new CustomerTransformer())->transform($customer);
-        } else {
-            // Handle invalid or missing App-Version-Name
-            return response()->json(['message' => 'Invalid App-Version-Name'], 400);
-        }
-
-        // Automatically log in the user after registration
-        event(new UserLoggedIn($user));
-        $user->tokens()->delete(); // Delete any existing tokens
-
-        // Create a new access token for the user
-        $accessToken = $user->createToken('api')->plainTextToken;
-
-        // Prepare the response
+        // Create the user and associated records in a transaction
         $resp = new \stdClass();
-        $resp->access_token = $accessToken;
-        $resp->user = (new UserTransformer)->transform($user);
-        $resp->active = true;
-        $resp->completed = true;
+        DB::transaction(function () use ($request, $appVersionName, $nameWithEmail, &$resp) {
+            // Create the user
+            $user = User::create([
+                'name' => $nameWithEmail,
+                'email' => $request->email,
+                'password' => $request->email, // Kept original password logic
+            ]);
 
-        // Add merchant or customer data to the response based on App-Version-Name
-        if ($appVersionName === 'khadamati_merchant_app') {
-            $resp->merchant = $merchantData;
-        } elseif ($appVersionName === 'khadamati_customer_app') {
-            $resp->customer = $customerData;
-        }
+            // Assign role using syncRoles
+            if ($appVersionName === 'khadamati_merchant_app') {
+                $user->syncRoles(2); // Assign merchant_admin role (ID 2)
+            } elseif ($appVersionName === 'khadamati_customer_app') {
+                $user->syncRoles(3); // Assign customer role (ID 3)
+            }
+
+            // Check the App-Version-Name and create merchant or customer
+            if ($appVersionName === 'khadamati_merchant_app') {
+                // Create a merchant
+                $merchant = Merchant::create([
+                    'profile_id' => $user->id,
+                    'created_by_id' => $user->id,
+                    'name' => $nameWithEmail,
+                    'updated_by_id' => $user->id,
+                ]);
+
+                // Save the merchant_id in the user record
+                $user->merchant_id = $merchant->id;
+                $user->save();
+
+                // Verify user is a merchant admin
+                if (!$user->isMerchantAdmin()) {
+                    throw new \Exception('User is not a merchant admin');
+                }
+
+                // Transform merchant data for response
+                $resp->merchant = (new MerchantTransformer())->transform($merchant);
+            } elseif ($appVersionName === 'khadamati_customer_app') {
+                // Create a customer
+                $customer = Customer::create([
+                    'name' => $nameWithEmail,
+                    'profile_id' => $user->id,
+                    'created_by_id' => $user->id,
+                    'updated_by_id' => $user->id,
+                ]);
+
+                // Save the customer_id in the user record
+                $user->customer_id = $customer->id;
+                $user->save();
+
+                // Verify user is a customer
+                if (!$user->isCustomer()) {
+                    throw new \Exception('User is not a customer');
+                }
+
+                // Transform customer data for response
+                $resp->customer = (new CustomerTransformer())->transform($customer);
+            }
+
+            // Automatically log in the user after registration
+            event(new UserLoggedIn($user));
+
+            // Delete any existing tokens
+            $user->tokens()->each(function ($token) {
+                $token->delete();
+            });
+
+            // Create a new access token for the user
+            $resp->access_token = $user->createToken('mobile')->plainTextToken;
+            $resp->user = (new UserTransformer)->transform($user);
+            $resp->active = true;
+            $resp->completed = true;
+        });
 
         return response()->json($resp, 201);
     }
-
 
 
 

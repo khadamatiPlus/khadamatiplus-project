@@ -2,11 +2,13 @@
 
 namespace App\Domains\Customer\Http\Controllers\API;
 
+use App\Domains\Auth\Http\Transformers\UserTransformer;
 use App\Domains\Auth\Models\User;
 use App\Domains\Customer\Http\Requests\API\UpdateCustomerRequest;
 use App\Domains\Customer\Http\Transformers\CustomerTransformer;
 use App\Domains\Customer\Models\Customer;
 use App\Domains\Customer\Services\CustomerService;
+use App\Domains\Merchant\Http\Transformers\MerchantTransformer;
 use App\Domains\Service\Http\Transformers\ServiceTransformer;
 use App\Domains\Service\Models\Service;
 use App\Http\Controllers\APIBaseController;
@@ -303,5 +305,55 @@ class CustomerApiController extends APIBaseController
                 'longitude' => $customer->longitude
             ]
         ]);
+    }
+
+    public function updateMobileNumber(Request $request)
+    {
+        // Ensure the user is authenticated
+        if (!auth()->check()) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        // Validate the request
+        $request->validate([
+            'mobile_number' => 'required|string|max:15', // Adjust max length as needed
+        ]);
+
+        // Get the authenticated user
+        $user = auth()->user();
+
+        // Get the App-Version-Name from the header
+        $appVersionName = $request->header('App-Version-Name');
+
+        // Validate App-Version-Name and user role
+        if ($appVersionName === 'khadamati_merchant_app' && !$user->isMerchantAdmin()) {
+            return response()->json(['message' => 'User is not a merchant admin'], 403);
+        } elseif ($appVersionName === 'khadamati_customer_app' && !$user->isCustomer()) {
+            return response()->json(['message' => 'User is not a customer'], 403);
+        } elseif (!in_array($appVersionName, ['khadamati_merchant_app', 'khadamati_customer_app'])) {
+            return response()->json(['message' => 'Invalid App-Version-Name'], 400);
+        }
+
+        // Update mobile number within a transaction
+        $resp = new \stdClass();
+        DB::transaction(function () use ($request, $user, $appVersionName, &$resp) {
+            // Update the mobile number
+            $user->mobile_number = $request->mobile_number;
+            $user->save();
+
+            // Prepare the response
+            $resp->user = (new UserTransformer())->transform($user);
+            $resp->active = $user->isActive();
+            $resp->completed = true;
+
+            // Add merchant or customer data based on App-Version-Name
+            if ($appVersionName === 'khadamati_merchant_app' && $user->merchant) {
+                $resp->merchant = (new MerchantTransformer())->transform($user->merchant);
+            } elseif ($appVersionName === 'khadamati_customer_app' && $user->customer) {
+                $resp->customer = (new CustomerTransformer)->transform($user->customer);
+            }
+        });
+
+        return response()->json($resp, 200);
     }
 }

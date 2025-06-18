@@ -233,7 +233,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
         Route::post('/auth/send-otp', [LoginApiController::class, 'sendOtp']);
         Route::post('/auth/send-otp-register', [LoginApiController::class, 'sendOtpRegister']);
         Route::post('merchant/uploadImage', [ServiceApiController::class, 'uploadImage']);
-
+        Route::middleware('auth:sanctum')->post('/update-mobile-number', [CustomerApiController::class, 'updateMobileNumber']);
 
     });
    });

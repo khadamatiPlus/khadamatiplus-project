@@ -306,35 +306,50 @@ class LoginApiController extends APIBaseController
         // Find the user by email
         $user = User::where('email', $request->email)->first();
 
+
         if ($user) {
             // Check if the user is active
             if (!$user->isActive()) {
                 $user->tokens()->delete();
-                return response()->json([
-                    'access_token' => '',
-                    'active' => false,
-                    'completed' => true,
-                ]);
+                $resp = new \stdClass();
+                $resp->access_token = '';
+                $resp->active = false;
+                $resp->completed = true;
+                return response()->json($resp);
             }
+
+            // Initialize response object
+            $resp = new \stdClass();
 
             // Trigger the UserLoggedIn event
             event(new UserLoggedIn($user));
 
             // Delete existing tokens
-            $user->tokens()->delete();
+            $user->tokens()->each(function ($token) {
+                $token->delete();
+            });
 
-            // Prepare the response
-            $resp = new \stdClass();
-            $resp->access_token = $user->createToken('api')->plainTextToken;
-            $resp->user = (new UserTransformer)->transform($user);
-            $resp->active = true;
-            $resp->completed = true;
+            // Handle merchant app
+            if ($appVersionName === 'khadamati_merchant_app' && $user->isMerchantAdmin()) {
+                $merchant = $user->merchant;
+                $resp->access_token = $user->createToken('mobile')->plainTextToken;
+                $resp->user = (new UserTransformer)->transform($user);
+                $resp->active = true;
+                $resp->completed = true;
+                $resp->merchant = (new MerchantTransformer)->transform($merchant);
+            }
+            // Handle customer app
+            elseif ($appVersionName === 'khadamati_customer_app' && $user->isCustomer()) {
 
-            // Add merchant or customer data based on App-Version-Name
-            if ($appVersionName === 'khadamati_merchant_app' && $user->merchant) {
-                $resp->merchant = (new MerchantTransformer)->transform($user->merchant);
-            } elseif ($appVersionName === 'khadamati_customer_app' && $user->customer) {
-                $resp->customer = (new CustomerTransformer())->transform($user->customer);
+                $resp->access_token = $user->createToken('mobile')->plainTextToken;
+                $resp->user = (new UserTransformer)->transform($user);
+                $resp->active = true;
+                $resp->completed = true;
+                $resp->customer = (new CustomerTransformer)->transform($user->customer);
+            }
+            // Invalid app version or user type
+            else {
+                return response()->json(['message' => 'Invalid app version or user type'], 403);
             }
 
             return response()->json($resp);
