@@ -41,6 +41,7 @@
 <script src="{{ asset('js/manifest.js') }}"></script>
 <script src="{{ asset('js/vendor.js') }}"></script>
 <script src="{{ asset('js/backend.js') }}"></script>
+<script src="{{ asset('js/backend/real-time-dashboard.js') }}"></script>
 <livewire:scripts />
 @stack('after-scripts')
 </body>

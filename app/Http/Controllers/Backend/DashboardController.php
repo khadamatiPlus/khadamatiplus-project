@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Domains\Delivery\Models\Order;
 use App\Domains\Delivery\Services\OrderService;
-use App\Domains\Order\Models\Order;
 use App\Enums\Core\OrderStatuses;
 
 /**
@@ -19,13 +19,48 @@ class DashboardController
      */
     public function index()
     {
-//        $totalOfOrders=$this->orderService->count();
-//        $totalPriceOfOrders=$this->orderService->sum('order_amount');
-//        $totalOfRequestedOrders=$this->orderService->where('status','=',OrderStatuses::NEW_ORDER)->count();
-//        $totalOfAcceptedOrders=$this->orderService->where('status','=',OrderStatuses::CAPTAIN_ACCEPTED)->count();
-//        $totalOfDeliveredOrders=$this->orderService->where('status','=',OrderStatuses::DELIVERED)->count();
-//        $totalOfCanceledOrders=$this->orderService->where('status','=',OrderStatuses::CAPTAIN_CANCELLED)->count();
-        return view('backend.dashboard');
-//        return view('backend.dashboard',compact('totalOfOrders','totalPriceOfOrders','totalOfRequestedOrders','totalOfAcceptedOrders','totalOfDeliveredOrders','totalOfCanceledOrders'));
+        $totalOfOrders = Order::count();
+        $totalPriceOfOrders = Order::sum('total_price') ?? 0;
+        $totalOfRequestedOrders = Order::where('status', 'pending')->count();
+        $totalOfAcceptedOrders = Order::where('status', 'accepted')->count();
+        $totalOfDeliveredOrders = Order::where('status', 'completed')->count();
+        $totalOfCanceledOrders = Order::where('status', 'cancelled')->count();
+        
+        // Get recent orders for real-time updates with phone data
+        $recentOrders = Order::with(['customer.profile', 'merchant.profile', 'service'])
+            ->orderBy('created_at', 'desc')
+            ->limit(10)
+            ->get()
+            ->map(function ($order) {
+                return [
+                    'id' => $order->id,
+                    'customer' => [
+                        'name' => $order->customer->name ?? 'N/A',
+                        'phone' => $order->customer->profile->mobile_number ?? null,
+                    ],
+                    'merchant' => [
+                        'name' => $order->merchant->name ?? 'N/A',
+                        'phone' => $order->merchant->profile->mobile_number ?? null,
+                    ],
+                    'service' => [
+                        'title' => $order->service->title ?? 'N/A',
+                    ],
+                    'status' => $order->status,
+                    'price' => $order->price,
+                    'total_price' => $order->total_price,
+                    'customer_phone' => $order->customer_phone,
+                    'created_at' => $order->created_at,
+                ];
+            });
+        
+        return view('backend.dashboard', compact(
+            'totalOfOrders',
+            'totalPriceOfOrders', 
+            'totalOfRequestedOrders',
+            'totalOfAcceptedOrders',
+            'totalOfDeliveredOrders',
+            'totalOfCanceledOrders',
+            'recentOrders'
+        ));
     }
 }

@@ -3,6 +3,8 @@
 namespace App\Domains\Delivery\Models;
 
 use App\Domains\Customer\Models\Customer;
+use App\Domains\Delivery\Events\OrderCreated;
+use App\Domains\Delivery\Events\OrderUpdated;
 use App\Domains\Delivery\Models\Traits\Method\OrderMethod;
 use App\Domains\Lookups\Models\City;
 use App\Domains\Service\Models\Service;
@@ -22,6 +24,15 @@ class Order extends BaseModel
      * @var string
      */
     protected $keyType = 'integer';
+
+    /**
+     * The event map for the model.
+     *
+     * @var array
+     */
+    protected $dispatchesEvents = [
+        'created' => OrderCreated::class,
+    ];
 
     /**
      * @var array
@@ -54,9 +65,21 @@ class Order extends BaseModel
         'cancelled_at',
         'cancelled_by_id',
         'notes',
-
-
     ];
+
+    /**
+     * Boot the model and add event listeners
+     */
+    public static function boot()
+    {
+        parent::boot();
+
+        static::updating(function ($order) {
+            if ($order->isDirty('status')) {
+                event(new OrderUpdated($order, $order->getOriginal('status'), $order->status));
+            }
+        });
+    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

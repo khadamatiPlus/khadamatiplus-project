@@ -172,3 +172,31 @@ if(!function_exists('getCaptainTotalCompletedOrders')){
     }
 
 }
+
+if(!function_exists('getStatusBadgeClass')){
+    /**
+     * This method returns the appropriate Bootstrap badge class for order status
+     *
+     * @param $status
+     * @return string
+     */
+    function getStatusBadgeClass($status): string
+    {
+        switch($status) {
+            case 'pending':
+                return 'warning';
+            case 'accepted':
+                return 'info';
+            case 'on_the_way':
+                return 'primary';
+            case 'on_progress':
+                return 'info';
+            case 'completed':
+                return 'success';
+            case 'cancelled':
+                return 'danger';
+            default:
+                return 'secondary';
+        }
+    }
+}
