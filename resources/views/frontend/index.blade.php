@@ -75,8 +75,8 @@
                 <div>
                     <h1>{{__("One platform, a world of opportunities.")}}</h1>
                     <h2>{{__("Easily publish your services on the Khadamati app and make them visible to thousands of users via the services review app. Get started now and start your journey to success!")}}</h2>
-                    <a href="#" class="download-btn"><i class="bx bxl-play-store"></i> {{__("Google Play")}}</a>
-                    <a href="#" class="download-btn"><i class="bx bxl-apple"></i> {{__("App Store")}}</a>
+                    <a href="https://play.google.com/store/apps/details?id=com.app.khadamati&hl=en" target="_blank" class="download-btn"><i class="bx bxl-play-store"></i> {{__("Google Play")}}</a>
+                    <a href="https://apps.apple.com/us/app/khadamati-plus/id6739426767" target="_blank" class="download-btn"><i class="bx bxl-apple"></i> {{__("App Store")}}</a>
                 </div>
             </div>
             <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
