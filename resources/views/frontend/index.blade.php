@@ -28,7 +28,62 @@
     <link href="{{asset("assets/css/style.css")}}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 
+    <style>
+        /* Container for the buttons */
+        .download-buttons {
+            display: flex;
+            flex-wrap: wrap; /* Allows buttons to wrap on smaller screens */
+            gap: 15px; /* Space between buttons */
+            justify-content: center; /* Center buttons horizontally */
+            margin-top: 20px; /* Space above the buttons */
+        }
 
+        /* Style for individual buttons */
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #007bff; /* Example background color */
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #0056b3; /* Darker shade on hover */
+        }
+
+        /* Icon spacing */
+        .download-btn i {
+            margin-right: 8px; /* Space between icon and text in LTR */
+        }
+
+        /* RTL adjustments */
+        [dir="rtl"] .download-btn i {
+            margin-right: 0;
+            margin-left: 8px; /* Space between icon and text in RTL */
+        }
+
+        /* Ensure text alignment respects direction */
+        [dir="rtl"] .download-btn {
+            direction: rtl;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .download-btn {
+                width: 100%; /* Full width on small screens */
+                max-width: 250px; /* Limit width for aesthetics */
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -72,11 +127,13 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 d-lg-flex flex-lg-column justify-content-center " data-aos="fade-up">
-                <div>
+                <div class="download-buttons">
                     <h1>{{__("One platform, a world of opportunities.")}}</h1>
                     <h2>{{__("Easily publish your services on the Khadamati app and make them visible to thousands of users via the services review app. Get started now and start your journey to success!")}}</h2>
                     <a href="https://play.google.com/store/apps/details?id=com.app.khadamati&hl=en" target="_blank" class="download-btn"><i class="bx bxl-play-store"></i> {{__("Google Play")}}</a>
                     <a href="https://apps.apple.com/us/app/khadamati-plus/id6739426767" target="_blank" class="download-btn"><i class="bx bxl-apple"></i> {{__("App Store")}}</a>
+                    <a href="https://appgallery.huawei.com/app/C112154125" target="_blank" class="download-btn"><i class="bx bx-mobile"></i> {{__('Huawei AppGallery')}}</a>
+
                 </div>
             </div>
             <div class="col-lg-6 d-lg-flex flex-lg-column align-items-stretch order-1 order-lg-2 hero-img" data-aos="fade-up">
@@ -242,18 +299,13 @@
 
 
             <div class="owl-carousel gallery-carousel" data-aos="fade-up">
-                <a href="{{asset("assets/img/gallery/gallery-1.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-1.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-2.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-2.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-3.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-3.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-4.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-4.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-5.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-5.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-6.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-6.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-7.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-7.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-8.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-8.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-9.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-9.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-10.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-10.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-11.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-11.png" alt=""></a>
-                <a href="{{asset("assets/img/gallery/gallery-12.png")}}" class="venobox" data-gall="gallery-carousel"><img src="assets/img/gallery/gallery-12.png" alt=""></a>
+                <a href="{{asset('assets/img/customer/customer-1.jpg')}}" class="venobox" data-gall="gallery-carousel"><img src="{{asset("assets/img/customer/customer-1.jpg")}}" alt=""></a>
+                <a href="{{asset('assets/img/customer/customer-2.jpg')}}" class="venobox" data-gall="gallery-carousel"><img src="{{asset("assets/img/customer/customer-2.jpg")}}" alt=""></a>
+                <a href="{{asset('assets/img/customer/customer-3.jpg')}}" class="venobox" data-gall="gallery-carousel"><img src="{{asset("assets/img/customer/customer-3.jpg")}}" alt=""></a>
+                <a href="{{asset('assets/img/customer/customer-4.jpg')}}" class="venobox" data-gall="gallery-carousel"><img src="{{asset("assets/img/customer/customer-4.jpg")}}" alt=""></a>
+                <a href="{{asset('assets/img/customer/customer-5.jpg')}}" class="venobox" data-gall="gallery-carousel"><img src="{{asset("assets/img/customer/customer-5.jpg")}}" alt=""></a>
+                <a href="{{asset('assets/img/customer/customer-6.jpg')}}" class="venobox" data-gall="gallery-carousel"><img src="{{asset("assets/img/customer/customer-6.jpg")}}" alt=""></a>
+                <a href="{{asset('assets/img/customer/customer-7.jpg')}}" class="venobox" data-gall="gallery-carousel"><img src="{{asset("assets/img/customer/customer-7.jpg")}}" alt=""></a>
             </div>
 
         </div>
@@ -583,9 +635,9 @@
                     <h4>{{__("Our Social Networks")}}</h4>
                     <p>{{__("Follow us on social media for the latest updates and news!")}}</p>
                     <div class="social-links mt-3">
-                        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                        <a target="_blank" href="https://www.facebook.com/profile.php?id=61573114636042#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                        <a target="_blank" href="https://www.instagram.com/khadamatiplus/" class="instagram"><i class="bx bxl-instagram"></i></a>
+{{--                        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>--}}
                     </div>
                 </div>
 

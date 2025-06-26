@@ -502,9 +502,9 @@
                     <h4>{{__('Our Social Networks')}}</h4>
                     <p>{{__('Stay connected with us for provider tips and updates!')}}</p>
                     <div class="social-links mt-3">
-                        <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                        <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                        <a target="_blank" href="https://www.facebook.com/profile.php?id=61573114636042#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                        <a target="_blank" href="https://www.instagram.com/khadamatiplus/" class="instagram"><i class="bx bxl-instagram"></i></a>
+{{--                        <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>--}}
                     </div>
                 </div>
             </div>
