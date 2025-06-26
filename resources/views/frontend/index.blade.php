@@ -132,7 +132,7 @@
                     <h2>{{__("Easily publish your services on the Khadamati app and make them visible to thousands of users via the services review app. Get started now and start your journey to success!")}}</h2>
                     <a href="https://play.google.com/store/apps/details?id=com.app.khadamati&hl=en" target="_blank" class="download-btn"><i class="bx bxl-play-store"></i> {{__("Google Play")}}</a>
                     <a href="https://apps.apple.com/us/app/khadamati-plus/id6739426767" target="_blank" class="download-btn"><i class="bx bxl-apple"></i> {{__("App Store")}}</a>
-                    <a href="https://appgallery.huawei.com/app/C112154125" target="_blank" class="download-btn"><i class="bx bx-mobile"></i> {{__('Huawei AppGallery')}}</a>
+                    <a href="https://appgallery.huawei.com/app/C113100565" target="_blank" class="download-btn"><i class="bx bx-mobile"></i> {{__('Huawei AppGallery')}}</a>
 
                 </div>
             </div>
