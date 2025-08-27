@@ -82,7 +82,7 @@
                     <label for="service_id" class="col-md-2 col-form-label">@lang('Service')</label>
                     <div class="col-md-10">
                         <select name="service_id" id="service_id" class="form-control">
-                            <option value="" selected disabled>@lang('--- Select Service ---')</option>
+                            <option value="" selected disabled>@lang('-- Select Service --')</option>
                             @foreach($services as $service)
                                 <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
                                     {{ $service->title }} @if($service->title_ar) ({{ $service->title_ar }}) @endif
