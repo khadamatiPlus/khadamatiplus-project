@@ -42,16 +42,55 @@
                     </div>
                 </div><!--form-group-->
                 <div class="form-group row">
-                    <label for="type" class="col-md-2 col-form-label">@lang('Type')</label>
+                    <label for="type" class="col-md-2 col-form-label">@lang('Recipient Type')</label>
                     <div class="col-md-10">
-                        <select name="type"  id="type" class="form-control" required>
+                        <select name="type" id="type" class="form-control" required>
                             <option value="" selected disabled>@lang('-- Select --')</option>
-                                    <option  value="merchants">{{__("Merchants")}}</option>
-                                     <option  value="customers">{{__("Customers")}}</option>
+                            <option value="merchant" {{ old('type') == 'merchant' ? 'selected' : '' }}>{{__("Merchants")}}</option>
+                            <option value="user" {{ old('type') == 'user' ? 'selected' : '' }}>{{__("Customers")}}</option>
                         </select>
                     </div>
                 </div><!--form-group-->
 
+                <div class="form-group row">
+                    <label for="notification_type" class="col-md-2 col-form-label">@lang('Notification Type')</label>
+                    <div class="col-md-10">
+                        <select name="notification_type" id="notification_type" class="form-control" required>
+                            <option value="" selected disabled>@lang('-- Select --')</option>
+                            <option value="category" {{ old('notification_type') == 'category' ? 'selected' : '' }}>{{__("Category")}}</option>
+                            <option value="service" {{ old('notification_type') == 'service' ? 'selected' : '' }}>{{__("Service")}}</option>
+                            <option value="informative" {{ old('notification_type') == 'informative' ? 'selected' : '' }}>{{__("Informative")}}</option>
+                        </select>
+                    </div>
+                </div><!--form-group-->
+
+                <div class="form-group row category-select" style="display: none;">
+                    <label for="category_id" class="col-md-2 col-form-label">@lang('Category')</label>
+                    <div class="col-md-10">
+                        <select name="category_id" id="category_id" class="form-control">
+                            <option value="" selected disabled>@lang('-- Select Category --')</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }} @if($category->name_ar) ({{ $category->name_ar }}) @endif
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div><!--form-group-->
+
+                <div class="form-group row service-select" style="display: none;">
+                    <label for="service_id" class="col-md-2 col-form-label">@lang('Service')</label>
+                    <div class="col-md-10">
+                        <select name="service_id" id="service_id" class="form-control">
+                            <option value="" selected disabled>@lang('-- Select Service --')</option>
+                            @foreach($services as $service)
+                                <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
+                                    {{ $service->title }} @if($service->title_ar) ({{ $service->title_ar }}) @endif
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div><!--form-group-->
 
             </x-slot>
             <x-slot name="footer">
@@ -60,6 +99,7 @@
         </x-backend.card>
     </x-forms.post>
 @endsection
+
 @push('after-scripts')
     <script>
         function readURL(input) {
@@ -75,5 +115,28 @@
             $('#blah').removeClass('d-none');
             readURL(this);
         });
+
+        // Handle notification type change
+        $('#notification_type').change(function() {
+            const type = $(this).val();
+
+            // Hide all select boxes first
+            $('.category-select, .service-select').hide();
+            $('#category_id, #service_id').prop('required', false);
+
+            // Show the relevant select box based on type
+            if (type === 'category') {
+                $('.category-select').show();
+                $('#category_id').prop('required', true);
+            } else if (type === 'service') {
+                $('.service-select').show();
+                $('#service_id').prop('required', true);
+            }
+        });
+
+        // Trigger change on page load if there's an old value
+        @if(old('notification_type'))
+        $('#notification_type').trigger('change');
+        @endif
     </script>
 @endpush

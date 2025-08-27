@@ -4,16 +4,20 @@ namespace App\Http\Livewire\Backend;
 
 use App\Domains\Delivery\Models\Order;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class RealTimeOrders extends Component
 {
+    use WithPagination;
+
     public $totalOfOrders = 0;
     public $totalPriceOfOrders = 0;
     public $totalOfRequestedOrders = 0;
     public $totalOfAcceptedOrders = 0;
     public $totalOfDeliveredOrders = 0;
     public $totalOfCanceledOrders = 0;
-    public $recentOrders = [];
+
+    public $perPage = 10;
 
     protected $listeners = [
         'orderUpdated' => 'refreshData',
@@ -33,37 +37,21 @@ class RealTimeOrders extends Component
         $this->totalOfAcceptedOrders = Order::where('status', 'accepted')->count();
         $this->totalOfDeliveredOrders = Order::where('status', 'completed')->count();
         $this->totalOfCanceledOrders = Order::where('status', 'cancelled')->count();
-        
-        $this->recentOrders = Order::with(['customer.profile', 'merchant.profile', 'service'])
-            ->orderBy('created_at', 'desc')
-            ->limit(10)
-            ->get()
-            ->map(function ($order) {
-                return [
-                    'id' => $order->id,
-                    'customer' => [
-                        'name' => $order->customer->name ?? 'N/A',
-                        'phone' => $order->customer->profile->mobile_number ?? null,
-                    ],
-                    'merchant' => [
-                        'name' => $order->merchant->name ?? 'N/A',
-                        'phone' => $order->merchant->profile->mobile_number ?? null,
-                    ],
-                    'service' => [
-                        'title' => $order->service->title ?? 'N/A',
-                    ],
-                    'status' => $order->status,
-                    'price' => $order->price,
-                    'total_price' => $order->total_price,
-                    'customer_phone' => $order->customer_phone,
-                    'created_at' => $order->created_at,
-                ];
-            })
-            ->toArray();
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 10;
     }
 
     public function render()
     {
-        return view('livewire.backend.real-time-orders');
+        $recentOrders = Order::with(['customer.profile', 'merchant.profile', 'service'])
+            ->orderBy('created_at', 'desc')
+            ->paginate($this->perPage);
+
+        return view('livewire.backend.real-time-orders', [
+            'recentOrders' => $recentOrders
+        ]);
     }
-} 
+}

@@ -31,6 +31,9 @@ class NotificationRequest extends FormRequest
                     'description' => ['required', 'max:350'],
                     'description_ar' => ['required'],
                     'type' => ['required', 'max:350'],
+                    'notification_type' => 'required|in:category,service,informative',
+                    'category_id' => 'required_if:notification_type,category|exists:categories,id',
+                    'service_id' => 'required_if:notification_type,service|exists:services,id',
                     'notification_icon' => ['required', 'mimes:'.implode(',',StorageManagerService::$allowedImages)],
                 ];
             case self::METHOD_PATCH:
@@ -41,6 +44,9 @@ class NotificationRequest extends FormRequest
                     'description' => ['required', 'max:350'],
                     'description_ar' => ['required'],
                     'type' => ['required', 'max:350'],
+                    'notification_type' => 'required|in:category,service,informative',
+                    'category_id' => 'required_if:notification_type,category|exists:categories,id',
+                    'service_id' => 'required_if:notification_type,service|exists:services,id',
                     'notification_icon' => ['nullable', 'mimes:'.implode(',',StorageManagerService::$allowedImages)],
                 ];
             case self::METHOD_DELETE:

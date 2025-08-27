@@ -1,5 +1,7 @@
 <?php
 namespace App\Domains\Notification\Models;
+use App\Domains\Lookups\Models\Category;
+use App\Domains\Service\Models\Service;
 use App\Models\BaseModel;
 use App\Domains\Auth\Models\User;
 /**
@@ -30,7 +32,11 @@ class Notification extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = [ 'is_sent','created_by_id', 'updated_by_id', 'title', 'title_ar', 'description', 'description_ar', 'notification_icon', 'type', 'created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = [ 'is_sent','created_by_id', 'updated_by_id', 'title', 'title_ar', 'description', 'description_ar', 'notification_icon',
+        'notification_type', // category, service, or informative
+        'category_id',
+        'service_id',
+        'type', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -38,5 +44,15 @@ class Notification extends BaseModel
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Service::class);
     }
 }

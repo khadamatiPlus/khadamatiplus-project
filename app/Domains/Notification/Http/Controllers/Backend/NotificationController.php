@@ -2,12 +2,14 @@
 namespace App\Domains\Notification\Http\Controllers\Backend;
 use App\Domains\Delivery\Http\Transformers\OrderTransformer;
 use App\Domains\FirebaseIntegration\FirebaseIntegration;
+use App\Domains\Lookups\Models\Category;
 use App\Domains\Notification\Http\Requests\Backend\NotificationRequest;
 use App\Domains\Lookups\Services\CategoryService;
 use App\Domains\Merchant\Services\MerchantBranchService;
 use App\Domains\Notification\Models\Notification;
 use App\Domains\Notification\Services\NotificationService;
 use App\Domains\Item\Services\ItemService;
+use App\Domains\Service\Models\Service;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -39,7 +41,11 @@ class NotificationController extends Controller
      */
     public function create()
     {
-        return view('backend.notification.create');
+        // Add these lines to fetch categories and services
+        $categories = Category::all(); // Adjust based on your Category model
+        $services = Service::all(); // Adjust based on your Service model
+
+        return view('backend.notification.create', compact('categories', 'services'));
     }
     /**
      * @param NotificationRequest $request
@@ -58,7 +64,9 @@ class NotificationController extends Controller
      */
     public function edit(Notification $notification)
     {
-        return view('backend.notification.edit')
+        $categories = Category::all(); // Adjust based on your model
+        $services = Service::all(); // Adjust based on your model
+        return view('backend.notification.edit', compact( 'categories', 'services'))
             ->withNotification($notification);
     }
     /**
@@ -82,35 +90,104 @@ class NotificationController extends Controller
         $this->notificationService->destroy($notification);
         return redirect()->back()->withFlashSuccess(__('The Notification was successfully deleted.'));
     }
-    public function sendNotification (Request $request){
-        try{
-            $notification=Notification::query()->where('id',$request->input('notificationId'))->firstOrFail();
-            if( $notification->type=='merchant'){
-                $type=100;
-            }
-            if( $notification->type=='captain'){
-                $type=101;
-            }
-            $data = json_encode([
-                'notification_icon' => storageBaseLink(\App\Enums\Core\StoragePaths::NOTIFICATION_ICON.$notification->notification_icon),
-                'type' => $type,
-                'title' => ['en' => $notification->title, 'ar' =>$notification->title_ar],
-                'description' => ['en' => $notification->description, 'ar' => $notification->description_ar],
-            ],JSON_UNESCAPED_SLASHES);
-//        Log::info($data); exit();
-            $topic='all11';
-            //return firebase message to be sent
-            $this->firebaseIntegration->pushNotification(CloudMessage::withTarget('topic', $topic)
-                ->withData(['data' => $data]));
-            $notification->is_sent =1;
-            $notification->update();
+    public function sendNotification(Request $request)
+    {
+        try {
+            // Fetch the notification with relationships
+            $notification = Notification::with(['category', 'service'])
+                ->where('id', $request->input('notificationId'))
+                ->firstOrFail();
 
-            return response()->json(true);
-        }
-        catch (\Exception $exception)
-        {
+            // Check if notification_type is null and set a default
+            if ($notification->notification_type === null) {
+                // Set a default notification type for existing notifications
+                $notification->notification_type = 'informative';
+                $notification->save(); // Save the change to the database
+            }
+
+            // Prepare the base notification data
+            $notificationData = [
+                'notification_id' => $notification->id,
+                'notification_icon' => storageBaseLink(\App\Enums\Core\StoragePaths::NOTIFICATION_ICON . $notification->notification_icon),
+                'title' => ['en' => $notification->title, 'ar' => $notification->title_ar],
+                'description' => ['en' => $notification->description, 'ar' => $notification->description_ar],
+                'type' => $notification->type, // recipient type (merchant/user)
+                'notification_type' => $notification->notification_type, // category/service/informative
+            ];
+
+            // Add category or service data based on notification type
+            if ($notification->notification_type === 'category' && $notification->category) {
+                $notificationData['category'] = [
+                    'id' => $notification->category->id,
+                    'name' => [
+                        'en' => $notification->category->name,
+                        'ar' => $notification->category->name_ar ?? $notification->category->name
+                    ],
+                    'image' => $notification->category->image ?
+                        storageBaseLink(\App\Enums\Core\StoragePaths::CATEGORY_IMAGE . $notification->category->image) : null
+                ];
+            } elseif ($notification->notification_type === 'service' && $notification->service) {
+                $notificationData['service'] = [
+                    'id' => $notification->service->id,
+                    'name' => [
+                        'en' => $notification->service->name,
+                        'ar' => $notification->service->name_ar ?? $notification->service->name
+                    ],
+                    'image' => $notification->service->image ?
+                        storageBaseLink(\App\Enums\Core\StoragePaths::SERVICE_FILE . $notification->service->image) : null
+                ];
+            }
+
+            // Encode the data for Firebase
+            $data = json_encode($notificationData, JSON_UNESCAPED_SLASHES);
+
+            // Log the prepared notification data
+            \Log::info('Preparing to send notification', [
+                'notification_id' => $notification->id,
+                'notification_type' => $notification->notification_type,
+                'data' => $notificationData
+            ]);
+
+            // Determine the target topic based on recipient type
+            $topic = $notification->type === 'merchant' ? 'merchants' : 'users';
+
+            // Send the notification via Firebase
+            $this->firebaseIntegration->pushNotification(
+                CloudMessage::withTarget('topic', $topic)
+                    ->withData(['notification_data' => $data])
+                    ->withNotification(
+                        \Kreait\Firebase\Messaging\Notification::create()
+                            ->withTitle($notification->title)
+                            ->withBody($notification->description)
+                    )
+            );
+
+            // Update notification status and sent time
+            $notification->is_sent = 1;
+//            $notification->sent_at = now();
+            $notification->save(); // Use save() instead of update() for single model
+
+            // Log success
+            \Log::info('Notification sent successfully', [
+                'notification_id' => $notification->id,
+                'topic' => $topic,
+                'notification_type' => $notification->notification_type
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'Notification sent successfully']);
+        } catch (\Exception $exception) {
+            // Log the error
+            \Log::error('Failed to send notification', [
+                'notification_id' => $request->input('notificationId'),
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString()
+            ]);
+
             report($exception);
-            return response()->json(['success' => false, 'error' => $exception]);
+            return response()->json([
+                'success' => false,
+                'error' => 'Failed to send notification: ' . $exception->getMessage()
+            ], 500);
         }
     }
 }

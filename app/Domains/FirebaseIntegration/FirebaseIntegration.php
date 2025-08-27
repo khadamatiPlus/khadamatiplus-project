@@ -116,22 +116,38 @@ class FirebaseIntegration implements FirebaseWorkInterface
      * @throws \Kreait\Firebase\Exception\FirebaseException
      * @throws \Kreait\Firebase\Exception\MessagingException
      */
-    public function pushNotification(CloudMessage $message):void
+    public function pushNotification(CloudMessage $message): void
     {
-        try{
-            \Log::info('message firebase:',[$message]);
+        try {
+            // Log the attempt to send the Firebase message
+            \Log::info('Attempting to send Firebase notification', [
+                'message' => $message->jsonSerialize() // Log the serialized message
+            ]);
+
             $this->firebase_messaging->send($message);
-        }
-        catch (InvalidMessage $invalidMessageException)
-        {
+
+            // Log success
+            \Log::info('Firebase notification sent successfully');
+        } catch (InvalidMessage $invalidMessageException) {
+            // Log invalid message error
+            \Log::error('Invalid Firebase message', [
+                'error' => $invalidMessageException->getMessage(),
+                'trace' => $invalidMessageException->getTraceAsString()
+            ]);
             report($invalidMessageException);
-        }
-        catch (FirebaseException $firebaseException)
-        {
+        } catch (FirebaseException $firebaseException) {
+            // Log Firebase-specific error
+            \Log::error('Firebase error while sending notification', [
+                'error' => $firebaseException->getMessage(),
+                'trace' => $firebaseException->getTraceAsString()
+            ]);
             report($firebaseException);
-        }
-        catch (\Exception $exception)
-        {
+        } catch (\Exception $exception) {
+            // Log general error
+            \Log::error('Unexpected error while sending Firebase notification', [
+                'error' => $exception->getMessage(),
+                'trace' => $exception->getTraceAsString()
+            ]);
             report($exception);
         }
     }
