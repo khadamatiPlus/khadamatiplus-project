@@ -13,6 +13,7 @@ class ServiceTransformer
 
     public function transform(Service $service): array
     {
+
         $isFavorite = auth()->check() && $service->favoritedBy()->where('customer_id', auth()->user()->customer_id)->exists();
         $prices = $service->prices ? $service->prices->map(function($price) {
             return [

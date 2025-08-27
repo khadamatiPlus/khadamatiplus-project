@@ -22,7 +22,9 @@ class OrderTransformer
             'total_price' => numberFormatPrecision($order->total_price)??"",
             'merchant_name' => $order->merchant->name??"",
             'merchant_mobile_number' => $order->merchant->profile->mobile_number??"",
-            'service' => !empty($order->service_id)?(new ServiceTransformer())->transform($order->service):null,
+            'service' => (!empty($order->service_id) && $order->service)
+                ? (new ServiceTransformer())->transform($order->service)
+                : null,
             'customer_id' => $order->customer_id,
             'customer_name' => !empty($order->customer_id)?$order->customer->name??"":'',
             'status' => $order->status,
@@ -40,25 +42,6 @@ class OrderTransformer
         ];
     }
 
-//    /**
-//     * @param Order $order
-//     * @return array
-//     */
-//    public function transformForMerchantReport(Order $order): array
-//    {
-//        return [
-//            'id' => $order->id,
-//            'order_amount' => numberFormatPrecision($order->order_amount),
-//            'delivery_amount' => numberFormatPrecision($order->delivery_amount),
-//            'merchant_percentage' => numberFormatPrecision($order->merchant_percentage),
-//            'merchant_revenue' => numberFormatPrecision($order->merchant_revenue),
-//            'total_amount_after_deduct' => numberFormatPrecision($order->total_amount_after_deduct),
-//            'total_amount' => numberFormatPrecision($order->total_amount),
-//            'order_reference' => $order->order_reference,
-//            'payment_type' => $order->payment_type,
-//            'delivered_at' => $order->delivered_at
-//        ];
-//    }
 
 
 }
