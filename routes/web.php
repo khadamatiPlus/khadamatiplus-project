@@ -58,3 +58,9 @@ Route::get('/test-notification', function () {
         'message' => 'Failed to send notification'
     ], 500);
 });
+
+
+Route::get('/optimize-clear', function () {
+    Artisan::call('optimize:clear');
+    return "All caches cleared successfully!";
+});
