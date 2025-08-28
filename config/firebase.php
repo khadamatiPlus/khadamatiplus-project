@@ -10,7 +10,19 @@ return [
  * ------------------------------------------------------------------------
  */
     'default' => env('FIREBASE_PROJECT', 'app'),
-    'credentials' => 'firebase/khadamati-firebase.json',
+    'credentials' => [
+        'type' => 'service_account',
+        'project_id' => 'khadamat-services',
+        'private_key_id' => '69c8c08e6726bad997ea652443ef75e5a011cdbd',
+        'private_key' => "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDgKWDCfgfIbbhr\nA7ZJW64AmJMHBo/R6ToNLRtNSBvY4BEJYreBePwIc3zV11Br6Lpbr5VsEK7cfuoH\nhG2VMqTRbpetaBBur4jHNZGI+clBsal6/dJOG2Aq5ZWHsykVIbwkjrLcRNwGllqp\nSTMgYCbGewLeUxKz9GltVAsGB7TsWASFUnhINclwnsKYphyFuxkc8DE7RlaBexT/\ng9F4h8b/zpc24aAq4s0cJXpN4Sqg8BgAssgniWoWdztmCuL8B5vbaIXfBPX0GJBW\naXv4MHyZDeCEhkhy47eH+uqGEazLm8cjmRGsgSdFGDCN+z7TO9YoqgLWI6P4utVV\nWhft5DP3AgMBAAECggEAWSDasjp+SbkmnJZLQnvLgb0oqKB5StNbG6YVtvK279KX\ns42mvTonrAyPVE9aUK2me5Ii7WbswAtOblK/Z5VNZ2B7up0n+3qb/elUxova8936\nL0cA+cF0yVmjzOL1sMtLDZYXk/FlMtFRlwHd7D+O61g52cBaLWc/DBNglrM1wsq1\n7Bas7CY7A43IqIMdOAQNwX/d/mtlLoYJIJp6T3CIExcATrxka/PWC+E4ljQUaFzP\ndI5eb22MGL5YrZhRvkdFruixIbuN17lELbYsqifA2uVzTrqBKyLZpqdFR9eEFkee\nKvsS09dtqnaghxa02FFlPdjai4pDQF2mhcgrAXNLwQKBgQDzQJ0XHVy4MEJuMfNC\nNb2M4iMz+hm0EjQKX/v6Tg1nEfTx3CSRKRfK6LyQNmPBLrUH0AYVxCYu9q3kYXRl\nd+/2nYqXQuD9/8t2yHbvtCkeIECk63VLqTmmGQ6srx1UVIPxHqjhNhz5eLkhqbcs\nE51ZFjyhICvpDyX9sYY/34+/hwKBgQDr6KZHk7NUtO1fZsKD6DHVqRJadtIZJs1N\njyrV1KUsg0QqjdZav51JXtIMgHwb7bqkgMh9W+bXU6JsBdDfVwI/qEJ+GTxRNGxD\nZWi/3AFx5dkFF15dOdtgx1n/pCzL3Nr/+4i46YJdIfAD0A4eggTNcRKzOn0dqNSw\n8CKqeaqkEQKBgCJYHBXYYm/q+GYgjUzq04FhqEC9bgWbkFdqp+P2QzQrN98yCsOn\n/qD6bS0bUMhEtPCOcV1/XTjCQVj+XXW6ElpKcffbTHLwO6TgttIvKKMFQLtINz5g\nfTAzV3wQGV7/s8VGY+ewQTUD03eqQ59ogY3Dcvn41dpI9j80YlUAVoZfAoGAEEGD\n08LVxKyC/uPx220Qogx4e0tcxubplsKazQlOKHcTJ2uGrdIuYHPsPXhNFQ+YoOVO\n63R9v7C/rHnqHrm8Ke7KRi4u/dmC7FH8mdvrLZINFlC56+qkt1KFXRxPCe06GhGX\nJkbQ+OHxzBF2J5wGALId+8O4A2cy4M5rVRv1KkECgYBeHopY+8teAjdQBXLU3+Ew\nrWnJPKVGMUknLVSXzKJb/5l8X4cE3erZvqkByXx/H7NAgvxgfBZoHEryrwQcbXlc\nVFmU1uTmU5TFqjmsu0R9dO8iYnjrWI2qOTXjjlu/AN7d24nZEtXB1uiZVcH3ebrn\nvMi43rSzC/8CSIrVf4DgCg==\n-----END PRIVATE KEY-----\n",
+        'client_email' => 'firebase-adminsdk-pyzyo@khadamat-services.iam.gserviceaccount.com',
+        'client_id' => '102408090052003763615',
+        'auth_uri' => 'https://accounts.google.com/o/oauth2/auth',
+        'token_uri' => 'https://oauth2.googleapis.com/token',
+        'auth_provider_x509_cert_url' => 'https://www.googleapis.com/oauth2/v1/certs',
+        'client_x509_cert_url' => 'https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-pyzyo@khadamat-services.iam.gserviceaccount.com',
+        'universe_domain' => 'googleapis.com'
+    ],
 
     /*
      * ------------------------------------------------------------------------
