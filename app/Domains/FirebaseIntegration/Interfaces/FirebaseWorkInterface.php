@@ -11,5 +11,5 @@ interface FirebaseWorkInterface
 
     public function verifyUID(string $uid, string $phoneNumber):VerifyTokenResponse;
 
-    public function pushNotification(CloudMessage $message):void;
+    public function pushNotification(CloudMessage $message):array;
 }

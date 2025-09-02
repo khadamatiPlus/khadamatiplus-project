@@ -111,44 +111,62 @@ class FirebaseIntegration implements FirebaseWorkInterface
         }
     }
 
-    /**
-     * @param CloudMessage $message
-     * @throws \Kreait\Firebase\Exception\FirebaseException
-     * @throws \Kreait\Firebase\Exception\MessagingException
-     */
-    public function pushNotification(CloudMessage $message): void
+
+
+    public function pushNotification(CloudMessage $message): array
     {
+        // Existing implementation
         try {
-            // Log the attempt to send the Firebase message
             \Log::info('Attempting to send Firebase notification', [
-                'message' => $message->jsonSerialize() // Log the serialized message
+                'message_data' => $message->jsonSerialize()
             ]);
 
-            $this->firebase_messaging->send($message);
+            $response = $this->firebase_messaging->send($message);
 
-            // Log success
-            \Log::info('Firebase notification sent successfully');
+            if (isset($response['name']) && !empty($response['name'])) {
+                \Log::info('Firebase notification sent successfully', [
+                    'message_id' => $response['name']
+                ]);
+                return [
+                    'success' => true,
+                    'message_id' => $response['name']
+                ];
+            } else {
+                \Log::error('Firebase notification failed: No valid message ID in response', [
+                    'response' => $response
+                ]);
+                throw new \Exception('No valid message ID returned from Firebase');
+            }
         } catch (InvalidMessage $invalidMessageException) {
-            // Log invalid message error
             \Log::error('Invalid Firebase message', [
-                'error' => $invalidMessageException->getMessage(),
+                'error_message' => $invalidMessageException->getMessage(),
+                'error_code' => $invalidMessageException->getCode(),
+                'file' => $invalidMessageException->getFile(),
+                'line' => $invalidMessageException->getLine(),
                 'trace' => $invalidMessageException->getTraceAsString()
             ]);
             report($invalidMessageException);
+            throw $invalidMessageException;
         } catch (FirebaseException $firebaseException) {
-            // Log Firebase-specific error
             \Log::error('Firebase error while sending notification', [
-                'error' => $firebaseException->getMessage(),
+                'error_message' => $firebaseException->getMessage(),
+                'error_code' => $firebaseException->getCode(),
+                'file' => $firebaseException->getFile(),
+                'line' => $firebaseException->getLine(),
                 'trace' => $firebaseException->getTraceAsString()
             ]);
             report($firebaseException);
+            throw $firebaseException;
         } catch (\Exception $exception) {
-            // Log general error
             \Log::error('Unexpected error while sending Firebase notification', [
-                'error' => $exception->getMessage(),
+                'error_message' => $exception->getMessage(),
+                'error_code' => $exception->getCode(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
                 'trace' => $exception->getTraceAsString()
             ]);
             report($exception);
+            throw $exception;
         }
     }
 }
