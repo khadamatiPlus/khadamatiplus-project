@@ -263,6 +263,44 @@
                 </ul>
             </li>
         @endif
+
+
+        @if (
+    $logged_in_user->hasAllAccess() ||
+    (
+        $logged_in_user->can('admin.highlight.list') ||
+        $logged_in_user->can('admin.highlight.store')
+    )
+)
+            <li class="c-sidebar-nav-title">@lang('Highlights')</li>
+            <li class="c-sidebar-nav-dropdown {{ activeClass(Route::is('admin.highlight.*'), 'c-open c-show') }}">
+                <x-utils.link
+                    href="#"
+                    icon="c-sidebar-nav-icon fas fa-star"
+                    class="c-sidebar-nav-dropdown-toggle"
+                    :text="__('Highlights')"/>
+
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @if (
+                        $logged_in_user->hasAllAccess() ||
+                        (
+                            $logged_in_user->can('admin.highlight.list') ||
+                            $logged_in_user->can('admin.highlight.store')
+                        )
+                    )
+                        <li class="c-sidebar-nav-item">
+                            <x-utils.link
+                                :href="route('admin.highlight.index')"
+                                class="c-sidebar-nav-link"
+                                :text="__('Highlights Management')"
+                                :active="activeClass(Route::is('admin.highlight.*'), 'c-active')"/>
+                        </li>
+                    @endif
+                </ul>
+            </li>
+        @endif
+
+
         @if (
         $logged_in_user->hasAllAccess() ||
         (

@@ -20,6 +20,7 @@ final class StoragePaths extends BaseEnum
 
     const NOTIFICATION_ICON='notification/notification_icons/';
     const BANNER_IMAGE='banner/images/';
+    const HIGHLIGHT_IMAGE='highlight/images/';
     const INTRODUCTION_IMAGE='introduction/images/';
     const SERVICE_FILE='service/files/';
 
