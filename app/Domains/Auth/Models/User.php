@@ -65,6 +65,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'otp_expires_at',
         'google_id',
         'facebook_id',
+        'fcm_token',
     ];
 
     /**
