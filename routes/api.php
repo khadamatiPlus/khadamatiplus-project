@@ -236,6 +236,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
         Route::post('/auth/send-otp-register', [LoginApiController::class, 'sendOtpRegister']);
         Route::post('merchant/uploadImage', [ServiceApiController::class, 'uploadImage']);
         Route::middleware('auth:sanctum')->post('/update-mobile-number', [CustomerApiController::class, 'updateMobileNumber']);
+        Route::middleware('auth:sanctum')->post('/update-fcm-token', [UserManagementApiController::class, 'updateFcmToken']);
 
     });
    });
