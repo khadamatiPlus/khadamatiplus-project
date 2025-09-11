@@ -13,6 +13,7 @@ use App\Domains\Service\Models\ServiceProduct;
 use App\Domains\Service\Services\ServiceService;
 use App\Http\Controllers\APIBaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class ServiceApiController extends APIBaseController
 {
@@ -393,6 +394,9 @@ class ServiceApiController extends APIBaseController
         $userLng = null;
 
         if ($user && $user->customer->customer_address_id) {
+            Log::info( "user->customer->customer_address_id");
+
+            Log::info( $user->customer->customer_address_id);
             $customerAddress = CustomerAddress::find($user->customer_address_id);
             if ($customerAddress && $customerAddress->latitude && $customerAddress->longitude) {
                 $userLat = $customerAddress->latitude;
