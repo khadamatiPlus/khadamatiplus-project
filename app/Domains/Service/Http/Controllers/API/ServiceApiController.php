@@ -13,6 +13,7 @@ use App\Domains\Service\Models\ServiceProduct;
 use App\Domains\Service\Services\ServiceService;
 use App\Http\Controllers\APIBaseController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class ServiceApiController extends APIBaseController
@@ -359,11 +360,17 @@ class ServiceApiController extends APIBaseController
 
     public function getAllServices(Request $request)
     {
+        Log::info('Entering getAllServices', [
+            'request_parameters' => $request->all(),
+            'user_id' => auth()->check() ? auth()->id() : null
+        ]);
+
         $query = Service::query();
 
         // Apply optional search filters if provided
         if ($request->has('search') && !empty($request->input('search'))) {
             $search = $request->input('search');
+            Log::debug('Applying search filter', ['search_term' => $search]);
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
                     ->orWhere('description', 'like', "%{$search}%");
@@ -373,6 +380,7 @@ class ServiceApiController extends APIBaseController
         // Apply optional sub_category_id filter
         if ($request->has('sub_category_id') && !empty($request->input('sub_category_id'))) {
             $subCategoryId = $request->input('sub_category_id');
+            Log::debug('Applying sub_category_id filter', ['sub_category_id' => $subCategoryId]);
             $query->where('sub_category_id', $subCategoryId);
         }
 
@@ -381,6 +389,9 @@ class ServiceApiController extends APIBaseController
             $tags = $request->input('tags'); // Expecting tags as an array or comma-separated string
             if (is_string($tags)) {
                 $tags = explode(',', $tags); // Convert comma-separated string to array
+                Log::debug('Converted comma-separated tags to array', ['tags' => $tags]);
+            } else {
+                Log::debug('Tags received as array', ['tags' => $tags]);
             }
 
             $query->whereHas('tags', function ($q) use ($tags) {
@@ -388,53 +399,69 @@ class ServiceApiController extends APIBaseController
             });
         }
 
-        // Check if user is authenticated and has location data
-        $user = auth()->user();
-        $userLat = null;
-        $userLng = null;
+        // If there is an authenticated user, sort services by distance to user's location
+        if (auth()->check()) {
+            $user = auth()->user();
+            $userLat = null;
+            $userLng = null;
 
-        if ($user && $user->customer->customer_address_id) {
-            Log::info( "user->customer->customer_address_id");
-
-            Log::info( $user->customer->customer_address_id);
-            $customerAddress = CustomerAddress::find($user->customer_address_id);
-            if ($customerAddress && $customerAddress->latitude && $customerAddress->longitude) {
-                $userLat = $customerAddress->latitude;
-                $userLng = $customerAddress->longitude;
+            // Get user's latitude and longitude from customer_addresses if available
+            if ($user->customer->customer_address_id && $user->customer->defaultAddress) {
+                $userLat = $user->customer->defaultAddress->latitude;
+                $userLng = $user->customer->defaultAddress->longitude;
+                Log::info('User location found', [
+                    'user_id' => $user->id,
+                    'latitude' => $userLat,
+                    'longitude' => $userLng
+                ]);
+            } else {
+                Log::warning('User location not available', [
+                    'user_id' => $user->id,
+                    'customer_address_id' => $user->customer->customer_address_id
+                ]);
             }
-        }
 
-        // If user has location data, calculate distances and sort by distance
-        if ($userLat && $userLng) {
-            // Add distance calculation using Haversine formula
-            $query->selectRaw('services.*,
-            (6371 * acos(cos(radians(?)) * cos(radians(merchants.latitude)) *
-            cos(radians(merchants.longitude) - radians(?)) +
-            sin(radians(?)) * sin(radians(merchants.latitude)))) AS distance',
-                [$userLat, $userLng, $userLat]
-            )
-                ->join('merchants', 'services.merchant_id', '=', 'merchants.id')
-                ->whereNotNull('merchants.latitude')
-                ->whereNotNull('merchants.longitude')
-                ->orderBy('distance', 'asc');
+            if ($userLat !== null && $userLng !== null) {
+                Log::debug('Applying distance-based sorting using Haversine formula');
+                // Add distance calculation using Haversine formula (in km)
+                $distanceRaw = DB::raw("
+                    ( 6371 * acos(
+                        cos( radians({$userLat}) ) *
+                        cos( radians( merchants.latitude ) ) *
+                        cos( radians( merchants.longitude ) - radians({$userLng} ) ) +
+                        sin( radians({$userLat}) ) *
+                        sin( radians( merchants.latitude ) )
+                    ) ) AS distance
+                ");
+
+                // Join with merchants table
+                $query->join('merchants', 'services.merchant_id', '=', 'merchants.id')
+                    ->select('services.*', $distanceRaw)
+                    ->whereNotNull('merchants.latitude')
+                    ->whereNotNull('merchants.longitude')
+                    ->orderBy('distance', 'asc');
+            } else {
+                Log::debug('No user location, falling back to created_at sorting');
+                $query->orderBy('created_at', 'desc');
+            }
         } else {
-            // Default sorting if no location data
+            Log::debug('No authenticated user, using created_at sorting');
             $query->orderBy('created_at', 'desc');
         }
 
-        $services = $query->paginate(10);
+        $services = $query->paginate(10); // Adjust the items per page as needed
+        Log::info('Services retrieved', [
+            'total' => $services->total(),
+            'current_page' => $services->currentPage(),
+            'per_page' => $services->perPage()
+        ]);
 
         // Transform the paginated data
-        $transformedServices = $services->getCollection()->map(function ($service) use ($userLat, $userLng) {
-            $transformed = (new ServiceTransformer)->transform($service);
-
-            // Add distance to the transformed data if available
-            if ($userLat && $userLng && isset($service->distance)) {
-                $transformed['distance_km'] = round($service->distance, 2);
-            }
-
-            return $transformed;
+        $transformedServices = $services->getCollection()->map(function ($service) {
+            return (new ServiceTransformer)->transform($service);
         });
+
+        Log::debug('Transformed services data', ['service_count' => $transformedServices->count()]);
 
         // Return the response using successResponse
         return $this->successResponse([
