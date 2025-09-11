@@ -27,6 +27,16 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>@lang('Fcm Token')</th>
+                    <td>
+                        @if(!empty($customer->profile->fcm_token))
+                            {{ $customer->profile->fcm_token }}
+                        @else
+                            @lang('Empty')
+                        @endif
+                    </td>
+                </tr>
+                <tr>
                     <th>@lang('Created By')</th>
                     <td>{{$customer->createdById->name??"Not Found"}}</td>
                 </tr>

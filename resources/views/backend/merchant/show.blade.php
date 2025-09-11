@@ -25,6 +25,16 @@
                     </td>
                 </tr>
                 <tr>
+                    <th>@lang('Fcm Token')</th>
+                    <td>
+                        @if(!empty($merchant->profile->fcm_token))
+                           {{ $merchant->profile->fcm_token }}
+                        @else
+                            @lang('Empty')
+                        @endif
+                    </td>
+                </tr>
+                <tr>
                     <th>@lang('Email')</th>
                     <td>
                         @if(!empty($merchant->profile->email))
@@ -50,11 +60,11 @@
                 </tr>
                 <tr>
                     <th>@lang('Merchant City')</th>
-                    <td>{{ $merchant->city->name }}</td>
+                    <td>{{ $merchant->city->name??"--" }}</td>
                 </tr>
                 <tr>
                     <th>@lang('Merchant Area')</th>
-                    <td>{{ $merchant->area->name }}</td>
+                    <td>{{ $merchant->area->name??"--"  }}</td>
                 </tr>
                 <tr>
                     <th>@lang('Merchant Location')</th>
