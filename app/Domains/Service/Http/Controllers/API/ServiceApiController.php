@@ -406,7 +406,7 @@ class ServiceApiController extends APIBaseController
             $userLng = null;
 
             // Get user's latitude and longitude from customer_addresses if available
-            if ($user->customer->customer_address_id && $user->customer->defaultAddress) {
+            if ($user->customer && $user->customer->customer_address_id && $user->customer->defaultAddress) {
                 $userLat = $user->customer->defaultAddress->latitude;
                 $userLng = $user->customer->defaultAddress->longitude;
                 Log::info('User location found', [
@@ -417,7 +417,8 @@ class ServiceApiController extends APIBaseController
             } else {
                 Log::warning('User location not available', [
                     'user_id' => $user->id,
-                    'customer_address_id' => $user->customer->customer_address_id
+                    'customer_exists' => !empty($user->customer),
+                    'customer_address_id' => $user->customer ? $user->customer->customer_address_id : null
                 ]);
             }
 
@@ -474,23 +475,6 @@ class ServiceApiController extends APIBaseController
                 'total_pages' => $services->lastPage(),
             ],
         ]);
-    }
-
-    public function getServiceById($id)
-    {
-        // Fetch the merchant by ID
-        $service = Service::find($id);
-
-        // Check if the merchant exists
-        if (!$service) {
-            return $this->errorResponse('Service not found', 404);
-        }
-
-        // Transform the merchant data
-        $transformedService = (new ServiceTransformer())->transform($service);
-
-        // Return the response
-        return $this->successResponse(['data' => $transformedService]);
     }
 
 
