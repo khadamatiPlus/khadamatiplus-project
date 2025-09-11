@@ -72,7 +72,7 @@ class OrderApiController extends APIBaseController
             $firebaseService->sendPushNotification(
                 $deviceToken,
                 "طلب جديد",
-                "لديك طلب جديد لـ {$service->name} في الساعة {$validated['time']} يوم {$validated['day']}"
+                "لديك طلب جديد لـ {$service->title}"
             );
         }
 
