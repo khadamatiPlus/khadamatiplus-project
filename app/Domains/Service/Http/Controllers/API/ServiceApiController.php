@@ -2,6 +2,7 @@
 
 namespace App\Domains\Service\Http\Controllers\API;
 
+use App\Domains\Customer\Models\CustomerAddress;
 use App\Domains\Lookups\Models\Category;
 use App\Domains\Merchant\Http\Transformers\MerchantTransformer;
 use App\Domains\Merchant\Models\Merchant;
@@ -386,12 +387,49 @@ class ServiceApiController extends APIBaseController
             });
         }
 
-        $query->orderBy('created_at', 'desc');
-        $services = $query->paginate(10); // Adjust the items per page as needed
+        // Check if user is authenticated and has location data
+        $user = auth()->user();
+        $userLat = null;
+        $userLng = null;
+
+        if ($user && $user->customer->customer_address_id) {
+            $customerAddress = CustomerAddress::find($user->customer_address_id);
+            if ($customerAddress && $customerAddress->latitude && $customerAddress->longitude) {
+                $userLat = $customerAddress->latitude;
+                $userLng = $customerAddress->longitude;
+            }
+        }
+
+        // If user has location data, calculate distances and sort by distance
+        if ($userLat && $userLng) {
+            // Add distance calculation using Haversine formula
+            $query->selectRaw('services.*,
+            (6371 * acos(cos(radians(?)) * cos(radians(merchants.latitude)) *
+            cos(radians(merchants.longitude) - radians(?)) +
+            sin(radians(?)) * sin(radians(merchants.latitude)))) AS distance',
+                [$userLat, $userLng, $userLat]
+            )
+                ->join('merchants', 'services.merchant_id', '=', 'merchants.id')
+                ->whereNotNull('merchants.latitude')
+                ->whereNotNull('merchants.longitude')
+                ->orderBy('distance', 'asc');
+        } else {
+            // Default sorting if no location data
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $services = $query->paginate(10);
 
         // Transform the paginated data
-        $transformedServices = $services->getCollection()->map(function ($service) {
-            return (new ServiceTransformer)->transform($service);
+        $transformedServices = $services->getCollection()->map(function ($service) use ($userLat, $userLng) {
+            $transformed = (new ServiceTransformer)->transform($service);
+
+            // Add distance to the transformed data if available
+            if ($userLat && $userLng && isset($service->distance)) {
+                $transformed['distance_km'] = round($service->distance, 2);
+            }
+
+            return $transformed;
         });
 
         // Return the response using successResponse
