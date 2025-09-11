@@ -71,8 +71,8 @@ class OrderApiController extends APIBaseController
         if ($deviceToken) {
             $firebaseService->sendPushNotification(
                 $deviceToken,
-                "New Order Request",
-                "You have a new order request for {$service->name} at {$validated['time']} on {$validated['day']}"
+                "طلب جديد",
+                "لديك طلب جديد لـ {$service->name} في الساعة {$validated['time']} يوم {$validated['day']}"
             );
         }
 
@@ -147,18 +147,18 @@ class OrderApiController extends APIBaseController
 
         // Prepare the message for the notification
         $statusMessages = [
-            'accepted' => "Your order for {$order->service->title} has been accepted.",
-            'on_the_way' => "Your order for {$order->service->title} is on the way.",
-            'on_progress' => "Your order for {$order->service->title} is in progress.",
-            'completed' => "Your order for {$order->service->title} has been completed.",
-            'cancelled' => "Your order for {$order->service->title} has been cancelled."
+            'accepted' => "تم قبول طلبك لـ {$order->service->title}." ,
+            'on_the_way' => "طلبك لـ {$order->service->title} في الطريق." ,
+            'on_progress' => "طلبك لـ {$order->service->title} قيد التقدم." ,
+            'completed' => "تم إكمال طلبك لـ {$order->service->title}." ,
+            'cancelled' => "تم إلغاء طلبك لـ {$order->service->title}."
         ];
 
-        // Send notification to the customer
+// Send notification to the customer
         if ($deviceToken) {
             $firebaseService->sendPushNotification(
                 $deviceToken,
-                "Order Status Update",
+                "تحديث حالة الطلب",
                 $statusMessages[$validated['status']]
             );
         }
