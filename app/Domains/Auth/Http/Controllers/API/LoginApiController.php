@@ -221,7 +221,7 @@ class LoginApiController extends APIBaseController
         $request->validate([
             'country_code' => 'nullable',
             'mobile_number' => 'required',
-            'fcm_token' => 'required',
+            'fcm_token' => 'nullable',
         ]);
 
         $country_code = $request->input('country_code');
