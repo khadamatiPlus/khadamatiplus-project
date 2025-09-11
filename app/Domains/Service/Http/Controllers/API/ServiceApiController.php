@@ -479,7 +479,22 @@ class ServiceApiController extends APIBaseController
 
 
 
+    public function getServiceById($id)
+    {
+        // Fetch the merchant by ID
+        $service = Service::find($id);
 
+        // Check if the merchant exists
+        if (!$service) {
+            return $this->errorResponse('Service not found', 404);
+        }
+
+        // Transform the merchant data
+        $transformedService = (new ServiceTransformer())->transform($service);
+
+        // Return the response
+        return $this->successResponse(['data' => $transformedService]);
+    }
 
 
     public function store(Request $request)
