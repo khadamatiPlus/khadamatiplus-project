@@ -384,6 +384,18 @@ class ServiceApiController extends APIBaseController
             $query->where('sub_category_id', $subCategoryId);
         }
 
+        if ($request->has('city_id') && !empty($request->input('city_id'))) {
+            $cityId = $request->input('city_id');
+            Log::debug('Applying city_id filter', ['city_id' => $cityId]);
+            $query->where('city_id', $cityId);
+        }
+
+        if ($request->has('area_id') && !empty($request->input('area_id'))) {
+            $areaId = $request->input('area_id');
+            Log::debug('Applying area_id filter', ['area_id' => $areaId]);
+            $query->where('area_id', $areaId);
+        }
+
         // Apply optional tags filter
         if ($request->has('tags') && !empty($request->input('tags'))) {
             $tags = $request->input('tags'); // Expecting tags as an array or comma-separated string
