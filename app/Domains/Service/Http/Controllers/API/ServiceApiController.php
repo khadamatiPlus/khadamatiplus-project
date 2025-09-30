@@ -386,15 +386,22 @@ class ServiceApiController extends APIBaseController
 
         if ($request->has('city_id') && !empty($request->input('city_id'))) {
             $cityId = $request->input('city_id');
-            Log::debug('Applying city_id filter', ['city_id' => $cityId]);
-            $query->where('city_id', $cityId);
+            Log::debug('Applying city_id filter via merchant', ['city_id' => $cityId]);
+
+            $query->whereHas('merchant', function ($q) use ($cityId) {
+                $q->where('city_id', $cityId);
+            });
         }
 
         if ($request->has('area_id') && !empty($request->input('area_id'))) {
             $areaId = $request->input('area_id');
-            Log::debug('Applying area_id filter', ['area_id' => $areaId]);
-            $query->where('area_id', $areaId);
+            Log::debug('Applying area_id filter via merchant', ['area_id' => $areaId]);
+
+            $query->whereHas('merchant', function ($q) use ($areaId) {
+                $q->where('area_id', $areaId);
+            });
         }
+
 
         // Apply optional tags filter
         if ($request->has('tags') && !empty($request->input('tags'))) {
