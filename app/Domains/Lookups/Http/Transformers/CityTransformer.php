@@ -11,6 +11,13 @@ class CityTransformer
         return [
             'id' => $city->id,
             'name' => $city->name,
+            'areas' => $city->areas->map(function ($area) {
+                return [
+                    'id' => $area->id,
+                    'name' => $area->name,
+                ];
+            })->toArray(),
         ];
     }
+
 }
