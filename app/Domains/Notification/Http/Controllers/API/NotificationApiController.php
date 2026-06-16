@@ -22,46 +22,7 @@ class NotificationApiController extends APIBaseController
         $this->notificationService = $notificationService;
     }
 
-    /**
-     * @OA\Get(
-     * path="/api/notifications/getNotifications",
-     * summary="Get Notifications",
-     * description="",
-     * operationId="getNotifications",
-     * tags={"Hayat Delivery App"},
-     *     @OA\Parameter(
-     *         name="Accept-Language",
-     *         in="header",
-     *         description="Set language parameter by RFC2616 <https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4>",
-     *         @OA\Schema(
-     *             type="string",
-     *             default="en"
-     *         )
-     *     ),
-     *      @OA\Parameter(
-     *          name="page",
-     *          description="page to paginate data",
-     *          required=true,
-     *          in="query",
-     *          @OA\Schema(
-     *              type="integer",
-     *          )
-     *      ),
-     *    security={{"bearerAuth":{}}},
-     * @OA\Response(
-     *    response=400,
-     *    description="input validation errors"
-     * ),
-     * @OA\Response(
-     *    response=500,
-     *    description="internal server error"
-     * ),
-     *     @OA\Response(
-     *    response=200,
-     *    description="success"
-     * )
-     * )
-     */
+
     public function getNotifications(Request $request): \Illuminate\Http\JsonResponse
     {
         try {

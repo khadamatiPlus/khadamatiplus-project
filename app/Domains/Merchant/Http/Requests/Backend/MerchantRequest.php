@@ -63,6 +63,8 @@ class MerchantRequest extends FormRequest
                     'latitude' => ['required', 'max:350'],
                     'longitude' => ['required', 'max:350'],
                     'password' => ['required', 'confirmed'],
+                    'app_services' => ['nullable', 'array'],
+                    'app_services.*' => ['exists:app_services,id'],
 
                 ];
             case self::METHOD_PATCH:
@@ -92,6 +94,8 @@ class MerchantRequest extends FormRequest
                         }),
                     ],
                     'password' => ['nullable', 'confirmed'],
+                    'app_services' => ['nullable', 'array'],
+                    'app_services.*' => ['exists:app_services,id'],
 
                 ];
             case self::METHOD_DELETE:

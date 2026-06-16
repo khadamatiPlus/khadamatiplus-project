@@ -27,6 +27,8 @@ use App\Domains\Customer\Http\Controllers\API\CustomerAddressApiController;
 use App\Domains\Customer\Http\Controllers\API\CustomerApiController;
 use App\Domains\AppVersion\Http\Controllers\API\AppVersionApiController;
 use App\Domains\Highlight\Http\Controllers\API\HighlightApiController;
+use App\Domains\AppService\Http\Controllers\API\AppServiceApiController;
+use App\Domains\Offer\Http\Controllers\API\OfferApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +68,10 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
         Route::get('getBanners', [BannerApiController::class, 'getBanners']);
         Route::get('getIntroductions', [IntroductionApiController::class, 'getIntroductions']);
         Route::get('getHighlights', [HighlightApiController::class, 'getHighlights']);
+        Route::get('app-services', [AppServiceApiController::class, 'getAppServices']);
+        Route::get('app-services/{id}', [AppServiceApiController::class, 'getAppServiceById']);
+        Route::get('offers', [OfferApiController::class, 'getOffers']);
+        Route::get('offers/{id}', [OfferApiController::class, 'getOfferById']);
         //Required Auth token routes
         Route::group(['middleware' => 'auth:sanctum'], function (){
             Route::get('get-all-orders', [OrderApiController::class, 'getAllOrders']);

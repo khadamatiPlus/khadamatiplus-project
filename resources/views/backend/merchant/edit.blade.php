@@ -152,6 +152,18 @@
                     </div>
                 </div><!--form-group-->
 
+                <div class="form-group row">
+                    <label for="app_services" class="col-md-2 col-form-label">@lang('App Services')</label>
+                    <div class="col-md-10">
+                        <select name="app_services[]" id="app_services" class="form-control" multiple="multiple" size="5">
+                            @foreach ($appServices as $appService)
+                                <option value="{{ $appService->id }}" {{ $merchant->appServices->contains($appService->id) ? 'selected' : '' }}>{{ $appService->name }}</option>
+                            @endforeach
+                        </select>
+                        <small class="text-muted">Hold Ctrl/Cmd to select multiple app services</small>
+                    </div>
+                </div><!--form-group-->
+
             </x-slot>
             <x-slot name="footer">
                 <button class="btn btn-sm btn-primary float-right" type="submit">@lang('Update Merchant')</button>

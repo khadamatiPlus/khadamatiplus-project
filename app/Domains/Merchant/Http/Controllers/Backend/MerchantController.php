@@ -41,8 +41,10 @@ class MerchantController extends Controller
     public function create()
     {
         $countries = $this->countryService->select(['id','name'])->get();
+        $appServices = \App\Domains\AppService\Models\AppService::where('status', 'active')->get();
         return view('backend.merchant.create')
-            ->withCountries($countries);
+            ->withCountries($countries)
+            ->withAppServices($appServices);
     }
     /**
      * @param merchantRequest $request
@@ -64,12 +66,14 @@ class MerchantController extends Controller
         $countries = $this->countryService->select(['id','name'])->get();
         $cities = $this->cityService->where('country_id',$merchant->country_id)->select(['id','name'])->get();
         $areas = $this->areaService->where('city_id',$merchant->city_id)->select(['id','name'])->get();
+        $appServices = \App\Domains\AppService\Models\AppService::where('status', 'active')->get();
 
         return view('backend.merchant.edit')
             ->withMerchant($merchant)
             ->withCountries($countries)
             ->withCities($cities)
-            ->withAreas($areas);
+            ->withAreas($areas)
+            ->withAppServices($appServices);
     }
     /**
      * @param Merchant $item
@@ -77,6 +81,7 @@ class MerchantController extends Controller
      */
     public function show(Merchant $merchant)
     {
+        $merchant->load('appServices');
         return view('backend.merchant.show')
             ->withMerchant($merchant);
     }

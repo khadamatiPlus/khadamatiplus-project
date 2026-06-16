@@ -23,5 +23,6 @@ final class StoragePaths extends BaseEnum
     const HIGHLIGHT_IMAGE='highlight/images/';
     const INTRODUCTION_IMAGE='introduction/images/';
     const SERVICE_FILE='service/files/';
+    const APP_SERVICE_IMAGE='app-services/images/';
 
 }

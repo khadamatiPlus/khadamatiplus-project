@@ -39,6 +39,7 @@ class LocationApiController extends APIBaseController
     }
 
 
+
     public function getCountries(Request $request): \Illuminate\Http\JsonResponse
     {
         try{

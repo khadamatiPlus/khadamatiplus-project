@@ -91,6 +91,11 @@ class MerchantService extends BaseService
             $merchant->id_image = $idImage;
             $merchant->save();
 
+            // Sync app services if provided
+            if (isset($data['app_services']) && is_array($data['app_services'])) {
+                $merchant->appServices()->sync($data['app_services']);
+            }
+
             // Associate the merchant id with the merchantAdmin
             $merchantAdmin->merchant_id = $merchant->id;
             $merchantAdmin->save();
@@ -200,7 +205,14 @@ class MerchantService extends BaseService
         $data['is_verified'] = isset($data['is_verified']) ? 1 : $merchant->is_verified;
         $data['profile_id'] = $merchant->profile_id;
 
-        return parent::update($entity, $data);
+        $updatedMerchant = parent::update($entity, $data);
+
+        // Sync app services if provided
+        if (isset($data['app_services']) && is_array($data['app_services'])) {
+            $updatedMerchant->appServices()->sync($data['app_services']);
+        }
+
+        return $updatedMerchant;
     }
 
     /**

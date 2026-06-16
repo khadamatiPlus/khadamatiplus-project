@@ -118,6 +118,57 @@
                                 :active="activeClass(Route::is('admin.service.*'), 'c-active')"/>
                         </li>
                     @endif
+                    @if (
+                        $logged_in_user->hasAllAccess() ||
+                        (
+                            $logged_in_user->can('admin.app-service.list') ||
+                            $logged_in_user->can('admin.app-service.store') ||
+                            $logged_in_user->can('admin.app-service.update') ||
+                            $logged_in_user->can('admin.app-service.delete')
+                        )
+                    )
+                        <li class="c-sidebar-nav-item">
+                            <x-utils.link
+                                :href="route('admin.app-service.index')"
+                                class="c-sidebar-nav-link"
+                                :text="__('App Services Management')"
+                                :active="activeClass(Route::is('admin.app-service.*'), 'c-active')"/>
+                        </li>
+                    @endif
+                    @if (
+                        $logged_in_user->hasAllAccess() ||
+                        (
+                            $logged_in_user->can('admin.coupon.list') ||
+                            $logged_in_user->can('admin.coupon.store') ||
+                            $logged_in_user->can('admin.coupon.update') ||
+                            $logged_in_user->can('admin.coupon.delete')
+                        )
+                    )
+                        <li class="c-sidebar-nav-item">
+                            <x-utils.link
+                                :href="route('admin.coupon.index')"
+                                class="c-sidebar-nav-link"
+                                :text="__('Coupons Management')"
+                                :active="activeClass(Route::is('admin.coupon.*'), 'c-active')"/>
+                        </li>
+                    @endif
+                    @if (
+                        $logged_in_user->hasAllAccess() ||
+                        (
+                            $logged_in_user->can('admin.offer.list') ||
+                            $logged_in_user->can('admin.offer.store') ||
+                            $logged_in_user->can('admin.offer.update') ||
+                            $logged_in_user->can('admin.offer.delete')
+                        )
+                    )
+                        <li class="c-sidebar-nav-item">
+                            <x-utils.link
+                                :href="route('admin.offer.index')"
+                                class="c-sidebar-nav-link"
+                                :text="__('Offers Management')"
+                                :active="activeClass(Route::is('admin.offer.*'), 'c-active')"/>
+                        </li>
+                    @endif
             </ul>
         @endif
         @if (

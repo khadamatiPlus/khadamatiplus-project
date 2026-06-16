@@ -94,4 +94,9 @@ class Merchant extends BaseModel
     {
         return $this->hasMany(MerchantAvailability::class);
     }
+
+    public function appServices()
+    {
+        return $this->belongsToMany(\App\Domains\AppService\Models\AppService::class, 'app_service_merchant', 'merchant_id', 'app_service_id');
+    }
 }

@@ -71,6 +71,20 @@
                     <td><a href="https://maps.google.com/?q= {{ $merchant->latitude}},{{ $merchant->longitude}}" target="_blank">{{__("View In Map")}}</a></td>
                 </tr>
                 <tr>
+                    <th>@lang('App Services')</th>
+                    <td>
+                        @if($merchant->appServices && $merchant->appServices->count() > 0)
+                            <ul class="list-unstyled">
+                                @foreach($merchant->appServices as $appService)
+                                    <li>{{ $appService->name }}</li>
+                                @endforeach
+                            </ul>
+                        @else
+                            @lang('No App Services Assigned')
+                        @endif
+                    </td>
+                </tr>
+                <tr>
                     <th>@lang('Created By')</th>
                     <td>{{$merchant->createdById->name??"Not Found"}}</td>
                 </tr>

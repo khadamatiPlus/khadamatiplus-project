@@ -36,58 +36,7 @@ class LoginApiController extends APIBaseController
         $this->smsService = $smsService;
     }
 
-    /**
-     * @OA\Post(
-     * path="/api/auth/authenticate",
-     * summary="Authentication - Login Using Mobile",
-     * description="",
-     * operationId="authenticate",
-     * tags={"Auth"},
-     *     @OA\Parameter(
-     *         name="Accept-Language",
-     *         in="header",
-     *         description="Set language parameter by RFC2616 <https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4>",
-     *         @OA\Schema(
-     *             type="string",
-     *             default="en"
-     *         )
-     *     ),
-     *     @OA\Parameter(
-     *         name="App-Version-Name",
-     *         in="header",
-     *         description="Set language parameter by RFC2616 <https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4>",
-     *         @OA\Schema(
-     *             type="string",
-     *             default="hayat_delivery_merchant_app"
-     *         )
-     *     ),
-     * @OA\RequestBody(
-     *    required=true,
-     *    description="pass authetication data",
-     *       @OA\MediaType(
-     *           mediaType="multipart/form-data",
-     *           @OA\Schema(
-     *               required={"mobile_number", "firebase_auth_token"},
-     *              @OA\Property(property="country_code", type="string"),
-     *              @OA\Property(property="mobile_number", type="string"),
-     *              @OA\Property(property="firebase_auth_token", type="string")
-     *           ),
-     *       )
-     * ),
-     * @OA\Response(
-     *    response=400,
-     *    description="input validation errors"
-     * ),
-     * @OA\Response(
-     *    response=500,
-     *    description="internal server error"
-     * ),
-     *     @OA\Response(
-     *    response=200,
-     *    description="success"
-     * )
-     * )
-     */
+
     public function mobileAuthenticate(MobileAuthenticateRequest $request)
     {
         $request->validated(); // Validate before proceeding
