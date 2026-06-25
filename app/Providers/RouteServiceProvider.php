@@ -51,10 +51,12 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/web.php'));
 
             // For the 'Login As' functionality from the 404labfr/laravel-impersonate package
-            Route::middleware('web')
-                ->group(function (Router $router) {
-                    $router->impersonate();
-                });
+            if (method_exists(Router::class, 'impersonate')) {
+                Route::middleware('web')
+                    ->group(function (Router $router) {
+                        $router->impersonate();
+                    });
+            }
         });
 
         // To be able to restore a user, since the default binding is a find and would result in a 404

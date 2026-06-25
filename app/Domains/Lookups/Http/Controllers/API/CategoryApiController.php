@@ -25,6 +25,24 @@ class CategoryApiController extends APIBaseController
     }
 
 
+    /**
+     * Get Categories
+     *
+     * Returns a list of top-level categories.
+     *
+     * @group Categories
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 1,
+     *       "name": "Services",
+     *       "name_ar": "خدمات"
+     *     }
+     *   ]
+     * }
+     */
     public function getCategories(Request $request): \Illuminate\Http\JsonResponse
     {
         try {
@@ -38,6 +56,66 @@ class CategoryApiController extends APIBaseController
                 });
 
             return $this->successResponse($categories);
+        } catch (\Exception $exception) {
+            report($exception);
+            return $this->internalServerErrorResponse($exception->getMessage());
+        }
+    }
+
+    /**
+     * Get Sub-Categories by Category ID
+     *
+     * Returns all sub-categories for a given parent category ID.
+     *
+     * @group Categories
+     *
+     * @queryParam category_id integer required The ID of the parent category. Example: 1
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": [
+     *     {
+     *       "id": 2,
+     *       "name": "Cleaning",
+     *       "name_ar": "تنظيف",
+     *       "parent_id": 1
+     *     }
+     *   ]
+     * }
+     *
+     * @response 422 {
+     *   "success": false,
+     *   "message": "The category_id field is required."
+     * }
+     *
+     * @response 404 {
+     *   "success": false,
+     *   "message": "Category not found"
+     * }
+     */
+    public function getSubCategories(Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $request->validate([
+                'category_id' => 'required|integer|exists:categories,id'
+            ]);
+
+            $category = Category::find($request->category_id);
+
+            if (!$category) {
+                return $this->inputValidationErrorResponse('Category not found');
+            }
+
+            $subCategories = $category->children()
+                ->sorted()
+                ->get()
+                ->transform(function ($subCategory) {
+                    return (new CategoryTransformer())->transform($subCategory);
+                });
+
+            return $this->successResponse($subCategories);
+        } catch (\Illuminate\Validation\ValidationException $exception) {
+            return $this->inputValidationErrorResponse($exception->errors());
         } catch (\Exception $exception) {
             report($exception);
             return $this->internalServerErrorResponse($exception->getMessage());

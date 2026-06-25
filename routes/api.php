@@ -56,6 +56,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
             Route::get('getCities', [LocationApiController::class, 'getCities']);
             Route::get('getAreas', [LocationApiController::class, 'getAreas']);
             Route::get('getCategories', [CategoryApiController::class, 'getCategories']);
+            Route::get('getSubCategories', [CategoryApiController::class, 'getSubCategories']);
 
             Route::get('getLabels', [LabelApiController::class, 'getLabels']);
             Route::get('getTags', [TagApiController::class, 'getTags']);

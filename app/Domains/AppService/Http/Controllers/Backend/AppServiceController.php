@@ -41,6 +41,7 @@ class AppServiceController extends Controller
             'currency' => 'nullable|string|max:10',
             'price_type' => 'required|string|in:fixed,hourly,starts_from,by_agreement',
             'status' => 'required|string|in:active,draft,inactive,scheduled',
+            'variants' => 'nullable',
         ]);
 
         DB::beginTransaction();
@@ -147,6 +148,7 @@ class AppServiceController extends Controller
             'currency' => 'nullable|string|max:10',
             'price_type' => 'required|string|in:fixed,hourly,starts_from,by_agreement',
             'status' => 'required|string|in:active,draft,inactive,scheduled',
+            'variants' => 'nullable',
         ]);
 
         DB::beginTransaction();

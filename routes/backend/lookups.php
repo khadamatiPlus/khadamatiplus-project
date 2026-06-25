@@ -12,8 +12,6 @@ use App\Domains\Lookups\Models\Tag;
 use App\Domains\Lookups\Http\Controllers\Backend\TagController;
 use App\Domains\Lookups\Models\Label;
 use App\Domains\Lookups\Http\Controllers\Backend\LabelController;
-use App\Domains\Lookups\Models\UserType;
-use App\Domains\Lookups\Http\Controllers\Backend\UserTypeController;
 use App\Domains\Lookups\Http\Controllers\Backend\CategoryController;
 use App\Domains\Lookups\Models\Category;
 
@@ -324,54 +322,7 @@ Route::group([
      */
 
 
-    /**
-     * UserType Routes
-     */
-    Route::group([
-        'prefix' => 'userType',
-        'as' => 'userType.'
-    ], function (){
-        Route::get('/', [UserTypeController::class, 'index'])
-            ->name('index')
-            ->middleware('permission:admin.lookups.userType.list|admin.lookups.userType.store|admin.lookups.userType.update|admin.lookups.userType.delete')
-            ->breadcrumbs(function (Trail $trail) {
-                $trail->parent('admin.dashboard')
-                    ->push(__('User Type Management'), route('admin.lookups.userType.index'));
-            });
 
-        Route::get('create', [UserTypeController::class, 'create'])
-            ->name('create')
-            ->middleware('permission:admin.lookups.userType.store')
-            ->breadcrumbs(function (Trail $trail) {
-                $trail->parent('admin.lookups.userType.index')
-                    ->push(__('Create User Type'), route('admin.lookups.userType.create'));
-            });
-
-        Route::post('store', [UserTypeController::class, 'store'])
-            ->name('store')
-            ->middleware('permission:admin.lookups.userType.store');
-
-        Route::group(['prefix' => '{userType}'], function () {
-            Route::get('edit', [UserTypeController::class, 'edit'])
-                ->name('edit')
-                ->middleware('permission:admin.lookups.userType.update')
-                ->breadcrumbs(function (Trail $trail, UserType $userType) {
-                    $trail->parent('admin.lookups.userType.index', $userType)
-                        ->push(__('Editing :entity', ['entity' => __('UserType')]), route('admin.lookups.userType.edit', $userType));
-                });
-
-            Route::patch('/', [UserTypeController::class, 'update'])
-                ->name('update')
-                ->middleware('permission:admin.lookups.userType.update');
-
-            Route::delete('delete', [UserTypeController::class, 'destroy'])
-                ->name('delete')
-                ->middleware('permission:admin.lookups.userType.delete');
-        });
-    });
-    /**
-     * End UserType Routes
-     */
 
 
     /**

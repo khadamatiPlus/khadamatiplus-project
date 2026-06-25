@@ -23,8 +23,10 @@ class AppServiceApiController extends APIBaseController
      *
      * @group App Services
      *
+     * @queryParam search string Search services by name, description, or tags. Example: cleaning
      * @queryParam featured boolean Filter featured services only. Example: true
      * @queryParam category_id integer Filter services by category ID. Example: 5
+     * @queryParam sub_category_id integer Filter services by sub-category ID. Example: 10
      * @queryParam online boolean Filter online services only. Example: true
      *
      * @response 200 {
@@ -32,43 +34,66 @@ class AppServiceApiController extends APIBaseController
      *   "data": [
      *     {
      *       "id": 1,
-     *       "name": "Cleaning Service"
+     *       "name": "Cleaning Service",
+     *       "variants": [
+     *         {
+     *           "name": "Size",
+     *           "options": [
+     *             {
+     *               "name": "Small",
+     *               "value": "small",
+     *               "discount_price": 10.50
+     *             }
+     *           ]
+     *         }
+     *       ]
      *     }
      *   ]
      * }
      */
- public function getAppServices(Request $request): \Illuminate\Http\JsonResponse
- {
-     try {
-         $query = $this->appServiceService->getActiveAppServices();
 
-         // Filter by featured
-         if ($request->has('featured') && $request->boolean('featured')) {
-             $query = $this->appServiceService->getFeaturedAppServices();
-         }
+    public function getAppServices(Request $request): \Illuminate\Http\JsonResponse
+    {
+        try {
+            $query = $this->appServiceService->getActiveAppServices();
 
-         // Filter by category
-         if ($request->has('category_id')) {
-             $query = $this->appServiceService->getAppServicesByCategory($request->category_id);
-         }
+            // Search by name, description, or tags
+            if ($request->filled('search')) {
+                $query = $this->appServiceService->searchAppServices($request->search);
+            }
 
-         // Filter by online
-         if ($request->has('online') && $request->boolean('online')) {
-             $query = $this->appServiceService->getOnlineAppServices();
-         }
+            // Filter by featured
+            if ($request->has('featured') && $request->boolean('featured')) {
+                $query = $this->appServiceService->getFeaturedAppServices();
+            }
 
-         $appServices = $query->get();
+            // Filter by category
+            if ($request->has('category_id')) {
+                $query = $this->appServiceService->getAppServicesByCategory($request->category_id);
+            }
 
-         return $this->successResponse(
-             $appServices->transform(function ($appService) {
-                 return (new AppServiceTransformer())->transform($appService);
-             })
-         );
-     } catch (\Exception $exception) {
-         report($exception);
-         return $this->internalServerErrorResponse($exception->getMessage());
-     }
- }
+            // Filter by sub-category
+            if ($request->has('sub_category_id')) {
+                $query = $this->appServiceService->getAppServicesBySubCategory($request->sub_category_id);
+            }
+
+            // Filter by online
+            if ($request->has('online') && $request->boolean('online')) {
+                $query = $this->appServiceService->getOnlineAppServices();
+            }
+
+            $appServices = $query->get();
+
+            return $this->successResponse(
+                $appServices->transform(function ($appService) {
+                    return (new AppServiceTransformer())->transform($appService);
+                })
+            );
+        } catch (\Exception $exception) {
+            report($exception);
+            return $this->internalServerErrorResponse($exception->getMessage());
+        }
+    }
 
 
     /**

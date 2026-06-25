@@ -79,6 +79,19 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-categories" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="categories">
+                    <a href="#categories">Categories</a>
+                </li>
+                                    <ul id="tocify-subheader-categories" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="categories-GETapi-lookups-getCategories">
+                                <a href="#categories-GETapi-lookups-getCategories">Get Categories</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="categories-GETapi-lookups-getSubCategories">
+                                <a href="#categories-GETapi-lookups-getSubCategories">Get Sub-Categories by Category ID</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-endpoints" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="endpoints">
                     <a href="#endpoints">Endpoints</a>
@@ -92,9 +105,6 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-lookups-getAreas">
                                 <a href="#endpoints-GETapi-lookups-getAreas">GET api/lookups/getAreas</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-lookups-getCategories">
-                                <a href="#endpoints-GETapi-lookups-getCategories">GET api/lookups/getCategories</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-lookups-getLabels">
                                 <a href="#endpoints-GETapi-lookups-getLabels">GET api/lookups/getLabels</a>
@@ -336,7 +346,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: June 16, 2026</li>
+        <li>Last updated: June 25, 2026</li>
     </ul>
 </div>
 
@@ -372,7 +382,7 @@ You can switch the language used with the tabs at the top right (or from the nav
 
 <div class="bash-example">
     <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/app-services?featured=1&amp;category_id=5&amp;online=1" \
+    --get "http://127.0.0.1:8000/api/app-services?search=cleaning&amp;featured=1&amp;category_id=5&amp;sub_category_id=10&amp;online=1" \
     --header "Content-Type: application/json" \
     --header "Accept: application/json"</code></pre></div>
 
@@ -383,8 +393,10 @@ You can switch the language used with the tabs at the top right (or from the nav
 );
 
 const params = {
+    "search": "cleaning",
     "featured": "1",
     "category_id": "5",
+    "sub_category_id": "10",
     "online": "1",
 };
 Object.keys(params)
@@ -414,7 +426,19 @@ fetch(url, {
     &quot;data&quot;: [
         {
             &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;Cleaning Service&quot;
+            &quot;name&quot;: &quot;Cleaning Service&quot;,
+            &quot;variants&quot;: [
+                {
+                    &quot;name&quot;: &quot;Size&quot;,
+                    &quot;options&quot;: [
+                        {
+                            &quot;name&quot;: &quot;Small&quot;,
+                            &quot;value&quot;: &quot;small&quot;,
+                            &quot;discount_price&quot;: 10.5
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }</code>
@@ -493,6 +517,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                             <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
                                     <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>search</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="search"                data-endpoint="GETapi-app-services"
+               value="cleaning"
+               data-component="query">
+    <br>
+<p>Search services by name, description, or tags. Example: <code>cleaning</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>featured</code></b>&nbsp;&nbsp;
 <small>boolean</small>&nbsp;
 <i>optional</i> &nbsp;
@@ -525,6 +561,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="query">
     <br>
 <p>Filter services by category ID. Example: <code>5</code></p>
+            </div>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>sub_category_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="sub_category_id"                data-endpoint="GETapi-app-services"
+               value="10"
+               data-component="query">
+    <br>
+<p>Filter services by sub-category ID. Example: <code>10</code></p>
             </div>
                                     <div style="padding-left: 28px; clear: unset;">
                 <b style="line-height: 2;"><code>online</code></b>&nbsp;&nbsp;
@@ -709,6 +757,304 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>The ID of the app service. Example: <code>1</code></p>
             </div>
                     </form>
+
+                <h1 id="categories">Categories</h1>
+
+    
+
+                                <h2 id="categories-GETapi-lookups-getCategories">Get Categories</h2>
+
+<p>
+</p>
+
+<p>Returns a list of top-level categories.</p>
+
+<span id="example-requests-GETapi-lookups-getCategories">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/lookups/getCategories" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/lookups/getCategories"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-lookups-getCategories">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 1,
+            &quot;name&quot;: &quot;Services&quot;,
+            &quot;name_ar&quot;: &quot;خدمات&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-lookups-getCategories" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-lookups-getCategories"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-lookups-getCategories"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-lookups-getCategories" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-lookups-getCategories">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-lookups-getCategories" data-method="GET"
+      data-path="api/lookups/getCategories"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-lookups-getCategories', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-lookups-getCategories"
+                    onclick="tryItOut('GETapi-lookups-getCategories');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-lookups-getCategories"
+                    onclick="cancelTryOut('GETapi-lookups-getCategories');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-lookups-getCategories"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/lookups/getCategories</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-lookups-getCategories"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-lookups-getCategories"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
+
+                    <h2 id="categories-GETapi-lookups-getSubCategories">Get Sub-Categories by Category ID</h2>
+
+<p>
+</p>
+
+<p>Returns all sub-categories for a given parent category ID.</p>
+
+<span id="example-requests-GETapi-lookups-getSubCategories">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/lookups/getSubCategories?category_id=1" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/lookups/getSubCategories"
+);
+
+const params = {
+    "category_id": "1",
+};
+Object.keys(params)
+    .forEach(key =&gt; url.searchParams.append(key, params[key]));
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-lookups-getSubCategories">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;data&quot;: [
+        {
+            &quot;id&quot;: 2,
+            &quot;name&quot;: &quot;Cleaning&quot;,
+            &quot;name_ar&quot;: &quot;تنظيف&quot;,
+            &quot;parent_id&quot;: 1
+        }
+    ]
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (404):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;Category not found&quot;
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (422):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: false,
+    &quot;message&quot;: &quot;The category_id field is required.&quot;
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-lookups-getSubCategories" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-lookups-getSubCategories"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-lookups-getSubCategories"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-lookups-getSubCategories" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-lookups-getSubCategories">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-lookups-getSubCategories" data-method="GET"
+      data-path="api/lookups/getSubCategories"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-lookups-getSubCategories', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-lookups-getSubCategories"
+                    onclick="tryItOut('GETapi-lookups-getSubCategories');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-lookups-getSubCategories"
+                    onclick="cancelTryOut('GETapi-lookups-getSubCategories');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-lookups-getSubCategories"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/lookups/getSubCategories</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-lookups-getSubCategories"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-lookups-getSubCategories"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                            <h4 class="fancy-heading-panel"><b>Query Parameters</b></h4>
+                                    <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>category_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="category_id"                data-endpoint="GETapi-lookups-getSubCategories"
+               value="1"
+               data-component="query">
+    <br>
+<p>The ID of the parent category. Example: <code>1</code></p>
+            </div>
+                </form>
 
                 <h1 id="endpoints">Endpoints</h1>
 
@@ -1111,157 +1457,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-GETapi-lookups-getCategories">GET api/lookups/getCategories</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-GETapi-lookups-getCategories">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/lookups/getCategories" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/lookups/getCategories"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-lookups-getCategories">
-            <blockquote>
-            <p>Example response (200):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
-x-ratelimit-limit: 60
-x-ratelimit-remaining: 56
- </code></pre></details>         <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;success&quot;: true,
-    &quot;message&quot;: &quot;Request successful&quot;,
-    &quot;data&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;name&quot;: &quot;first category&quot;,
-            &quot;image&quot;: &quot;http://127.0.0.1:8000/storage//category/images/1759513581-fanni-logo.png&quot;,
-            &quot;sub_categories&quot;: [
-                {
-                    &quot;id&quot;: 3,
-                    &quot;name&quot;: &quot;xsax&quot;,
-                    &quot;image&quot;: &quot;http://127.0.0.1:8000/storage//category/images/1781273232-1762020252_2900.jpg&quot;
-                }
-            ],
-            &quot;tags&quot;: []
-        },
-        {
-            &quot;id&quot;: 2,
-            &quot;name&quot;: &quot;second category&quot;,
-            &quot;image&quot;: &quot;http://127.0.0.1:8000/storage//category/images/1760210392-fanni-logo.png&quot;,
-            &quot;sub_categories&quot;: [],
-            &quot;tags&quot;: []
-        }
-    ]
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-lookups-getCategories" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-lookups-getCategories"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-lookups-getCategories"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-lookups-getCategories" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-lookups-getCategories">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-lookups-getCategories" data-method="GET"
-      data-path="api/lookups/getCategories"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-lookups-getCategories', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-lookups-getCategories"
-                    onclick="tryItOut('GETapi-lookups-getCategories');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-lookups-getCategories"
-                    onclick="cancelTryOut('GETapi-lookups-getCategories');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-lookups-getCategories"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/lookups/getCategories</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-lookups-getCategories"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-lookups-getCategories"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
-
                     <h2 id="endpoints-GETapi-lookups-getLabels">GET api/lookups/getLabels</h2>
 
 <p>
@@ -1309,7 +1504,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 55
+x-ratelimit-remaining: 56
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -1439,7 +1634,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 54
+x-ratelimit-remaining: 55
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -1569,7 +1764,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 53
+x-ratelimit-remaining: 54
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -1705,7 +1900,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 52
+x-ratelimit-remaining: 53
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -1835,7 +2030,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 51
+x-ratelimit-remaining: 52
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -1974,7 +2169,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 50
+x-ratelimit-remaining: 51
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -2104,7 +2299,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 49
+x-ratelimit-remaining: 50
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -2242,7 +2437,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 48
+x-ratelimit-remaining: 49
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -2387,7 +2582,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 47
+x-ratelimit-remaining: 48
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -3511,7 +3706,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"images\": [
         {
             \"image\": \"http:\\/\\/kunze.biz\\/iste-laborum-eius-est-dolor.html\",
-            \"is_main\": false
+            \"is_main\": true
         }
     ],
     \"products\": [
@@ -3522,7 +3717,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             \"images\": [
                 {
                     \"image\": \"http:\\/\\/reynolds.com\\/\",
-                    \"is_main\": false
+                    \"is_main\": true
                 }
             ]
         }
@@ -3555,7 +3750,7 @@ let body = {
     "images": [
         {
             "image": "http:\/\/kunze.biz\/iste-laborum-eius-est-dolor.html",
-            "is_main": false
+            "is_main": true
         }
     ],
     "products": [
@@ -3566,7 +3761,7 @@ let body = {
             "images": [
                 {
                     "image": "http:\/\/reynolds.com\/",
-                    "is_main": false
+                    "is_main": true
                 }
             ]
         }
@@ -3759,7 +3954,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
                     </div>
                                     </details>
         </div>
@@ -3887,7 +4082,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
                     </div>
                                     </details>
         </div>
@@ -3918,7 +4113,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"images\": [
         {
             \"image\": \"https:\\/\\/www.mueller.com\\/laborum-eius-est-dolor-dolores-minus-voluptatem\",
-            \"is_main\": true
+            \"is_main\": false
         }
     ],
     \"service_prices\": [
@@ -3935,7 +4130,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             \"images\": [
                 {
                     \"image\": \"http:\\/\\/reynolds.com\\/\",
-                    \"is_main\": true
+                    \"is_main\": false
                 }
             ]
         }
@@ -3961,7 +4156,7 @@ let body = {
     "images": [
         {
             "image": "https:\/\/www.mueller.com\/laborum-eius-est-dolor-dolores-minus-voluptatem",
-            "is_main": true
+            "is_main": false
         }
     ],
     "service_prices": [
@@ -3978,7 +4173,7 @@ let body = {
             "images": [
                 {
                     "image": "http:\/\/reynolds.com\/",
-                    "is_main": true
+                    "is_main": false
                 }
             ]
         }
@@ -4184,7 +4379,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
                     </div>
                                     </details>
         </div>
@@ -4336,7 +4531,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
                     </div>
                                     </details>
         </div>
@@ -4919,7 +5114,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"order_id\": \"consequatur\",
-    \"status\": \"cancelled\"
+    \"status\": \"completed\"
 }"
 </code></pre></div>
 
@@ -4936,7 +5131,7 @@ const headers = {
 
 let body = {
     "order_id": "consequatur",
-    "status": "cancelled"
+    "status": "completed"
 };
 
 fetch(url, {
@@ -5040,10 +5235,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-merchant-updateOrderStatusByMerchant"
-               value="cancelled"
+               value="completed"
                data-component="body">
     <br>
-<p>Validate that the order exists. Example: <code>cancelled</code></p>
+<p>Validate that the order exists. Example: <code>completed</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>accepted</code></li> <li><code>on_the_way</code></li> <li><code>on_progress</code></li> <li><code>completed</code></li> <li><code>cancelled</code></li></ul>
         </div>
@@ -5757,7 +5952,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"title\": \"consequatur\",
     \"value\": \"consequatur\",
     \"type\": \"consequatur\",
-    \"value_type\": \"consequatur\"
+    \"value_type\": \"consequatur\",
+    \"discount_price\": 45
 }"
 </code></pre></div>
 
@@ -5777,7 +5973,8 @@ let body = {
     "title": "consequatur",
     "value": "consequatur",
     "type": "consequatur",
-    "value_type": "consequatur"
+    "value_type": "consequatur",
+    "discount_price": 45
 };
 
 fetch(url, {
@@ -5922,6 +6119,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
     <br>
 <p>Example: <code>consequatur</code></p>
         </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>discount_price</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="discount_price"                data-endpoint="POSTapi-merchant-service-options"
+               value="45"
+               data-component="body">
+    <br>
+<p>Must be at least 0. Example: <code>45</code></p>
+        </div>
         </form>
 
                     <h2 id="endpoints-PUTapi-merchant-service-options--id-">PUT api/merchant/service/options/{id}</h2>
@@ -5944,7 +6153,8 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"title\": \"consequatur\",
     \"value\": \"consequatur\",
     \"type\": \"consequatur\",
-    \"value_type\": \"consequatur\"
+    \"value_type\": \"consequatur\",
+    \"discount_price\": 45
 }"
 </code></pre></div>
 
@@ -5963,7 +6173,8 @@ let body = {
     "title": "consequatur",
     "value": "consequatur",
     "type": "consequatur",
-    "value_type": "consequatur"
+    "value_type": "consequatur",
+    "discount_price": 45
 };
 
 fetch(url, {
@@ -6108,6 +6319,18 @@ You can check the Dev Tools console for debugging information.</code></pre>
                data-component="body">
     <br>
 <p>Example: <code>consequatur</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>discount_price</code></b>&nbsp;&nbsp;
+<small>number</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="discount_price"                data-endpoint="PUTapi-merchant-service-options--id-"
+               value="45"
+               data-component="body">
+    <br>
+<p>Must be at least 0. Example: <code>45</code></p>
         </div>
         </form>
 
@@ -8104,7 +8327,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"service_id\": \"consequatur\",
-    \"day\": \"Thursday\"
+    \"day\": \"Monday\"
 }"
 </code></pre></div>
 
@@ -8121,7 +8344,7 @@ const headers = {
 
 let body = {
     "service_id": "consequatur",
-    "day": "Thursday"
+    "day": "Monday"
 };
 
 fetch(url, {
@@ -8225,10 +8448,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="day"                data-endpoint="POSTapi-customer-requestOrder"
-               value="Thursday"
+               value="Monday"
                data-component="body">
     <br>
-<p>Example: <code>Thursday</code></p>
+<p>Example: <code>Monday</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>Monday</code></li> <li><code>Tuesday</code></li> <li><code>Wednesday</code></li> <li><code>Thursday</code></li> <li><code>Friday</code></li> <li><code>Saturday</code></li> <li><code>Sunday</code></li></ul>
         </div>
@@ -8264,7 +8487,7 @@ Must be one of:
     --header "Accept: application/json" \
     --data "{
     \"order_id\": \"consequatur\",
-    \"status\": \"completed\"
+    \"status\": \"on_the_way\"
 }"
 </code></pre></div>
 
@@ -8281,7 +8504,7 @@ const headers = {
 
 let body = {
     "order_id": "consequatur",
-    "status": "completed"
+    "status": "on_the_way"
 };
 
 fetch(url, {
@@ -8385,10 +8608,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-customer-updateOrderStatusByCustomer"
-               value="completed"
+               value="on_the_way"
                data-component="body">
     <br>
-<p>Validate that the order exists. Example: <code>completed</code></p>
+<p>Validate that the order exists. Example: <code>on_the_way</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>accepted</code></li> <li><code>on_the_way</code></li> <li><code>on_progress</code></li> <li><code>completed</code></li> <li><code>cancelled</code></li></ul>
         </div>
@@ -9939,7 +10162,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 46
+x-ratelimit-remaining: 47
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -10078,7 +10301,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 45
+x-ratelimit-remaining: 46
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -11331,7 +11554,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 44
+x-ratelimit-remaining: 45
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{
@@ -11540,7 +11763,7 @@ fetch(url, {
             <pre><code class="language-http">cache-control: no-cache, private
 content-type: application/json
 x-ratelimit-limit: 60
-x-ratelimit-remaining: 43
+x-ratelimit-remaining: 44
  </code></pre></details>         <pre>
 
 <code class="language-json" style="max-height: 300px;">{

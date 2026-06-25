@@ -496,6 +496,15 @@
         <span class="input-group-text" style="font-size:0.72rem; padding:0.3rem 0.4rem" id="optCurr_${optId}">ر.س</span>
       </div>
     </div>
+    <div class="price-input">
+      <div class="input-group input-group-sm">
+        <span class="input-group-text" style="font-size:0.75rem; padding:0.3rem 0.5rem">%</span>
+        <input type="number" class="form-control selected-option-discount-price" placeholder="0.00" min="0" step="0.01"
+          id="${optId}_dp"
+          data-discount-price="0" style="font-size:0.85rem"
+          oninput="this.dataset.discountPrice=this.value||0">
+      </div>
+    </div>
     <button class="btn-danger-soft" onclick="document.getElementById('${optId}').remove(); updatePreview()" title="حذف"><i class="bi bi-x-lg"></i></button>`;
         container.appendChild(div);
         console.log(`Option ${optId} appended to container`);
@@ -741,13 +750,16 @@
                 const optName = document.getElementById(optId + '_n')?.value || '';
                 const priceInput = optRow.querySelector('.selected-option-price');
                 const optPrice = priceInput ? priceInput.value : '0';
+                const discountPriceInput = optRow.querySelector('.selected-option-discount-price');
+                const optDiscountPrice = discountPriceInput ? discountPriceInput.value : '0';
 
-                console.log(`Option ${optId} - name: ${optName}, price: ${optPrice}`);
+                console.log(`Option ${optId} - name: ${optName}, price: ${optPrice}, discount_price: ${optDiscountPrice}`);
 
                 if (optName) {
                     options.push({
                         name: optName,
-                        price: parseFloat(optPrice) || 0
+                        price: parseFloat(optPrice) || 0,
+                        discount_price: parseFloat(optDiscountPrice) || 0
                     });
                 }
             });
@@ -855,7 +867,8 @@
 
                     const optNameInput = document.getElementById(optId + '_n');
                     const optPriceInput = document.getElementById(optId + '_p');
-                    console.log(`Option inputs - nameInput: ${!!optNameInput}, priceInput: ${!!optPriceInput}`);
+                    const optDiscountPriceInput = document.getElementById(optId + '_dp');
+                    console.log(`Option inputs - nameInput: ${!!optNameInput}, priceInput: ${!!optPriceInput}, discountPriceInput: ${!!optDiscountPriceInput}`);
 
                     if (optNameInput) {
                         optNameInput.value = option.name || '';
@@ -864,6 +877,10 @@
                     if (optPriceInput) {
                         optPriceInput.value = option.price || 0;
                         console.log(`Set option price to: ${option.price}`);
+                    }
+                    if (optDiscountPriceInput) {
+                        optDiscountPriceInput.value = option.discount_price || 0;
+                        console.log(`Set option discount_price to: ${option.discount_price}`);
                     }
                 });
             } else {

@@ -40,6 +40,16 @@ class AppServiceService extends BaseService
         return $this->model->where('status', 'active')->where('is_featured', true)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
     }
 
+
+    public function searchAppServices(string $search): \Illuminate\Database\Eloquent\Builder
+    {
+        return$this->model->where('status', 'active')
+            ->where(function ($query) use ($search) {
+                $query->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('description', 'LIKE', "%{$search}%")
+                    ->orWhereJsonContains('tags', $search);
+            });
+    }
     /**
      * Get app services by category
      *
@@ -49,6 +59,17 @@ class AppServiceService extends BaseService
     public function getAppServicesByCategory($categoryId)
     {
         return $this->model->where('status', 'active')->where('category_id', $categoryId)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
+    }
+
+    /**
+     * Get app services by sub-category
+     *
+     * @param int $subCategoryId
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function getAppServicesBySubCategory($subCategoryId)
+    {
+        return $this->model->where('status', 'active')->where('sub_category_id', $subCategoryId)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
     }
 
     /**

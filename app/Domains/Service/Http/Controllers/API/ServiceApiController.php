@@ -524,6 +524,7 @@ class ServiceApiController extends APIBaseController
             'value' => 'required|string',
             'type' => 'required|string',
             'value_type' => 'required|string',
+            'discount_price' => 'nullable|numeric|min:0',
         ]);
         $validated['created_by_id'] = \Auth::user()->id;
         $validated['updated_by_id'] = \Auth::user()->id;
@@ -540,6 +541,7 @@ class ServiceApiController extends APIBaseController
             'value' => 'required|string',
             'type' => 'required|string',
             'value_type' => 'required|string',
+            'discount_price' => 'nullable|numeric|min:0',
         ]);
 
         $serviceOption = ServiceOption::find($id);

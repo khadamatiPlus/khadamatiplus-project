@@ -573,10 +573,13 @@
                 const optName = document.getElementById(optId + '_n')?.value || '';
                 const priceInput = optRow.querySelector('.selected-option-price');
                 const optPrice = priceInput ? priceInput.value : '0';
+                const discountPriceInput = optRow.querySelector('.selected-option-discount-price');
+                const optDiscountPrice = discountPriceInput ? discountPriceInput.value : '0';
                 if (optName) {
                     options.push({
                         name: optName,
-                        price: parseFloat(optPrice) || 0
+                        price: parseFloat(optPrice) || 0,
+                        discount_price: parseFloat(optDiscountPrice) || 0
                     });
                 }
             });
@@ -657,6 +660,14 @@
           data-label="" data-price="0" style="font-size:0.85rem"
           oninput="this.dataset.price=this.value||0; this.dataset.label=document.getElementById('${optId}_n').value||'خيار'; updatePreview()">
         <span class="input-group-text" style="font-size:0.72rem; padding:0.3rem 0.4rem" id="optCurr_${optId}">JOD</span>
+      </div>
+    </div>
+    <div class="price-input">
+      <div class="input-group input-group-sm">
+        <span class="input-group-text" style="font-size:0.75rem; padding:0.3rem 0.5rem">%</span>
+        <input type="number" class="form-control selected-option-discount-price" placeholder="0.00" min="0" step="0.01"
+          data-discount-price="0" style="font-size:0.85rem"
+          oninput="this.dataset.discountPrice=this.value||0">
       </div>
     </div>
     <button class="btn-danger-soft" onclick="document.getElementById('${optId}').remove(); updatePreview()" title="حذف"><i class="bi bi-x-lg"></i></button>`;
