@@ -5,6 +5,7 @@ use App\Domains\Auth\Events\User\UserCreated;
 use App\Domains\Auth\Models\User;
 use App\Domains\Auth\Services\UserService;
 use App\Domains\Merchant\Models\Merchant;
+use App\Domains\Wallet\Services\WalletService;
 use App\Exceptions\GeneralException;
 use App\Services\BaseService;
 use App\Services\StorageManagerService;
@@ -33,17 +34,19 @@ class MerchantService extends BaseService
      */
     protected $storageManagerService;
 
+    protected WalletService $walletService;
 
     /**
      * @param Merchant $merchant
      * @param UserService $userService
      * @param StorageManagerService $storageManagerService
      */
-    public function __construct(Merchant $merchant, UserService $userService, StorageManagerService $storageManagerService)
+    public function __construct(Merchant $merchant, UserService $userService, StorageManagerService $storageManagerService, WalletService $walletService)
     {
         $this->model = $merchant;
         $this->userService = $userService;
         $this->storageManagerService = $storageManagerService;
+        $this->walletService = $walletService;
     }
 
     /**
@@ -86,6 +89,7 @@ class MerchantService extends BaseService
             // Store the merchant detailssss
             $data['profile_id'] = $merchantAdmin->id;
             $merchant = $this->store($data);
+            $this->walletService->ensureWallet(Merchant::class, $merchant->id, 'default');
 
             // Save the merchant id_image
             $merchant->id_image = $idImage;

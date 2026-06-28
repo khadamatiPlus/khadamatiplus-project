@@ -21,9 +21,10 @@ class OfferTransformer
             'end_date' => $offer->end_date ? $offer->end_date->format('Y-m-d H:i:s') : null,
             'is_active' => $offer->is_active,
             'is_featured' => $offer->is_featured,
+            'category_id' => $offer->category_id??null,
+            'app_service_id' => $offer->app_service_id??null,
             'coupon' => $this->getCouponData($offer),
-            'category' => $this->getCategoryData($offer),
-            'app_service' => $this->getAppServiceData($offer),
+
         ];
     }
 

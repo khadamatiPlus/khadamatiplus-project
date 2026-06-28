@@ -6,6 +6,7 @@ use App\Domains\Auth\Events\User\UserCreated;
 use App\Domains\Auth\Models\User;
 use App\Domains\Auth\Services\UserService;
 use App\Domains\Customer\Models\Customer;
+use App\Domains\Wallet\Services\WalletService;
 use App\Exceptions\GeneralException;
 use App\Services\BaseService;
 use App\Services\StorageManagerService;
@@ -32,11 +33,14 @@ class CustomerService extends BaseService
      */
     protected $storageManagerService;
 
-    public function __construct(Customer $customer, UserService $userService,StorageManagerService $storageManagerService)
+    protected WalletService $walletService;
+
+    public function __construct(Customer $customer, UserService $userService,StorageManagerService $storageManagerService, WalletService $walletService)
     {
         $this->model = $customer;
         $this->userService = $userService;
         $this->storageManagerService = $storageManagerService;
+        $this->walletService = $walletService;
     }
 
     /**
@@ -75,6 +79,7 @@ class CustomerService extends BaseService
             $data['profile_id'] = $customerUser->id;
 
             $customer = $this->store($data);
+            $this->walletService->ensureWallet(Customer::class, $customer->id, 'default');
 
             $customerUser->fill([
                 'customer_id' => $customer->id ?? null,

@@ -8,6 +8,7 @@ use App\Domains\Auth\Models\Traits\Relationship\UserRelationship;
 use App\Domains\Auth\Models\Traits\Scope\UserScope;
 use App\Domains\Auth\Notifications\Frontend\ResetPasswordNotification;
 use App\Domains\Auth\Notifications\Frontend\VerifyEmail;
+use App\Domains\Wallet\Models\Wallet;
 use Database\Factories\UserFactory;
 use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -153,6 +154,11 @@ class User extends Authenticatable implements MustVerifyEmail
     public function canBeImpersonated(): bool
     {
         return ! $this->isMasterAdmin();
+    }
+
+    public function wallet()
+    {
+        return $this->morphOne(Wallet::class, 'owner');
     }
 
     /**

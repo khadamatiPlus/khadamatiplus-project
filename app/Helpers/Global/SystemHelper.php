@@ -1,5 +1,21 @@
 <?php
 
+use App\Domains\Setting\Services\SettingService;
+
+if (! function_exists('getSettingByKey')) {
+    function getSettingByKey(string $key, mixed $default = null): mixed
+    {
+        return app(SettingService::class)->get($key, $default);
+    }
+}
+
+if (! function_exists('setSettingByKey')) {
+    function setSettingByKey(string $key, mixed $value, string $type = 'string', string $group = 'general'): mixed
+    {
+        return app(SettingService::class)->set($key, $value, $type, $group);
+    }
+}
+
 if (! function_exists('includeFilesInFolder')) {
     /**
      * Loops through a folder and requires all PHP files

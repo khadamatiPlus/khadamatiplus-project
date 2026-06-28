@@ -474,6 +474,21 @@
         </li>
         @endif
         @if (
+            $logged_in_user->hasAllAccess() ||
+            (
+                $logged_in_user->can('admin.settings')
+            )
+        )
+            <li class="c-sidebar-nav-item">
+                <x-utils.link
+                    :href="route('admin.settings.edit')"
+                    class="c-sidebar-nav-link"
+                    :text="__('Settings')"
+                    icon="c-sidebar-nav-icon cil-settings"
+                    :active="activeClass(Route::is('admin.settings.*'), 'c-active')"/>
+            </li>
+        @endif
+        @if (
                  $logged_in_user->hasAllAccess() ||
                  (
                      $logged_in_user->can('admin.social')

@@ -50,8 +50,9 @@ trait CreatedBy
         }
 
         if (!$this->exists && !$this->isDirty($this->getCreatedByForeignKeyName())) {
-            $this->setAttribute($this->getCreatedByForeignKeyName(), $user->getKey());
-
+            if (!is_null($user)) {
+                $this->setAttribute($this->getCreatedByForeignKeyName(), $user->getKey());
+            }
         }
     }
 

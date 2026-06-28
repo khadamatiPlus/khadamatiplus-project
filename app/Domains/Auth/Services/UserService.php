@@ -15,6 +15,7 @@ use App\Domains\Auth\Models\Role;
 use App\Domains\Auth\Models\User;
 use App\Domains\Customer\Http\Transformers\CustomerTransformer;
 use App\Domains\Merchant\Http\Transformers\MerchantTransformer;
+use App\Domains\Wallet\Services\WalletService;
 use App\Exceptions\GeneralException;
 use App\Services\BaseService;
 use Exception;
@@ -31,7 +32,7 @@ class UserService extends BaseService
      *
      * @param  User  $user
      */
-    public function __construct(User $user)
+    public function __construct(User $user, protected WalletService $walletService)
     {
         $this->model = $user;
     }
@@ -329,7 +330,7 @@ class UserService extends BaseService
      */
     protected function createUser(array $data = []): User
     {
-        return $this->model::create([
+        $user = $this->model::create([
             'type' => $data['type'] ?? $this->model::TYPE_USER,
             'name' => $data['name'] ?? null,
             'email' => $data['email'] ?? null,
@@ -341,6 +342,10 @@ class UserService extends BaseService
             'email_verified_at' => $data['email_verified_at'] ?? null,
             'active' => $data['active'] ?? true,
         ]);
+
+        $this->walletService->ensureWallet(User::class, $user->id, 'default');
+
+        return $user;
     }
 
     public function authenticateUserMobile($country_code,$mobile_number,$appVersionName, $password)

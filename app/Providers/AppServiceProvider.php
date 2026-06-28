@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Domains\Setting\Services\SettingService;
+use App\Domains\Wallet\Services\WalletService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use App\Services\StorageManagerService;
@@ -25,6 +27,13 @@ class AppServiceProvider extends ServiceProvider
             return new StorageManagerService();
         });
 
+        $this->app->singleton(SettingService::class, function ($app) {
+            return new SettingService(new \App\Domains\Setting\Models\Setting());
+        });
+
+        $this->app->singleton(WalletService::class, function ($app) {
+            return new WalletService(new \App\Domains\Wallet\Models\Wallet(), new \App\Domains\Wallet\Models\WalletTransaction());
+        });
     }
 
     /**

@@ -6,6 +6,7 @@ use App\Domains\Auth\Models\User;
 use App\Domains\Captain\Models\Traits\Attribute\CaptainAttribute;
 use App\Domains\Captain\Models\Traits\Scope\CaptainScope;
 use App\Domains\Service\Models\Service;
+use App\Domains\Wallet\Models\Wallet;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -67,6 +68,11 @@ class Customer extends BaseModel
     public function defaultAddress()
     {
         return $this->belongsTo(CustomerAddress::class, 'customer_address_id');
+    }
+
+    public function wallet()
+    {
+        return $this->morphOne(Wallet::class, 'owner');
     }
 
 }

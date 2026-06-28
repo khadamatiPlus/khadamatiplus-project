@@ -10,6 +10,7 @@ use App\Domains\Lookups\Models\Country;
 use App\Domains\Merchant\Http\Transformers\MerchantTransformer;
 use App\Domains\Merchant\Models\Traits\Scope\MerchantScope;
 use App\Domains\Service\Models\Service;
+use App\Domains\Wallet\Models\Wallet;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -98,5 +99,10 @@ class Merchant extends BaseModel
     public function appServices()
     {
         return $this->belongsToMany(\App\Domains\AppService\Models\AppService::class, 'app_service_merchant', 'merchant_id', 'app_service_id');
+    }
+
+    public function wallet()
+    {
+        return $this->morphOne(Wallet::class, 'owner');
     }
 }
