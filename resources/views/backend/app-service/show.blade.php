@@ -183,8 +183,9 @@
                                                     <tr>
                                                         <td>{{ $option['name'] ?? '-' }}</td>
                                                         <td>{{ $option['price'] ?? 0 }}</td>
-                                                        <td>{{ $option['discount_price'] == 0 ? '--' : $option['discount_price'] }}</td>
-                                                    </tr>
+                                                        <td>
+                                                            {{ isset($option['discount_price']) && $option['discount_price'] != 0 ? $option['discount_price'] : '--' }}
+                                                        </td>                                                    </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>

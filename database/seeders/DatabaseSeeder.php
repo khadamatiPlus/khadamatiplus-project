@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
         $this->call(CountriesSeeder::class);
         $this->call(CitiesSeeder::class);
         $this->call(AreasSeeder::class);
+        $this->call(WalletSeeder::class);
 
         Model::reguard();
     }

@@ -489,6 +489,21 @@
             </li>
         @endif
         @if (
+            $logged_in_user->hasAllAccess() ||
+            (
+                $logged_in_user->can('admin.wallet')
+            )
+        )
+            <li class="c-sidebar-nav-item">
+                <x-utils.link
+                    :href="route('admin.wallet.index')"
+                    class="c-sidebar-nav-link"
+                    :text="__('Wallet Management')"
+                    icon="c-sidebar-nav-icon cil-wallet"
+                    :active="activeClass(Route::is('admin.wallet.*'), 'c-active')"/>
+            </li>
+        @endif
+        @if (
                  $logged_in_user->hasAllAccess() ||
                  (
                      $logged_in_user->can('admin.social')
