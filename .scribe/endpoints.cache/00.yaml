@@ -130,47 +130,6 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/lookups/getCategories
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"success":true,"message":"Request successful","data":[{"id":1,"name":"first category","image":"http://127.0.0.1:8000/storage//category/images/1759513581-fanni-logo.png","sub_categories":[{"id":3,"name":"xsax","image":"http://127.0.0.1:8000/storage//category/images/1781273232-1762020252_2900.jpg"}],"tags":[]},{"id":2,"name":"second category","image":"http://127.0.0.1:8000/storage//category/images/1760210392-fanni-logo.png","sub_categories":[],"tags":[]}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '56'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
     uri: api/lookups/getLabels
     metadata:
       custom: []
@@ -201,7 +160,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '55'
+          x-ratelimit-remaining: '56'
         description: null
     responseFields: []
     auth: []
@@ -242,7 +201,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '54'
+          x-ratelimit-remaining: '55'
         description: null
     responseFields: []
     auth: []
@@ -283,7 +242,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '53'
+          x-ratelimit-remaining: '54'
         description: null
     responseFields: []
     auth: []
@@ -324,7 +283,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '52'
+          x-ratelimit-remaining: '53'
         description: null
     responseFields: []
     auth: []
@@ -365,7 +324,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '51'
+          x-ratelimit-remaining: '52'
         description: null
     responseFields: []
     auth: []
@@ -406,7 +365,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '50'
+          x-ratelimit-remaining: '51'
         description: null
     responseFields: []
     auth: []
@@ -447,7 +406,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '49'
+          x-ratelimit-remaining: '50'
         description: null
     responseFields: []
     auth: []
@@ -502,7 +461,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '48'
+          x-ratelimit-remaining: '49'
         description: null
     responseFields: []
     auth: []
@@ -543,7 +502,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '47'
+          x-ratelimit-remaining: '48'
         description: null
     responseFields: []
     auth: []
@@ -1051,7 +1010,7 @@ endpoints:
         name: 'images[].is_main'
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1139,7 +1098,7 @@ endpoints:
         name: 'products[].images[].is_main'
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1157,7 +1116,7 @@ endpoints:
       images:
         -
           image: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
-          is_main: false
+          is_main: true
       products:
         -
           title: consequatur
@@ -1166,7 +1125,7 @@ endpoints:
           images:
             -
               image: 'http://reynolds.com/'
-              is_main: false
+              is_main: true
     fileParameters: []
     responses: []
     responseFields: []
@@ -1313,7 +1272,7 @@ endpoints:
         name: 'images[].is_main'
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1423,7 +1382,7 @@ endpoints:
         name: 'products[].images[].is_main'
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1436,7 +1395,7 @@ endpoints:
       images:
         -
           image: 'https://www.mueller.com/laborum-eius-est-dolor-dolores-minus-voluptatem'
-          is_main: true
+          is_main: false
       service_prices:
         -
           title: sufvyvddqamniihfqcoyn
@@ -1449,7 +1408,7 @@ endpoints:
           images:
             -
               image: 'http://reynolds.com/'
-              is_main: true
+              is_main: false
     fileParameters: []
     responses: []
     responseFields: []
@@ -1688,7 +1647,7 @@ endpoints:
         name: status
         description: 'Validate that the order exists.'
         required: true
-        example: cancelled
+        example: completed
         type: string
         enumValues:
           - accepted
@@ -1712,7 +1671,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       order_id: consequatur
-      status: cancelled
+      status: completed
     fileParameters: []
     responses: []
     responseFields: []
@@ -2015,12 +1974,24 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
+      discount_price:
+        custom: []
+        name: discount_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     cleanBodyParameters:
       service_id: consequatur
       title: consequatur
       value: consequatur
       type: consequatur
       value_type: consequatur
+      discount_price: 45
     fileParameters: []
     responses: []
     responseFields: []
@@ -2107,11 +2078,23 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
+      discount_price:
+        custom: []
+        name: discount_price
+        description: 'Must be at least 0.'
+        required: false
+        example: 45
+        type: number
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: true
+        deprecated: false
     cleanBodyParameters:
       title: consequatur
       value: consequatur
       type: consequatur
       value_type: consequatur
+      discount_price: 45
     fileParameters: []
     responses: []
     responseFields: []
@@ -2877,7 +2860,7 @@ endpoints:
         name: day
         description: ''
         required: false
-        example: Thursday
+        example: Monday
         type: string
         enumValues:
           - Monday
@@ -2903,7 +2886,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       service_id: consequatur
-      day: Thursday
+      day: Monday
     fileParameters: []
     responses: []
     responseFields: []
@@ -2950,7 +2933,7 @@ endpoints:
         name: status
         description: 'Validate that the order exists.'
         required: true
-        example: completed
+        example: on_the_way
         type: string
         enumValues:
           - accepted
@@ -2974,7 +2957,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       order_id: consequatur
-      status: completed
+      status: on_the_way
     fileParameters: []
     responses: []
     responseFields: []
@@ -3663,7 +3646,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '46'
+          x-ratelimit-remaining: '47'
         description: null
     responseFields: []
     auth: []
@@ -3719,7 +3702,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '45'
+          x-ratelimit-remaining: '46'
         description: null
     responseFields: []
     auth: []
@@ -4152,7 +4135,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '44'
+          x-ratelimit-remaining: '45'
         description: null
     responseFields: []
     auth: []
@@ -4208,7 +4191,7 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '43'
+          x-ratelimit-remaining: '44'
         description: null
     responseFields: []
     auth: []

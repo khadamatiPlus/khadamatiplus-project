@@ -1,19 +1,19 @@
-name: Offers
+name: 'App Services'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
       - GET
-    uri: api/offers
+    uri: api/app-services
     metadata:
       custom: []
-      groupName: Offers
+      groupName: 'App Services'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get Offers'
-      description: 'Retrieve all active offers with optional filters.'
+      title: 'Get App Services'
+      description: 'Returns a list of active app services.'
       authenticated: false
       deprecated: false
     headers:
@@ -22,10 +22,21 @@ endpoints:
     urlParameters: []
     cleanUrlParameters: []
     queryParameters:
+      search:
+        custom: []
+        name: search
+        description: 'Search services by name, description, or tags.'
+        required: false
+        example: cleaning
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
       featured:
         custom: []
         name: featured
-        description: 'Return featured offers only.'
+        description: 'Filter featured services only.'
         required: false
         example: true
         type: boolean
@@ -36,18 +47,7 @@ endpoints:
       category_id:
         custom: []
         name: category_id
-        description: 'Filter offers by category ID.'
-        required: false
-        example: 1
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      app_service_id:
-        custom: []
-        name: app_service_id
-        description: 'Filter offers by app service ID.'
+        description: 'Filter services by category ID.'
         required: false
         example: 5
         type: integer
@@ -55,10 +55,34 @@ endpoints:
         exampleWasSpecified: true
         nullable: false
         deprecated: false
+      sub_category_id:
+        custom: []
+        name: sub_category_id
+        description: 'Filter services by sub-category ID.'
+        required: false
+        example: 10
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      online:
+        custom: []
+        name: online
+        description: 'Filter online services only.'
+        required: false
+        example: true
+        type: boolean
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
     cleanQueryParameters:
+      search: cleaning
       featured: true
-      category_id: 1
-      app_service_id: 5
+      category_id: 5
+      sub_category_id: 10
+      online: true
     bodyParameters: []
     cleanBodyParameters: []
     fileParameters: []
@@ -72,20 +96,21 @@ endpoints:
             "data": [
               {
                 "id": 1,
-                "title": "Summer Offer",
-                "discount_percentage": 20
+                "name": "Cleaning Service",
+                "variants": [
+                  {
+                    "name": "Size",
+                    "options": [
+                      {
+                        "name": "Small",
+                        "value": "small",
+                        "discount_price": 10.50
+                      }
+                    ]
+                  }
+                ]
               }
             ]
-          }
-        headers: []
-        description: ''
-      -
-        custom: []
-        status: 500
-        content: |-
-          {
-            "success": false,
-            "message": "Internal Server Error"
           }
         headers: []
         description: ''
@@ -98,15 +123,15 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: 'api/offers/{id}'
+    uri: 'api/app-services/{id}'
     metadata:
       custom: []
-      groupName: Offers
+      groupName: 'App Services'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get Offer By ID'
-      description: 'Retrieve a specific active offer by its ID.'
+      title: 'Get App Service By ID'
+      description: 'Retrieve a single active app service by its ID.'
       authenticated: false
       deprecated: false
     headers:
@@ -116,7 +141,7 @@ endpoints:
       id:
         custom: []
         name: id
-        description: 'The ID of the offer.'
+        description: 'The ID of the app service.'
         required: true
         example: 1
         type: integer
@@ -140,8 +165,10 @@ endpoints:
             "success": true,
             "data": {
               "id": 1,
-              "title": "Summer Offer",
-              "discount_percentage": 20
+              "name": "Cleaning Service",
+              "images": [
+                "http://127.0.0.1:8000/storage/app-services/image.jpg"
+              ]
             }
           }
         headers: []
@@ -152,7 +179,7 @@ endpoints:
         content: |-
           {
             "success": false,
-            "message": "Offer not found"
+            "message": "App Service not found"
           }
         headers: []
         description: ''
