@@ -79,7 +79,7 @@ class CustomerService extends BaseService
             $data['profile_id'] = $customerUser->id;
 
             $customer = $this->store($data);
-            $this->walletService->ensureWallet(Customer::class, $customer->id, 'default');
+//            $this->walletService->ensureWallet(Customer::class, $customer->id, 'default');
 
             $customerUser->fill([
                 'customer_id' => $customer->id ?? null,

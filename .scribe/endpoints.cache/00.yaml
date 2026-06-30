@@ -16,9 +16,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -37,10 +38,13 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '59'
+          x-ratelimit-remaining: '57'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -57,91 +61,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"success":true,"message":"Request successful","data":[]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '58'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/lookups/getAreas
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"success":true,"message":"Request successful","data":[]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '57'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/lookups/getLabels
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -163,7 +86,10 @@ endpoints:
           x-ratelimit-remaining: '56'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -171,7 +97,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/lookups/getTags
+    uri: api/lookups/getAreas
     metadata:
       custom: []
       groupName: Endpoints
@@ -180,9 +106,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -204,7 +131,10 @@ endpoints:
           x-ratelimit-remaining: '55'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -212,7 +142,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/lookups/getInformation
+    uri: api/lookups/getLabels
     metadata:
       custom: []
       groupName: Endpoints
@@ -221,9 +151,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -237,7 +168,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"message":"Request successful","data":[{"email":"omaratef.alrantisi@gmail.com","phone_number":"fre","second_phone_number":"323"}]}'
+        content: '{"success":true,"message":"Request successful","data":[]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -245,7 +176,10 @@ endpoints:
           x-ratelimit-remaining: '54'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -253,7 +187,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/lookups/getSocial
+    uri: api/lookups/getTags
     metadata:
       custom: []
       groupName: Endpoints
@@ -262,9 +196,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -286,7 +221,10 @@ endpoints:
           x-ratelimit-remaining: '53'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -294,7 +232,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/lookups/getAppVersion
+    uri: api/lookups/getInformation
     metadata:
       custom: []
       groupName: Endpoints
@@ -303,9 +241,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -319,7 +258,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"message":"Request successful","data":[{"current_version_android":"1.0.0","current_version_ios":"1.0.0","current_version_huawei":"1.0.0","customer_version_android":"1.0.0","customer_version_ios":"1.0.0","customer_version_huawei":"1.0.0"}]}'
+        content: '{"success":true,"message":"Request successful","data":[{"email":"omaratef.alrantisi@gmail.com","phone_number":"fre","second_phone_number":"323"}]}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
@@ -327,7 +266,10 @@ endpoints:
           x-ratelimit-remaining: '52'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -335,7 +277,7 @@ endpoints:
     custom: []
     httpMethods:
       - GET
-    uri: api/lookups/getPageBySlug
+    uri: api/lookups/getSocial
     metadata:
       custom: []
       groupName: Endpoints
@@ -344,50 +286,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: '{"success":true,"message":"Request successful","data":null}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-          x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '51'
-        description: null
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/getBanners
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -406,10 +308,148 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '51'
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/lookups/getAppVersion
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"success":true,"message":"Request successful","data":[{"current_version_android":"1.0.0","current_version_ios":"1.0.0","current_version_huawei":"1.0.0","customer_version_android":"1.0.0","customer_version_ios":"1.0.0","customer_version_huawei":"1.0.0"}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
           x-ratelimit-remaining: '50'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/lookups/getPageBySlug
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"success":true,"message":"Request successful","data":null}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '49'
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/getBanners
+    metadata:
+      custom: []
+      groupName: Endpoints
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: ''
+      description: ''
+      authenticated: true
+      deprecated: false
+    headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 200
+        content: '{"success":true,"message":"Request successful","data":[]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+          x-ratelimit-limit: '60'
+          x-ratelimit-remaining: '48'
+        description: null
+    responseFields: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -426,9 +466,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -461,10 +502,13 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '49'
+          x-ratelimit-remaining: '47'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -481,9 +525,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -502,10 +547,13 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '48'
+          x-ratelimit-remaining: '46'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -522,9 +570,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -544,7 +593,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -561,9 +613,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -583,7 +636,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -600,9 +656,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -634,7 +691,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -651,9 +711,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -689,7 +750,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -706,9 +770,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -720,7 +785,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -737,9 +805,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -852,7 +921,7 @@ endpoints:
         name: 'images[].is_main'
         description: ''
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -958,7 +1027,7 @@ endpoints:
       images:
         -
           image: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
-          is_main: true
+          is_main: false
       products:
         -
           title: consequatur
@@ -971,7 +1040,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -988,9 +1060,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1114,7 +1187,7 @@ endpoints:
         name: 'images[].is_main'
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1237,7 +1310,7 @@ endpoints:
       images:
         -
           image: 'https://www.mueller.com/laborum-eius-est-dolor-dolores-minus-voluptatem'
-          is_main: false
+          is_main: true
       service_prices:
         -
           title: sufvyvddqamniihfqcoyn
@@ -1254,7 +1327,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1271,9 +1347,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1305,7 +1382,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1322,9 +1402,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1348,7 +1429,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1365,9 +1449,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1387,7 +1472,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1404,9 +1492,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1446,7 +1535,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1463,9 +1555,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1489,7 +1582,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: accepted
+        example: on_progress
         type: string
         enumValues:
           - accepted
@@ -1502,11 +1595,14 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       order_id: consequatur
-      status: accepted
+      status: on_progress
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1523,9 +1619,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1545,7 +1642,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1562,9 +1662,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1584,7 +1685,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1601,9 +1705,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1623,7 +1728,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1640,9 +1748,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1668,7 +1777,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1685,9 +1797,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1723,7 +1836,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1740,9 +1856,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -1826,7 +1943,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1843,9 +1963,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1929,7 +2050,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1946,9 +2070,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -1972,7 +2097,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -1989,9 +2117,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2023,7 +2152,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2040,9 +2172,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -2074,7 +2207,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2091,9 +2227,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2113,7 +2250,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2130,9 +2270,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2252,7 +2393,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2269,9 +2413,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2283,7 +2428,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2300,9 +2448,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2322,7 +2471,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2339,9 +2491,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2361,7 +2514,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2378,9 +2534,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2392,7 +2549,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2409,9 +2569,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2456,7 +2617,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2473,9 +2637,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2499,7 +2664,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2516,9 +2684,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2538,7 +2707,10 @@ endpoints:
           content-type: application/json
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2555,9 +2727,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2581,7 +2754,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2598,9 +2774,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2648,7 +2825,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2665,9 +2845,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2691,7 +2872,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: on_the_way
+        example: accepted
         type: string
         enumValues:
           - accepted
@@ -2715,12 +2896,15 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       order_id: consequatur
-      status: on_the_way
+      status: accepted
       notes: consequatur
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -2737,9 +2921,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -2775,260 +2960,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/auth/registerMerchant
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      mobile_number:
-        custom: []
-        name: mobile_number
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      email:
-        custom: []
-        name: email
-        description: 'Must be a valid email address.'
-        required: false
-        example: carolyne.luettgen@example.org
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      name:
-        custom: []
-        name: name
-        description: 'Must not be greater than 350 characters.'
-        required: true
-        example: fuudtdsufvyvddqamniih
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      country_id:
-        custom: []
-        name: country_id
-        description: 'Must match an existing stored value.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      city_id:
-        custom: []
-        name: city_id
-        description: 'Must match an existing stored value.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      area_id:
-        custom: []
-        name: area_id
-        description: 'Must match an existing stored value.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      is_verified:
-        custom: []
-        name: is_verified
-        description: ''
-        required: false
-        example: 0
-        type: string
-        enumValues:
-          - 0
-          - 1
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      profile_pic:
-        custom: []
-        name: profile_pic
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      latitude:
-        custom: []
-        name: latitude
-        description: 'Must not be greater than 350 characters.'
-        required: true
-        example: mqeopfuudtdsufvyvddqa
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      longitude:
-        custom: []
-        name: longitude
-        description: 'Must not be greater than 350 characters.'
-        required: true
-        example: mniihfqcoynlazghdtqtq
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      password:
-        custom: []
-        name: password
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      id_image:
-        custom: []
-        name: id_image
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      fcm_token:
-        custom: []
-        name: fcm_token
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      mobile_number: consequatur
-      email: carolyne.luettgen@example.org
-      name: fuudtdsufvyvddqamniih
-      country_id: consequatur
-      city_id: consequatur
-      area_id: consequatur
-      is_verified: 0
-      latitude: mqeopfuudtdsufvyvddqa
-      longitude: mniihfqcoynlazghdtqtq
-      password: consequatur
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/auth/authenticate
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      country_code:
-        custom: []
-        name: country_code
-        description: ''
-        required: false
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      mobile_number:
-        custom: []
-        name: mobile_number
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      password:
-        custom: []
-        name: password
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters:
-      country_code: consequatur
-      mobile_number: consequatur
-      password: consequatur
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3045,9 +2980,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3093,7 +3029,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3110,9 +3049,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3136,7 +3076,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3153,9 +3096,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3191,97 +3135,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
-    uri: api/auth/registerCustomer
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      mobile_number:
-        custom: []
-        name: mobile_number
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      email:
-        custom: []
-        name: email
-        description: 'Must be a valid email address.'
-        required: false
-        example: carolyne.luettgen@example.org
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      name:
-        custom: []
-        name: name
-        description: 'Must not be greater than 350 characters.'
-        required: true
-        example: fuudtdsufvyvddqamniih
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      password:
-        custom: []
-        name: password
-        description: ''
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      fcm_token:
-        custom: []
-        name: fcm_token
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      mobile_number: consequatur
-      email: carolyne.luettgen@example.org
-      name: fuudtdsufvyvddqamniih
-      password: consequatur
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3298,9 +3155,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3324,7 +3182,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3341,9 +3202,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3367,7 +3229,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3384,9 +3249,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3405,10 +3271,13 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '47'
+          x-ratelimit-remaining: '45'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3425,9 +3294,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3461,10 +3331,13 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '46'
+          x-ratelimit-remaining: '44'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3481,9 +3354,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3507,7 +3381,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3524,9 +3401,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3550,7 +3428,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3567,9 +3448,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3605,7 +3487,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3622,9 +3507,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3660,7 +3546,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3677,9 +3566,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3703,7 +3593,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3720,9 +3613,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3746,7 +3640,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3763,9 +3660,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3801,7 +3699,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3818,9 +3719,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3856,7 +3758,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3873,9 +3778,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -3889,15 +3795,18 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"message":"Request successful","data":{"data":[{"id":28,"mobile_number":"77774822129","email":"omaratef.alrantisi@gma22il.com","name":"Omar Alrantisi","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.75663764461394","latitude":"32.031697614044155","id_image":"C:\\xampp\\tmp\\phpD024.tmp","rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1781302668-1729023825_5504.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[{"id":1,"name":"\u0627\u0644\u062e\u062f\u0645\u0629 \u0627\u0644\u0627\u0648\u0644\u0649","description":"<p>\u0627\u0644\u062e\u062f\u0645\u0629 \u0627\u0644\u0627\u0648\u0644\u0649</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/MVLz3wposZhhynoIZCbZ1rmyX6h4LJYCUxuCw3oT.jpg"],"video_url":null,"base_price":"31.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":2,"name":"Omar Alrantisi","description":"<p>\u064a\u0635\u0634\u064a</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/Zi7LNzYdHUQPpT45lUxIYHy1a1KIKpObQP8WFHYf.jpg","http://127.0.0.1:8000/storage//app-services/uM8fnZZZUNaocmYTaQvxczGltkgyLH9GApIq2g62.jpg","http://127.0.0.1:8000/storage//app-services/vb5ofyKtAuD0em7VNod9B8dmZ5xgLzmU6eQ0JTAn.jpg"],"video_url":"https://www.youtube.com/watch?v=1IEGrjMC88M","base_price":"50.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":3,"name":"test","description":"<p>xsax</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/EXAszNk72BDTfeFCKHfcNTeL6FX4LeC93bvXB8A7.jpg","http://127.0.0.1:8000/storage//app-services/v9DTJTeTqdjV9jjvObwcgMwzqByXezCOhAeRIS95.jpg"],"video_url":null,"base_price":"312.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[{"name":"\u0627\u0644\u0633\u0627\u0639\u0627\u062a","type":"single","required":"required","options":[{"name":"1","price":0},{"name":"2","price":0},{"name":"3","price":0}]}],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":5,"name":"\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0646\u0642\u0644","description":"\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0646\u0642\u0644 \u0648\u0627\u0644\u0627\u0646\u062a\u0642\u0627\u0644","category_id":2,"category_name":"second category","sub_category_id":null,"sub_category_name":null,"images":[],"video_url":null,"base_price":"0.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":null,"max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":20,"name":"\u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a","description":"<p>\u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/7QVXpghxIZsNQ1WKLe8Rhqyt2KtUVXaFTi882Xy6.jpg","http://127.0.0.1:8000/storage//app-services/XqEv5GB4sQub8gIAgGCO1lDiOajMUemwp3ed39Tg.jpg"],"video_url":null,"base_price":"10.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[{"name":"\u0627\u0644\u0633\u0627\u0639\u0627\u062a ","type":"single","required":"required","options":[{"name":"999","price":9},{"name":"555","price":555}]},{"name":"dqdqw","type":"single","required":"required","options":[{"name":"5555","price":33},{"name":"11","price":22}]}],"availability_days":["Sunday","Monday","Tuesday","Wednesday","Thursday"],"max_concurrent_orders":null,"is_featured":true,"is_online":true,"status":"active"}]},{"id":27,"mobile_number":"962790000000","email":"omaratef.alrantisi@gmail.c111om","name":"Merchant Name","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.930359","latitude":"31.98262841085299","id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1759862950-1676371260192.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[]},{"id":25,"mobile_number":null,"email":null,"name":"Omar Alrantisi","city_id":1,"country_id":1,"area_id":null,"city_name":"Amman","country_name":"Jordan","area_name":null,"longitude":null,"latitude":null,"id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1759523863-51e38cea-d6c1-4bd0-ade7-5c1f9ec737a6.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[]}],"pagination":{"total":3,"count":3,"per_page":10,"current_page":1,"total_pages":1}}}'
+        content: '{"success":true,"message":"Request successful","data":{"data":[{"id":54,"mobile_number":"791234567","email":"merchant@example.com","name":"My Store","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.9106","latitude":"31.9539","id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"","services":[],"availability":{"days":[],"times":[]},"app_services":[{"id":14,"name":"\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0633\u0628\u0627\u0643\u0629","description":"\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0633\u0628\u0627\u0643\u0629 \u0648\u0627\u0644\u0625\u0635\u0644\u0627\u062d","category_id":null,"category_name":null,"sub_category_id":null,"sub_category_name":null,"images":[],"video_url":null,"base_price":"0.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":null,"max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":22,"name":"\u063a\u0633\u064a\u0644 \u0627\u0644\u0633\u064a\u0627\u0631\u0627\u062a","description":"<p>\u063a\u0633\u064a\u0644 \u0627\u0644\u0633\u064a\u0627\u0631\u0627\u062a</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/vjNRTnzAgLefvlS8tk0299kxJEtktbDmMFoMSTB2.jpg"],"video_url":null,"base_price":"50.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[{"name":"\u0627\u0644\u0633\u0627\u0639\u0627\u062a ","type":"single","required":"required","options":[{"name":"1","price":10,"discount_price":8},{"name":"2","price":20,"discount_price":0},{"name":"3","price":30,"discount_price":28}]}],"availability_days":["Sunday","Monday","Tuesday","Wednesday","Thursday"],"max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"}]},{"id":53,"mobile_number":"962791234561","email":"merchant@exam11ple.com","name":"My Store","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.9106","latitude":"31.9539","id_image":"C:\\xampp\\tmp\\php8F6D.tmp","rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1782845585-default-image-icon-4595376-512.png","services":[],"availability":{"days":[],"times":[]},"app_services":[]},{"id":28,"mobile_number":"77774822129","email":"omaratef.alrantisi@gma22il.com","name":"Omar Alrantisi","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.75663764461394","latitude":"32.031697614044155","id_image":"C:\\xampp\\tmp\\phpD024.tmp","rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1781302668-1729023825_5504.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[{"id":1,"name":"\u0627\u0644\u062e\u062f\u0645\u0629 \u0627\u0644\u0627\u0648\u0644\u0649","description":"<p>\u0627\u0644\u062e\u062f\u0645\u0629 \u0627\u0644\u0627\u0648\u0644\u0649</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/MVLz3wposZhhynoIZCbZ1rmyX6h4LJYCUxuCw3oT.jpg"],"video_url":null,"base_price":"31.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":2,"name":"Omar Alrantisi","description":"<p>\u064a\u0635\u0634\u064a</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/Zi7LNzYdHUQPpT45lUxIYHy1a1KIKpObQP8WFHYf.jpg","http://127.0.0.1:8000/storage//app-services/uM8fnZZZUNaocmYTaQvxczGltkgyLH9GApIq2g62.jpg","http://127.0.0.1:8000/storage//app-services/vb5ofyKtAuD0em7VNod9B8dmZ5xgLzmU6eQ0JTAn.jpg"],"video_url":"https://www.youtube.com/watch?v=1IEGrjMC88M","base_price":"50.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":3,"name":"test","description":"<p>xsax</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/EXAszNk72BDTfeFCKHfcNTeL6FX4LeC93bvXB8A7.jpg","http://127.0.0.1:8000/storage//app-services/v9DTJTeTqdjV9jjvObwcgMwzqByXezCOhAeRIS95.jpg"],"video_url":null,"base_price":"312.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[{"name":"\u0627\u0644\u0633\u0627\u0639\u0627\u062a","type":"single","required":"required","options":[{"name":"1","price":0},{"name":"2","price":0},{"name":"3","price":0}]}],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":5,"name":"\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0646\u0642\u0644","description":"\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0646\u0642\u0644 \u0648\u0627\u0644\u0627\u0646\u062a\u0642\u0627\u0644","category_id":2,"category_name":"second category","sub_category_id":null,"sub_category_name":null,"images":[],"video_url":null,"base_price":"0.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":null,"max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":20,"name":"\u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a","description":"<p>\u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/7QVXpghxIZsNQ1WKLe8Rhqyt2KtUVXaFTi882Xy6.jpg","http://127.0.0.1:8000/storage//app-services/XqEv5GB4sQub8gIAgGCO1lDiOajMUemwp3ed39Tg.jpg"],"video_url":null,"base_price":"10.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[{"name":"\u0627\u0644\u0633\u0627\u0639\u0627\u062a ","type":"single","required":"required","options":[{"name":"999","price":9},{"name":"555","price":555}]},{"name":"dqdqw","type":"single","required":"required","options":[{"name":"5555","price":33},{"name":"11","price":22}]}],"availability_days":["Sunday","Monday","Tuesday","Wednesday","Thursday"],"max_concurrent_orders":null,"is_featured":true,"is_online":true,"status":"active"}]},{"id":27,"mobile_number":"962790000000","email":"omaratef.alrantisi@gmail.c111om","name":"Merchant Name","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.930359","latitude":"31.98262841085299","id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1759862950-1676371260192.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[]},{"id":25,"mobile_number":null,"email":null,"name":"Omar Alrantisi","city_id":1,"country_id":1,"area_id":null,"city_name":"Amman","country_name":"Jordan","area_name":null,"longitude":null,"latitude":null,"id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1759523863-51e38cea-d6c1-4bd0-ade7-5c1f9ec737a6.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[]}],"pagination":{"total":5,"count":5,"per_page":10,"current_page":1,"total_pages":1}}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '45'
+          x-ratelimit-remaining: '43'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3914,9 +3823,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -3950,10 +3860,13 @@ endpoints:
           cache-control: 'no-cache, private'
           content-type: application/json
           x-ratelimit-limit: '60'
-          x-ratelimit-remaining: '44'
+          x-ratelimit-remaining: '42'
         description: null
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -3970,9 +3883,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -4008,7 +3922,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -4025,9 +3942,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -4063,7 +3981,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -4080,9 +4001,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -4106,7 +4028,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -4123,9 +4048,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -4149,7 +4075,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -4166,9 +4095,10 @@ endpoints:
       subgroupDescription: ''
       title: ''
       description: ''
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -4192,7 +4122,10 @@ endpoints:
     fileParameters: []
     responses: []
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null

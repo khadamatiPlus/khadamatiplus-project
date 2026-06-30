@@ -21,12 +21,13 @@ class AppServiceVariantResolver
             throw new InvalidArgumentException(__('This app service has no configurable variants.'));
         }
 
-        $selectionsByName = collect($selections)->keyBy('name');
+        $selectionsByName = collect($selections)->keyBy(fn ($item) => trim($item['name']));
         $snapshot = [];
         $optionsTotal = 0.0;
 
         foreach ($variantDefinitions as $definition) {
-            $variantName = $definition['name'];
+            $variantName = trim($definition['name']);
+
             $selection = $selectionsByName->get($variantName);
             $selectedOptionNames = $selection['selected_options'] ?? [];
 
@@ -71,7 +72,11 @@ class AppServiceVariantResolver
             ];
         }
 
-        $unknownSelections = $selectionsByName->keys()->diff(collect($variantDefinitions)->pluck('name'));
+        $known = collect($variantDefinitions)
+            ->pluck('name')
+            ->map(fn ($n) => trim($n));
+
+        $unknownSelections = $selectionsByName->keys()->diff($known);
         if ($unknownSelections->isNotEmpty()) {
             throw new InvalidArgumentException(__('Unknown variant :variant.', ['variant' => $unknownSelections->first()]));
         }

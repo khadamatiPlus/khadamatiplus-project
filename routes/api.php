@@ -19,7 +19,6 @@ use App\Domains\Rating\Http\Controllers\API\RatingApiController;
 use App\Domains\Notification\Http\Controllers\API\NotificationApiController;
 use App\Domains\Information\Http\Controllers\API\InformationApiController;
 use App\Domains\Social\Http\Controllers\API\SocialApiController;
-use App\Domains\Delivery\Http\Controllers\API\CaptainOrdersApiController;
 use App\Domains\Banner\Http\Controllers\API\BannerApiController;
 use App\Domains\Introduction\Http\Controllers\API\IntroductionApiController;
 use App\Domains\Service\Http\Controllers\API\ServiceApiController;

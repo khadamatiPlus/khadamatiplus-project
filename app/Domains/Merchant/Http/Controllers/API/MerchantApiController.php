@@ -33,7 +33,6 @@ class MerchantApiController extends APIBaseController
         $this->smsService = $smsService;
     }
 
-
     /**
      * Update Merchant Profile
      *
@@ -42,15 +41,17 @@ class MerchantApiController extends APIBaseController
      * @group Merchant
      * @authenticated
      *
-     * @bodyParam name string Merchant name. Example: My Restaurant
-     * @bodyParam email string Merchant email. Example: merchant@example.com
-     * @bodyParam latitude string Merchant latitude. Example: 31.9539
-     * @bodyParam longitude string Merchant longitude. Example: 35.9106
-     * @bodyParam profile_pic file Merchant profile image.
-     * @bodyParam country_id integer Country ID. Example: 1
-     * @bodyParam city_id integer City ID that belongs to the selected country. Example: 10
-     * @bodyParam area_id integer Area ID that belongs to the selected city. Example: 50
-     * @bodyParam app_services integer[] App service IDs to link via app_service_merchant. Example: [1, 2]
+     * @header Authorization string required Bearer token. Example: Bearer 1|abc123token
+     *
+     * @bodyParam name string optional Merchant name. Example: My Restaurant
+     * @bodyParam email string optional Merchant email. Example: merchant@example.com
+     * @bodyParam latitude string optional Merchant latitude. Example: 31.9539
+     * @bodyParam longitude string optional Merchant longitude. Example: 35.9106
+     * @bodyParam profile_pic file optional Merchant profile image.
+     * @bodyParam country_id integer optional Country ID. Example: 1
+     * @bodyParam city_id integer optional City ID (must belong to country). Example: 10
+     * @bodyParam area_id integer optional Area ID (must belong to city). Example: 50
+     * @bodyParam app_services array optional App service IDs. Example: [1,2,3]
      *
      * @response 200 {
      *   "success": true,
@@ -80,6 +81,27 @@ class MerchantApiController extends APIBaseController
      *
      * @group Merchant
      * @authenticated
+     *
+     * @header Authorization string required Bearer token. Example: Bearer 1|abc123token
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "id": 1,
+     *     "name": "My Restaurant",
+     *     "email": "merchant@example.com",
+     *     "mobile_number": "791234567",
+     *     "country_id": 1,
+     *     "city_id": 10,
+     *     "area_id": 50,
+     *     "app_services": [
+     *       {
+     *         "id": 1,
+     *         "name": "Delivery"
+     *       }
+     *     ]
+     *   }
+     * }
      */
     public function profile()
     {
@@ -88,7 +110,6 @@ class MerchantApiController extends APIBaseController
             ->where('id', auth()->user()->merchant_id)
             ->where('profile_id', auth()->id())
             ->firstOrFail();
-
         return $this->successResponse(
             (new MerchantTransformer)->transform($merchant)
         );

@@ -55,7 +55,72 @@ class RegisterApiController extends APIBaseController
 //        $this->firebaseIntegration = $firebaseIntegration;
     }
 
-
+    /**
+     * Register Merchant
+     *
+     * Registers a new merchant account and automatically authenticates the user after successful registration.
+     * The endpoint validates merchant data, creates the merchant, then returns an authentication response
+     * if the login is successful.
+     *
+     * @group Authentication
+     *
+     * @unauthenticated
+     *
+     * @header App-Version-Name khadamati_merchant_app
+     *
+     * @bodyParam mobile_number string required Merchant mobile number (without country code). Example: 791234567
+     * @bodyParam email string optional Merchant email address. Example: merchant@example.com
+     * @bodyParam name string required Merchant/store name. Example: My Store
+     * @bodyParam country_id integer required Country ID. Example: 1
+     * @bodyParam city_id integer required City ID (must belong to selected country). Example: 1
+     * @bodyParam area_id integer required Area ID (must belong to selected city). Example: 1
+     * @bodyParam is_verified boolean optional Merchant verification flag. Example: 1
+     * @bodyParam profile_pic file optional Profile image file (allowed image types only).
+     * @bodyParam latitude number required Latitude coordinate. Example: 31.9539
+     * @bodyParam longitude number required Longitude coordinate. Example: 35.9106
+     * @bodyParam password string required Account password. Example: StrongPassword123
+     * @bodyParam id_image file optional ID image upload.
+     * @bodyParam fcm_token string optional Firebase Cloud Messaging token. Example: abc123fcmToken
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "completed": true,
+     *     "access_token": "1|abcdefg123456",
+     *     "active": true,
+     *     "user": {
+     *       "id": 10,
+     *       "name": "My Store",
+     *       "mobile_number": "791234567",
+     *       "country_id": 1,
+     *       "city_id": 1,
+     *       "area_id": 1
+     *     }
+     *   }
+     * }
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "completed": false,
+     *     "access_token": "",
+     *     "active": false
+     *   }
+     * }
+     *
+     * @response 422 {
+     *   "success": false,
+     *   "message": "Validation error",
+     *   "errors": {
+     *     "mobile_number": ["The mobile number has already been taken."]
+     *   }
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Internal Server Error"
+     * }
+     */
     public function registerMerchant(RegisterMerchantRequest $request): \Illuminate\Http\JsonResponse
     {
         try{
@@ -71,10 +136,12 @@ class RegisterApiController extends APIBaseController
                 $verifyResult = true;
             }
             if($verifyResult){
+
                 $this->merchantService->register($request->validated());
 
                 $login = $this->userService->authenticateUserMobile($country_code,$request->input('mobile_number'),$request->header('App-Version-Name'),$password, $fcm_token);
                 if($login && $login->active === true){
+
                     return $this->successResponse($login);
                 }
             }
@@ -93,7 +160,63 @@ class RegisterApiController extends APIBaseController
             return $this->internalServerErrorResponse($exception->getMessage());
         }
     }
-
+    /**
+     * Register Customer
+     *
+     * Registers a new customer account and automatically logs the customer in.
+     * If registration is successful, an access token and customer information are returned.
+     *
+     * @group Authentication
+     *
+     * @unauthenticated
+     *
+     * @header App-Version-Name khadamati_customer_app
+     *
+     * @bodyParam mobile_number string required Customer mobile number (without country code). Example: 791234567
+     * @bodyParam name string required Customer full name. Example: John Doe
+     * @bodyParam email string optional Customer email address. Example: john@example.com
+     * @bodyParam password string required Customer password. Example: Password@123
+     * @bodyParam fcm_token string optional Firebase Cloud Messaging token. Example: eXampleFcmToken123456789
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "completed": true,
+     *     "access_token": "1|abcdefghijklmnopqrstuvwxyz",
+     *     "active": true,
+     *     "user": {
+     *       "id": 1,
+     *       "name": "John Doe",
+     *       "mobile_number": "791234567",
+     *       "email": "john@example.com"
+     *     }
+     *   }
+     * }
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "completed": false,
+     *     "access_token": "",
+     *     "active": false
+     *   }
+     * }
+     *
+     * @response 422 {
+     *   "success": false,
+     *   "message": "The given data was invalid.",
+     *   "errors": {
+     *     "mobile_number": [
+     *       "The mobile number has already been taken."
+     *     ]
+     *   }
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Internal Server Error"
+     * }
+     */
     public function registerCustomer(RegisterCustomerRequest $request): \Illuminate\Http\JsonResponse
     {
         try{

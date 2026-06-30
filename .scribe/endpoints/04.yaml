@@ -14,9 +14,10 @@ endpoints:
       subgroupDescription: ''
       title: 'Get Offers'
       description: 'Retrieve all active offers with optional filters.'
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -90,7 +91,10 @@ endpoints:
         headers: []
         description: ''
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -107,9 +111,10 @@ endpoints:
       subgroupDescription: ''
       title: 'Get Offer By ID'
       description: 'Retrieve a specific active offer by its ID.'
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -167,7 +172,10 @@ endpoints:
         headers: []
         description: ''
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null

@@ -210,40 +210,40 @@
         </li>
         @endif
 
-{{--        @if (--}}
-{{--      $logged_in_user->hasAllAccess() ||--}}
-{{--      (--}}
-{{--          $logged_in_user->can('admin.order.list')--}}
+        @if (
+      $logged_in_user->hasAllAccess() ||
+      (
+          $logged_in_user->can('admin.order.list')
 
-{{--      )--}}
-{{--  )--}}
-{{--            <li class="c-sidebar-nav-title">@lang('Orders')</li>--}}
-{{--            <li class="c-sidebar-nav-dropdown {{ activeClass(Route::is('admin.order.*'), 'c-open c-show') }}">--}}
-{{--                <x-utils.link--}}
-{{--                    href="#"--}}
-{{--                    icon="c-sidebar-nav-icon cil-find-in-page"--}}
-{{--                    class="c-sidebar-nav-dropdown-toggle"--}}
-{{--                    :text="__('Orders')"/>--}}
+      )
+  )
+            <li class="c-sidebar-nav-title">@lang('Orders')</li>
+            <li class="c-sidebar-nav-dropdown {{ activeClass(Route::is('admin.order.*'), 'c-open c-show') }}">
+                <x-utils.link
+                    href="#"
+                    icon="c-sidebar-nav-icon cil-find-in-page"
+                    class="c-sidebar-nav-dropdown-toggle"
+                    :text="__('Orders')"/>
 
-{{--                <ul class="c-sidebar-nav-dropdown-items">--}}
-{{--                    @if (--}}
-{{--                        $logged_in_user->hasAllAccess() ||--}}
-{{--                        (--}}
-{{--                            $logged_in_user->can('admin.order.list')--}}
+                <ul class="c-sidebar-nav-dropdown-items">
+                    @if (
+                        $logged_in_user->hasAllAccess() ||
+                        (
+                            $logged_in_user->can('admin.order.list')
 
-{{--                        )--}}
-{{--                    )--}}
-{{--                        <li class="c-sidebar-nav-item">--}}
-{{--                            <x-utils.link--}}
-{{--                                :href="route('admin.order.index')"--}}
-{{--                                class="c-sidebar-nav-link"--}}
-{{--                                :text="__('Orders Management')"--}}
-{{--                                :active="activeClass(Route::is('admin.order.*'), 'c-active')"/>--}}
-{{--                        </li>--}}
-{{--                    @endif--}}
-{{--                </ul>--}}
+                        )
+                    )
+                        <li class="c-sidebar-nav-item">
+                            <x-utils.link
+                                :href="route('admin.order.index')"
+                                class="c-sidebar-nav-link"
+                                :text="__('Orders Management')"
+                                :active="activeClass(Route::is('admin.order.*'), 'c-active')"/>
+                        </li>
+                    @endif
+                </ul>
 
-{{--        @endif--}}
+        @endif
 
 {{--        @if (--}}
 {{-- $logged_in_user->hasAllAccess() ||--}}
@@ -954,3 +954,5 @@
 
     <button class="c-sidebar-minimizer c-class-toggler" type="button" data-target="_parent" data-class="c-sidebar-minimized"></button>
 </div><!--sidebar-->
+
+

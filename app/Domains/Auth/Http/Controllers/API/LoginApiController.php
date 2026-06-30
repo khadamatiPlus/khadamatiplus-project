@@ -36,7 +36,54 @@ class LoginApiController extends APIBaseController
         $this->smsService = $smsService;
     }
 
-
+    /**
+     * Login with Mobile Number
+     *
+     * Authenticates a user using their mobile number and password.
+     * If authentication succeeds, an access token and user information are returned.
+     * Optionally updates the user's FCM token for push notifications.
+     *
+     * @group Authentication
+     *
+     * @unauthenticated
+     *
+     * @header App-Version-Name string Required. Mobile application version. Example: 1.0.0
+     *
+     * @bodyParam country_code string optional Country calling code without "+". Defaults to 962. Example: 962
+     * @bodyParam mobile_number string required User mobile number without the country code. Example: 791234567
+     * @bodyParam password string required User password. Example: Password@123
+     * @bodyParam fcm_token string optional Firebase Cloud Messaging token. Example: eXampleFcmToken123456789
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "completed": true,
+     *     "access_token": "1|abcdefghijklmnopqrstuvwxyz",
+     *     "active": true,
+     *     "user": {
+     *       "id": 1,
+     *       "name": "John Doe",
+     *       "mobile_number": "791234567",
+     *       "country_code": "962"
+     *     }
+     *   }
+     * }
+     *
+     * @response 422 {
+     *   "success": false,
+     *   "message": "The given data was invalid."
+     * }
+     *
+     * @response 401 {
+     *   "success": false,
+     *   "message": "Invalid credentials."
+     * }
+     *
+     * @response 500 {
+     *   "success": false,
+     *   "message": "Internal Server Error."
+     * }
+     */
     public function mobileAuthenticate(MobileAuthenticateRequest $request)
     {
         $request->validated(); // Validate before proceeding

@@ -89,7 +89,8 @@ class MerchantService extends BaseService
             // Store the merchant detailssss
             $data['profile_id'] = $merchantAdmin->id;
             $merchant = $this->store($data);
-            $this->walletService->ensureWallet(Merchant::class, $merchant->id, 'default');
+//            dd($merchantAdmin );
+//            $this->walletService->ensureWallet(Merchant::class, $merchant->id, 'default');
 
             // Save the merchant id_image
             $merchant->id_image = $idImage;
@@ -108,9 +109,15 @@ class MerchantService extends BaseService
             $merchantAdmin = $merchantAdmin->refresh();
 
         } catch (\Exception $e) {
-            report($e);
             DB::rollBack();
-            throw new GeneralException(__('There was a problem registering the merchant. Please try again.'));
+            report($e);
+
+            return response()->json([
+                'message' => 'Error registering merchant',
+                'error' => $e->getMessage(),
+                'file' => $e->getFile(),
+                'line' => $e->getLine(),
+            ], 500);
         }
 
         // Trigger an event after the user is created

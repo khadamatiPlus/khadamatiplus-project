@@ -16,7 +16,7 @@ use App\Domains\Delivery\Http\Controllers\Backend\OrderController;
                 $trail->parent('admin.dashboard')
                     ->push(__('Order Management'), route('admin.order.index'));
             });
-        Route::get('orderDetails/{id}',[OrderController::class,'show'])->name('orderDetails');
+        Route::get('orderDetails/{id}',[OrderController::class,'show'])->name('show');
 
     });
     /**

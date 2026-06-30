@@ -28,7 +28,12 @@ class OrderController extends Controller
         return view('backend.order.index');
     }
     public function show($id){
-        $order = Order::query()->where('id','=',$id)->first();
+        $order = Order::with([
+            'customer.profile',
+            'merchant.profile',
+            'appService',
+            'service'
+        ])->where('id','=',$id)->first();
         return view('backend.order.includes.order-details',compact('order'));
     }
 }

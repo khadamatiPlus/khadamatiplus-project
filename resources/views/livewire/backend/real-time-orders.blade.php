@@ -243,7 +243,23 @@
                                 <tr>
                                     <td>#{{$order->id}}</td>
                                     <td>{{$order->customer->name ?? 'N/A'}}</td>
-                                    <td>{{ $order->appService->name ?? $order->service->title ?? 'N/A' }}</td>
+                                    <td>
+                                        @if($order->appService)
+                                            <strong>{{$order->appService->name}}</strong>
+                                            @if($order->selected_variants && count($order->selected_variants) > 0)
+                                                <br>
+                                                <small class="text-muted">
+                                                    @foreach($order->selected_variants as $variant)
+                                                        <span class="badge badge-secondary">{{$variant}}</span>
+                                                    @endforeach
+                                                </small>
+                                            @endif
+                                        @elseif($order->service)
+                                            {{$order->service->title}}
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
                                     <td>{{ $order->merchant->name ?? __('Unassigned') }}</td>
                                     <td>
                                             <span class="badge badge-{{getStatusBadgeClass($order->status)}}">

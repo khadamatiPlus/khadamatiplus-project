@@ -19,6 +19,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
+      Authorization: 'string required Bearer token. Example: Bearer 1|abc123token'
       Content-Type: multipart/form-data
       Accept: application/json
     urlParameters: []
@@ -29,7 +30,7 @@ endpoints:
       email:
         custom: []
         name: email
-        description: 'Merchant email.'
+        description: 'optional Merchant email.'
         required: false
         example: merchant@example.com
         type: string
@@ -40,7 +41,7 @@ endpoints:
       name:
         custom: []
         name: name
-        description: 'Merchant name.'
+        description: 'optional Merchant name.'
         required: false
         example: 'My Restaurant'
         type: string
@@ -51,7 +52,7 @@ endpoints:
       latitude:
         custom: []
         name: latitude
-        description: 'Merchant latitude.'
+        description: 'optional Merchant latitude.'
         required: false
         example: '31.9539'
         type: string
@@ -62,7 +63,7 @@ endpoints:
       longitude:
         custom: []
         name: longitude
-        description: 'Merchant longitude.'
+        description: 'optional Merchant longitude.'
         required: false
         example: '35.9106'
         type: string
@@ -73,7 +74,7 @@ endpoints:
       profile_pic:
         custom: []
         name: profile_pic
-        description: 'Merchant profile image.'
+        description: 'optional Merchant profile image.'
         required: false
         example: null
         type: file
@@ -84,7 +85,7 @@ endpoints:
       country_id:
         custom: []
         name: country_id
-        description: 'Country ID.'
+        description: 'optional Country ID.'
         required: false
         example: 1
         type: integer
@@ -95,7 +96,7 @@ endpoints:
       city_id:
         custom: []
         name: city_id
-        description: 'City ID that belongs to the selected country.'
+        description: 'optional City ID (must belong to country).'
         required: false
         example: 10
         type: integer
@@ -106,7 +107,7 @@ endpoints:
       area_id:
         custom: []
         name: area_id
-        description: 'Area ID that belongs to the selected city.'
+        description: 'optional Area ID (must belong to city).'
         required: false
         example: 50
         type: integer
@@ -117,12 +118,13 @@ endpoints:
       app_services:
         custom: []
         name: app_services
-        description: 'App service IDs to link via app_service_merchant.'
+        description: 'optional App service IDs.'
         required: false
         example:
           - 1
           - 2
-        type: 'integer[]'
+          - 3
+        type: 'string[]'
         enumValues: []
         exampleWasSpecified: true
         nullable: false
@@ -138,6 +140,7 @@ endpoints:
       app_services:
         - 1
         - 2
+        - 3
     fileParameters:
       profile_pic: null
     responses:
@@ -156,7 +159,10 @@ endpoints:
         headers: []
         description: ''
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -176,6 +182,7 @@ endpoints:
       authenticated: true
       deprecated: false
     headers:
+      Authorization: 'string required Bearer token. Example: Bearer 1|abc123token'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -188,14 +195,33 @@ endpoints:
     responses:
       -
         custom: []
-        status: 401
-        content: '{"errors":[{"key":0,"error":"Unauthenticated."}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-        description: null
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "id": 1,
+              "name": "My Restaurant",
+              "email": "merchant@example.com",
+              "mobile_number": "791234567",
+              "country_id": 1,
+              "city_id": 10,
+              "area_id": 50,
+              "app_services": [
+                {
+                  "id": 1,
+                  "name": "Delivery"
+                }
+              ]
+            }
+          }
+        headers: []
+        description: ''
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null

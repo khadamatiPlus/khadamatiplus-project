@@ -14,9 +14,10 @@ endpoints:
       subgroupDescription: ''
       title: 'Get App Services'
       description: 'Returns a list of active app services.'
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters: []
@@ -115,7 +116,10 @@ endpoints:
         headers: []
         description: ''
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null
@@ -132,9 +136,10 @@ endpoints:
       subgroupDescription: ''
       title: 'Get App Service By ID'
       description: 'Retrieve a single active app service by its ID.'
-      authenticated: false
+      authenticated: true
       deprecated: false
     headers:
+      Authorization: 'Bearer {YOUR_AUTH_KEY}'
       Content-Type: application/json
       Accept: application/json
     urlParameters:
@@ -194,7 +199,10 @@ endpoints:
         headers: []
         description: ''
     responseFields: []
-    auth: []
+    auth:
+      - headers
+      - Authorization
+      - 'Bearer 3V5EgbkvZcDPa166h8fd4ae'
     controller: null
     method: null
     route: null

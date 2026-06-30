@@ -351,6 +351,7 @@ class UserService extends BaseService
     public function authenticateUserMobile($country_code,$mobile_number,$appVersionName, $password)
     {
         if($appVersionName =='khadamati_merchant_app'){
+
             $normalizedMobileNumber = ltrim($mobile_number, '0');
 
             // Query the user with the modified mobile number
