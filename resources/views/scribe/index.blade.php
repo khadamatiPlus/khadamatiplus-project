@@ -242,9 +242,6 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-customer-storeReview">
                                 <a href="#endpoints-POSTapi-customer-storeReview">POST api/customer/storeReview</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-customer-requestOrder">
-                                <a href="#endpoints-POSTapi-customer-requestOrder">POST api/customer/requestOrder</a>
-                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-customer-updateOrderStatusByCustomer">
                                 <a href="#endpoints-POSTapi-customer-updateOrderStatusByCustomer">POST api/customer/updateOrderStatusByCustomer</a>
                             </li>
@@ -351,6 +348,16 @@
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="offers-GETapi-offers--id-">
                                 <a href="#offers-GETapi-offers--id-">Get Offer By ID</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
+                    <ul id="tocify-header-orders" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="orders">
+                    <a href="#orders">Orders</a>
+                </li>
+                                    <ul id="tocify-subheader-orders" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="orders-POSTapi-customer-requestOrder">
+                                <a href="#orders-POSTapi-customer-requestOrder">Request Order</a>
                             </li>
                                                                         </ul>
                             </ul>
@@ -2619,7 +2626,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"type\": \"merchants\"
+    \"type\": \"customers\"
 }"
 </code></pre></div>
 
@@ -2635,7 +2642,7 @@ const headers = {
 };
 
 let body = {
-    "type": "merchants"
+    "type": "customers"
 };
 
 fetch(url, {
@@ -2746,10 +2753,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="type"                data-endpoint="GETapi-getIntroductions"
-               value="merchants"
+               value="customers"
                data-component="body">
     <br>
-<p>Example: <code>merchants</code></p>
+<p>Example: <code>customers</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>customers</code></li> <li><code>merchants</code></li></ul>
         </div>
@@ -3586,7 +3593,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"images\": [
         {
             \"image\": \"http:\\/\\/kunze.biz\\/iste-laborum-eius-est-dolor.html\",
-            \"is_main\": false
+            \"is_main\": true
         }
     ],
     \"products\": [
@@ -3630,7 +3637,7 @@ let body = {
     "images": [
         {
             "image": "http:\/\/kunze.biz\/iste-laborum-eius-est-dolor.html",
-            "is_main": false
+            "is_main": true
         }
     ],
     "products": [
@@ -3834,7 +3841,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
                     </div>
                                     </details>
         </div>
@@ -3993,7 +4000,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"images\": [
         {
             \"image\": \"https:\\/\\/www.mueller.com\\/laborum-eius-est-dolor-dolores-minus-voluptatem\",
-            \"is_main\": true
+            \"is_main\": false
         }
     ],
     \"service_prices\": [
@@ -4036,7 +4043,7 @@ let body = {
     "images": [
         {
             "image": "https:\/\/www.mueller.com\/laborum-eius-est-dolor-dolores-minus-voluptatem",
-            "is_main": true
+            "is_main": false
         }
     ],
     "service_prices": [
@@ -4259,7 +4266,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
                     </div>
                                     </details>
         </div>
@@ -4994,7 +5001,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"order_id\": \"consequatur\",
-    \"status\": \"cancelled\"
+    \"status\": \"accepted\"
 }"
 </code></pre></div>
 
@@ -5011,7 +5018,7 @@ const headers = {
 
 let body = {
     "order_id": "consequatur",
-    "status": "cancelled"
+    "status": "accepted"
 };
 
 fetch(url, {
@@ -5115,26 +5122,12 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-merchant-updateOrderStatusByMerchant"
-               value="cancelled"
+               value="accepted"
                data-component="body">
     <br>
-<p>Validate that the order exists. Example: <code>cancelled</code></p>
+<p>Example: <code>accepted</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>accepted</code></li> <li><code>on_the_way</code></li> <li><code>on_progress</code></li> <li><code>completed</code></li> <li><code>cancelled</code></li></ul>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>options</code></b>&nbsp;&nbsp;
-<small>string[]</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="options[0]"                data-endpoint="POSTapi-merchant-updateOrderStatusByMerchant"
-               data-component="body">
-        <input type="text" style="display: none"
-               name="options[1]"                data-endpoint="POSTapi-merchant-updateOrderStatusByMerchant"
-               data-component="body">
-    <br>
-<p>Validate that options is an array (optional). Must match an existing stored value.</p>
         </div>
         </form>
 
@@ -5548,7 +5541,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"active\"
+    \"status\": \"inactive\"
 }"
 </code></pre></div>
 
@@ -5564,7 +5557,7 @@ const headers = {
 };
 
 let body = {
-    "status": "active"
+    "status": "inactive"
 };
 
 fetch(url, {
@@ -5656,10 +5649,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-merchant-status"
-               value="active"
+               value="inactive"
                data-component="body">
     <br>
-<p>Example: <code>active</code></p>
+<p>Example: <code>inactive</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
@@ -8189,166 +8182,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-customer-requestOrder">POST api/customer/requestOrder</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-customer-requestOrder">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://127.0.0.1:8000/api/customer/requestOrder" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-    --data "{
-    \"service_id\": \"consequatur\",
-    \"day\": \"Monday\"
-}"
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/customer/requestOrder"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-let body = {
-    "service_id": "consequatur",
-    "day": "Monday"
-};
-
-fetch(url, {
-    method: "POST",
-    headers,
-    body: JSON.stringify(body),
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-customer-requestOrder">
-</span>
-<span id="execution-results-POSTapi-customer-requestOrder" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-customer-requestOrder"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-customer-requestOrder"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-customer-requestOrder" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-customer-requestOrder">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-customer-requestOrder" data-method="POST"
-      data-path="api/customer/requestOrder"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-customer-requestOrder', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-customer-requestOrder"
-                    onclick="tryItOut('POSTapi-customer-requestOrder');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-customer-requestOrder"
-                    onclick="cancelTryOut('POSTapi-customer-requestOrder');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-customer-requestOrder"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/customer/requestOrder</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-customer-requestOrder"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-customer-requestOrder"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>service_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="service_id"                data-endpoint="POSTapi-customer-requestOrder"
-               value="consequatur"
-               data-component="body">
-    <br>
-<p>Must match an existing stored value. Example: <code>consequatur</code></p>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>day</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="day"                data-endpoint="POSTapi-customer-requestOrder"
-               value="Monday"
-               data-component="body">
-    <br>
-<p>Example: <code>Monday</code></p>
-Must be one of:
-<ul style="list-style-type: square;"><li><code>Monday</code></li> <li><code>Tuesday</code></li> <li><code>Wednesday</code></li> <li><code>Thursday</code></li> <li><code>Friday</code></li> <li><code>Saturday</code></li> <li><code>Sunday</code></li></ul>
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>time</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="time"                data-endpoint="POSTapi-customer-requestOrder"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-        </form>
-
                     <h2 id="endpoints-POSTapi-customer-updateOrderStatusByCustomer">POST api/customer/updateOrderStatusByCustomer</h2>
 
 <p>
@@ -8367,7 +8200,8 @@ Must be one of:
     --header "Accept: application/json" \
     --data "{
     \"order_id\": \"consequatur\",
-    \"status\": \"on_the_way\"
+    \"status\": \"on_the_way\",
+    \"notes\": \"consequatur\"
 }"
 </code></pre></div>
 
@@ -8384,7 +8218,8 @@ const headers = {
 
 let body = {
     "order_id": "consequatur",
-    "status": "on_the_way"
+    "status": "on_the_way",
+    "notes": "consequatur"
 };
 
 fetch(url, {
@@ -8491,7 +8326,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value="on_the_way"
                data-component="body">
     <br>
-<p>Validate that the order exists. Example: <code>on_the_way</code></p>
+<p>Example: <code>on_the_way</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>accepted</code></li> <li><code>on_the_way</code></li> <li><code>on_progress</code></li> <li><code>completed</code></li> <li><code>cancelled</code></li></ul>
         </div>
@@ -8502,10 +8337,10 @@ Must be one of:
  &nbsp;
                 <input type="text" style="display: none"
                               name="notes"                data-endpoint="POSTapi-customer-updateOrderStatusByCustomer"
-               value=""
+               value="consequatur"
                data-component="body">
     <br>
-<p>Validate the status.</p>
+<p>Example: <code>consequatur</code></p>
         </div>
         </form>
 
@@ -8678,7 +8513,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"country_id\": \"consequatur\",
     \"city_id\": \"consequatur\",
     \"area_id\": \"consequatur\",
-    \"is_verified\": 1,
+    \"is_verified\": 0,
     \"latitude\": \"mqeopfuudtdsufvyvddqa\",
     \"longitude\": \"mniihfqcoynlazghdtqtq\",
     \"password\": \"consequatur\"
@@ -8703,7 +8538,7 @@ let body = {
     "country_id": "consequatur",
     "city_id": "consequatur",
     "area_id": "consequatur",
-    "is_verified": 1,
+    "is_verified": 0,
     "latitude": "mqeopfuudtdsufvyvddqa",
     "longitude": "mniihfqcoynlazghdtqtq",
     "password": "consequatur"
@@ -8870,10 +8705,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="is_verified"                data-endpoint="POSTapi-auth-registerMerchant"
-               value="1"
+               value="0"
                data-component="body">
     <br>
-<p>Example: <code>1</code></p>
+<p>Example: <code>0</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>0</code></li> <li><code>1</code></li></ul>
         </div>
@@ -12632,7 +12467,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --form "city_id=10"\
     --form "area_id=50"\
     --form "app_services[]=1"\
-    --form "profile_pic=@C:\Users\Dell\AppData\Local\Temp\phpA93C.tmp" </code></pre></div>
+    --form "profile_pic=@C:\Users\Dell\AppData\Local\Temp\php9E0.tmp" </code></pre></div>
 
 
 <div class="javascript-example">
@@ -12810,7 +12645,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
                value=""
                data-component="body">
     <br>
-<p>Merchant profile image. Example: <code>C:\Users\Dell\AppData\Local\Temp\phpA93C.tmp</code></p>
+<p>Merchant profile image. Example: <code>C:\Users\Dell\AppData\Local\Temp\php9E0.tmp</code></p>
         </div>
                 <div style=" padding-left: 28px;  clear: unset;">
             <b style="line-height: 2;"><code>country_id</code></b>&nbsp;&nbsp;
@@ -13349,6 +13184,226 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>The ID of the offer. Example: <code>1</code></p>
             </div>
                     </form>
+
+                <h1 id="orders">Orders</h1>
+
+    
+
+                                <h2 id="orders-POSTapi-customer-requestOrder">Request Order</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Creates an order for an app service with selected variants.
+All merchants linked to the app service receive a push notification.</p>
+
+<span id="example-requests-POSTapi-customer-requestOrder">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://127.0.0.1:8000/api/customer/requestOrder" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"app_service_id\": 1,
+    \"variants\": [
+        {
+            \"name\": \"Size\",
+            \"selected_options\": [
+                \"Small\"
+            ]
+        }
+    ],
+    \"day\": \"Monday\",
+    \"time\": \"10:00\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/customer/requestOrder"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "app_service_id": 1,
+    "variants": [
+        {
+            "name": "Size",
+            "selected_options": [
+                "Small"
+            ]
+        }
+    ],
+    "day": "Monday",
+    "time": "10:00"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-customer-requestOrder">
+</span>
+<span id="execution-results-POSTapi-customer-requestOrder" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-customer-requestOrder"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-customer-requestOrder"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-customer-requestOrder" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-customer-requestOrder">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-customer-requestOrder" data-method="POST"
+      data-path="api/customer/requestOrder"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-customer-requestOrder', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-customer-requestOrder"
+                    onclick="tryItOut('POSTapi-customer-requestOrder');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-customer-requestOrder"
+                    onclick="cancelTryOut('POSTapi-customer-requestOrder');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-customer-requestOrder"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/customer/requestOrder</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-customer-requestOrder"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-customer-requestOrder"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>app_service_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="app_service_id"                data-endpoint="POSTapi-customer-requestOrder"
+               value="1"
+               data-component="body">
+    <br>
+<p>The app service ID. Example: <code>1</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+        <details>
+            <summary style="padding-bottom: 10px;">
+                <b style="line-height: 2;"><code>variants</code></b>&nbsp;&nbsp;
+<small>object[]</small>&nbsp;
+ &nbsp;
+ &nbsp;
+<br>
+<p>Selected app service variants.</p>
+            </summary>
+                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="variants.0.name"                data-endpoint="POSTapi-customer-requestOrder"
+               value="Size"
+               data-component="body">
+    <br>
+<p>Variant name. Example: <code>Size</code></p>
+                    </div>
+                                                                <div style="margin-left: 14px; clear: unset;">
+                        <b style="line-height: 2;"><code>selected_options</code></b>&nbsp;&nbsp;
+<small>string[]</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="variants.0.selected_options[0]"                data-endpoint="POSTapi-customer-requestOrder"
+               data-component="body">
+        <input type="text" style="display: none"
+               name="variants.0.selected_options[1]"                data-endpoint="POSTapi-customer-requestOrder"
+               data-component="body">
+    <br>
+<p>Selected option names.</p>
+                    </div>
+                                    </details>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>day</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="day"                data-endpoint="POSTapi-customer-requestOrder"
+               value="Monday"
+               data-component="body">
+    <br>
+<p>optional Booking day. Example: <code>Monday</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>time</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="time"                data-endpoint="POSTapi-customer-requestOrder"
+               value="10:00"
+               data-component="body">
+    <br>
+<p>optional Booking time. Example: <code>10:00</code></p>
+        </div>
+        </form>
 
             
 

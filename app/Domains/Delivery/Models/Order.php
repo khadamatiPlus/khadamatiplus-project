@@ -6,6 +6,7 @@ use App\Domains\Customer\Models\Customer;
 use App\Domains\Delivery\Events\OrderCreated;
 use App\Domains\Delivery\Events\OrderUpdated;
 use App\Domains\Delivery\Models\Traits\Method\OrderMethod;
+use App\Domains\AppService\Models\AppService;
 use App\Domains\Lookups\Models\City;
 use App\Domains\Service\Models\Service;
 use App\Domains\Service\Models\ServiceOption;
@@ -42,6 +43,8 @@ class Order extends BaseModel
         'merchant_id',
         'customer_id',
         'service_id',
+        'app_service_id',
+        'selected_variants',
         'created_by_id',
         'updated_by_id',
         'price',
@@ -65,6 +68,10 @@ class Order extends BaseModel
         'cancelled_at',
         'cancelled_by_id',
         'notes',
+    ];
+
+    protected $casts = [
+        'selected_variants' => 'array',
     ];
 
     /**
@@ -99,6 +106,32 @@ class Order extends BaseModel
     public function service(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(Service::class,'service_id');
+    }
+
+    public function appService(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(AppService::class, 'app_service_id');
+    }
+
+    public function scopeVisibleToMerchant($query, int $merchantId)
+    {
+        return $query->where(function ($query) use ($merchantId) {
+            $query->where('merchant_id', $merchantId)
+                ->orWhere(function ($query) use ($merchantId) {
+                    $query->whereNull('merchant_id')
+                        ->where('status', 'pending')
+                        ->whereHas('appService.merchants', function ($query) use ($merchantId) {
+                            $query->where('merchants.id', $merchantId);
+                        });
+                });
+        });
+    }
+
+    public function getDisplayName(): string
+    {
+        return $this->appService?->name
+            ?? $this->service?->title
+            ?? __('Order #:id', ['id' => $this->id]);
     }
 
     /**

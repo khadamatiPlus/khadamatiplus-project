@@ -79,4 +79,19 @@ class AppService extends BaseModel
     {
         return $this->belongsTo(User::class, 'updated_by_id');
     }
+
+    public function merchants()
+    {
+        return $this->belongsToMany(
+            \App\Domains\Merchant\Models\Merchant::class,
+            'app_service_merchant',
+            'app_service_id',
+            'merchant_id'
+        );
+    }
+
+    public function orders()
+    {
+        return $this->hasMany(\App\Domains\Delivery\Models\Order::class, 'app_service_id');
+    }
 }

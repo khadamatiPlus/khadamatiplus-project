@@ -19,6 +19,10 @@ class FirebaseNotificationService
 
     public function sendPushNotification($deviceToken, $title, $body)
     {
+        if (empty($deviceToken)) {
+            return false;
+        }
+
         try {
             // Log the notification attempt
             Log::info('Sending push notification', [
@@ -57,5 +61,21 @@ class FirebaseNotificationService
             // Handle exception
             return false;
         }
+    }
+
+    /**
+     * @param  array<int, string|null>  $deviceTokens
+     */
+    public function sendPushNotificationToMany(array $deviceTokens, string $title, string $body): int
+    {
+        $sentCount = 0;
+
+        foreach (array_unique(array_filter($deviceTokens)) as $deviceToken) {
+            if ($this->sendPushNotification($deviceToken, $title, $body)) {
+                $sentCount++;
+            }
+        }
+
+        return $sentCount;
     }
 }

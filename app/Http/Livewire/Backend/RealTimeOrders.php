@@ -46,7 +46,12 @@ class RealTimeOrders extends Component
 
     public function render()
     {
-        $recentOrders = Order::with(['customer.profile', 'merchant.profile', 'service'])
+        $recentOrders = Order::with([
+            'customer.profile',
+            'merchant.profile',
+            'appService',
+            'service',
+        ])
             ->orderBy('created_at', 'desc')
             ->paginate($this->perPage);
 

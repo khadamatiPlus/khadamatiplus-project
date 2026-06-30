@@ -243,8 +243,8 @@
                                 <tr>
                                     <td>#{{$order->id}}</td>
                                     <td>{{$order->customer->name ?? 'N/A'}}</td>
-                                    <td>{{$order->service->title ?? 'N/A'}}</td>
-                                    <td>{{$order->merchant->name ?? 'N/A'}}</td>
+                                    <td>{{ $order->appService->name ?? $order->service->title ?? 'N/A' }}</td>
+                                    <td>{{ $order->merchant->name ?? __('Unassigned') }}</td>
                                     <td>
                                             <span class="badge badge-{{getStatusBadgeClass($order->status)}}">
                                                 {{ucfirst($order->status)}}

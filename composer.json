@@ -13,7 +13,6 @@
         "knuckleswtf/scribe": "*",
         "kreait/laravel-firebase": "*",
         "lab404/laravel-impersonate": "^1.7",
-        "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/socialite": "^5.21",
         "laravel/tinker": "^2.8",

@@ -439,7 +439,7 @@ endpoints:
         name: type
         description: ''
         required: true
-        example: merchants
+        example: customers
         type: string
         enumValues:
           - customers
@@ -448,7 +448,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      type: merchants
+      type: customers
     fileParameters: []
     responses:
       -
@@ -850,7 +850,7 @@ endpoints:
         name: 'images[].is_main'
         description: ''
         required: true
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -956,7 +956,7 @@ endpoints:
       images:
         -
           image: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
-          is_main: false
+          is_main: true
       products:
         -
           title: consequatur
@@ -1112,7 +1112,7 @@ endpoints:
         name: 'images[].is_main'
         description: ''
         required: false
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1235,7 +1235,7 @@ endpoints:
       images:
         -
           image: 'https://www.mueller.com/laborum-eius-est-dolor-dolores-minus-voluptatem'
-          is_main: true
+          is_main: false
       service_prices:
         -
           title: sufvyvddqamniihfqcoyn
@@ -1485,9 +1485,9 @@ endpoints:
       status:
         custom: []
         name: status
-        description: 'Validate that the order exists.'
+        description: ''
         required: true
-        example: cancelled
+        example: accepted
         type: string
         enumValues:
           - accepted
@@ -1498,20 +1498,9 @@ endpoints:
         exampleWasSpecified: false
         nullable: false
         deprecated: false
-      options:
-        custom: []
-        name: options
-        description: 'Validate that options is an array (optional). Must match an existing stored value.'
-        required: false
-        example: null
-        type: 'string[]'
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
     cleanBodyParameters:
       order_id: consequatur
-      status: cancelled
+      status: accepted
     fileParameters: []
     responses: []
     responseFields: []
@@ -1664,7 +1653,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: active
+        example: inactive
         type: string
         enumValues:
           - active
@@ -1673,7 +1662,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      status: active
+      status: inactive
     fileParameters: []
     responses: []
     responseFields: []
@@ -2665,79 +2654,6 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/customer/requestOrder
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      service_id:
-        custom: []
-        name: service_id
-        description: 'Must match an existing stored value.'
-        required: true
-        example: consequatur
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      day:
-        custom: []
-        name: day
-        description: ''
-        required: false
-        example: Monday
-        type: string
-        enumValues:
-          - Monday
-          - Tuesday
-          - Wednesday
-          - Thursday
-          - Friday
-          - Saturday
-          - Sunday
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-      time:
-        custom: []
-        name: time
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: true
-        deprecated: false
-    cleanBodyParameters:
-      service_id: consequatur
-      day: Monday
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
     uri: api/customer/updateOrderStatusByCustomer
     metadata:
       custom: []
@@ -2771,7 +2687,7 @@ endpoints:
       status:
         custom: []
         name: status
-        description: 'Validate that the order exists.'
+        description: ''
         required: true
         example: on_the_way
         type: string
@@ -2787,9 +2703,9 @@ endpoints:
       notes:
         custom: []
         name: notes
-        description: 'Validate the status.'
+        description: ''
         required: false
-        example: null
+        example: consequatur
         type: string
         enumValues: []
         exampleWasSpecified: false
@@ -2798,6 +2714,7 @@ endpoints:
     cleanBodyParameters:
       order_id: consequatur
       status: on_the_way
+      notes: consequatur
     fileParameters: []
     responses: []
     responseFields: []
@@ -2954,7 +2871,7 @@ endpoints:
         name: is_verified
         description: ''
         required: false
-        example: 1
+        example: 0
         type: string
         enumValues:
           - 0
@@ -3035,7 +2952,7 @@ endpoints:
       country_id: consequatur
       city_id: consequatur
       area_id: consequatur
-      is_verified: 1
+      is_verified: 0
       latitude: mqeopfuudtdsufvyvddqa
       longitude: mniihfqcoynlazghdtqtq
       password: consequatur
