@@ -72,6 +72,8 @@ class UpdateMerchantRequest extends JsonRequest
                     }
                 },
             ]:'',
+            'app_services' => $this->has('app_services') ? ['sometimes', 'array'] : '',
+            'app_services.*' => $this->has('app_services') ? ['exists:app_services,id'] : '',
         ];
     }
 

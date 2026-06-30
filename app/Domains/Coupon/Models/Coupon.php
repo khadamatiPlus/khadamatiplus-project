@@ -49,6 +49,7 @@ class Coupon extends BaseModel
 
     public function scopeActive($query)
     {
+
         return $query->where('is_active', true);
     }
 
@@ -73,7 +74,7 @@ class Coupon extends BaseModel
     public function isValid()
     {
         $now = now();
-        
+
         // Check if active
         if (!$this->is_active) {
             return false;

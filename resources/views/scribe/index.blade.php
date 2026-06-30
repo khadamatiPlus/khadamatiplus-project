@@ -92,6 +92,16 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-coupon-validation" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="coupon-validation">
+                    <a href="#coupon-validation">Coupon Validation</a>
+                </li>
+                                    <ul id="tocify-subheader-coupon-validation" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="coupon-validation-POSTapi-validate-coupon">
+                                <a href="#coupon-validation-POSTapi-validate-coupon">Validate Coupon</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-endpoints" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="endpoints">
                     <a href="#endpoints">Endpoints</a>
@@ -142,17 +152,11 @@
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-GETapi-delivery-order-show">
                                 <a href="#endpoints-GETapi-delivery-order-show">GET api/delivery/order/show</a>
                             </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-POSTapi-merchant-update">
-                                <a href="#endpoints-POSTapi-merchant-update">POST api/merchant/update</a>
-                            </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-merchant-updatePassword">
                                 <a href="#endpoints-POSTapi-merchant-updatePassword">POST api/merchant/updatePassword</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-DELETEapi-merchant-deleteMerchantAccount">
                                 <a href="#endpoints-DELETEapi-merchant-deleteMerchantAccount">DELETE api/merchant/deleteMerchantAccount</a>
-                            </li>
-                                                                                <li class="tocify-item level-2" data-unique="endpoints-GETapi-merchant-profile">
-                                <a href="#endpoints-GETapi-merchant-profile">GET api/merchant/profile</a>
                             </li>
                                                                                 <li class="tocify-item level-2" data-unique="endpoints-POSTapi-merchant-storeService">
                                 <a href="#endpoints-POSTapi-merchant-storeService">POST api/merchant/storeService</a>
@@ -324,6 +328,19 @@
                             </li>
                                                                         </ul>
                             </ul>
+                    <ul id="tocify-header-merchant" class="tocify-header">
+                <li class="tocify-item level-1" data-unique="merchant">
+                    <a href="#merchant">Merchant</a>
+                </li>
+                                    <ul id="tocify-subheader-merchant" class="tocify-subheader">
+                                                    <li class="tocify-item level-2" data-unique="merchant-POSTapi-merchant-update">
+                                <a href="#merchant-POSTapi-merchant-update">Update Merchant Profile</a>
+                            </li>
+                                                                                <li class="tocify-item level-2" data-unique="merchant-GETapi-merchant-profile">
+                                <a href="#merchant-GETapi-merchant-profile">Merchant Profile</a>
+                            </li>
+                                                                        </ul>
+                            </ul>
                     <ul id="tocify-header-offers" class="tocify-header">
                 <li class="tocify-item level-1" data-unique="offers">
                     <a href="#offers">Offers</a>
@@ -346,7 +363,7 @@
     </ul>
 
     <ul class="toc-footer" id="last-updated">
-        <li>Last updated: June 25, 2026</li>
+        <li>Last updated: June 30, 2026</li>
     </ul>
 </div>
 
@@ -1055,6 +1072,209 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>The ID of the parent category. Example: <code>1</code></p>
             </div>
                 </form>
+
+                <h1 id="coupon-validation">Coupon Validation</h1>
+
+    
+
+                                <h2 id="coupon-validation-POSTapi-validate-coupon">Validate Coupon</h2>
+
+<p>
+</p>
+
+<p>Validate whether a coupon code is active, not expired, and eligible for the provided order amount.</p>
+
+<span id="example-requests-POSTapi-validate-coupon">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://127.0.0.1:8000/api/validate-coupon" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json" \
+    --data "{
+    \"code\": \"SAVE10\",
+    \"order_amount\": \"100.00\"
+}"
+</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/validate-coupon"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+let body = {
+    "code": "SAVE10",
+    "order_amount": "100.00"
+};
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body: JSON.stringify(body),
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-validate-coupon">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Coupon validation successful&quot;,
+    &quot;data&quot;: {
+        &quot;is_valid&quot;: true,
+        &quot;code&quot;: &quot;SAVE10&quot;,
+        &quot;discount_type&quot;: &quot;percentage&quot;,
+        &quot;discount_value&quot;: 10,
+        &quot;minimum_order_amount&quot;: 50,
+        &quot;maximum_discount_amount&quot;: 20,
+        &quot;reason&quot;: null
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;message&quot;: &quot;Coupon validation successful&quot;,
+    &quot;data&quot;: {
+        &quot;is_valid&quot;: false,
+        &quot;code&quot;: &quot;SAVE10&quot;,
+        &quot;discount_type&quot;: &quot;percentage&quot;,
+        &quot;discount_value&quot;: 10,
+        &quot;minimum_order_amount&quot;: 100,
+        &quot;maximum_discount_amount&quot;: 20,
+        &quot;reason&quot;: &quot;minimum_order_amount_not_met&quot;
+    }
+}</code>
+ </pre>
+            <blockquote>
+            <p>Example response (400):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;error_type&quot;: &quot;general&quot;,
+    &quot;errors&quot;: [
+        {
+            &quot;key&quot;: &quot;code&quot;,
+            &quot;error&quot;: &quot;The coupon code is required.&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-validate-coupon" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-validate-coupon"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-validate-coupon"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-validate-coupon" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-validate-coupon">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-validate-coupon" data-method="POST"
+      data-path="api/validate-coupon"
+      data-authed="0"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-validate-coupon', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-validate-coupon"
+                    onclick="tryItOut('POSTapi-validate-coupon');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-validate-coupon"
+                    onclick="cancelTryOut('POSTapi-validate-coupon');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-validate-coupon"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/validate-coupon</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-validate-coupon"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-validate-coupon"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>code</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="code"                data-endpoint="POSTapi-validate-coupon"
+               value="SAVE10"
+               data-component="body">
+    <br>
+<p>The coupon code to validate. Example: <code>SAVE10</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>order_amount</code></b>&nbsp;&nbsp;
+<small>numeric</small>&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="order_amount"                data-endpoint="POSTapi-validate-coupon"
+               value="100.00"
+               data-component="body">
+    <br>
+<p>The subtotal/order amount to validate against. Example: <code>100.00</code></p>
+        </div>
+        </form>
 
                 <h1 id="endpoints">Endpoints</h1>
 
@@ -3079,215 +3299,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
         </div>
         </form>
 
-                    <h2 id="endpoints-POSTapi-merchant-update">POST api/merchant/update</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-POSTapi-merchant-update">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request POST \
-    "http://127.0.0.1:8000/api/merchant/update" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json" \
-</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/merchant/update"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "POST",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-POSTapi-merchant-update">
-</span>
-<span id="execution-results-POSTapi-merchant-update" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-POSTapi-merchant-update"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-POSTapi-merchant-update"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-POSTapi-merchant-update" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-POSTapi-merchant-update">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-POSTapi-merchant-update" data-method="POST"
-      data-path="api/merchant/update"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('POSTapi-merchant-update', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-POSTapi-merchant-update"
-                    onclick="tryItOut('POSTapi-merchant-update');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-POSTapi-merchant-update"
-                    onclick="cancelTryOut('POSTapi-merchant-update');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-POSTapi-merchant-update"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-black">POST</small>
-            <b><code>api/merchant/update</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="POSTapi-merchant-update"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="POSTapi-merchant-update"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
-        <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="email"                data-endpoint="POSTapi-merchant-update"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="name"                data-endpoint="POSTapi-merchant-update"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>latitude</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="latitude"                data-endpoint="POSTapi-merchant-update"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>longitude</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="longitude"                data-endpoint="POSTapi-merchant-update"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>profile_pic</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="profile_pic"                data-endpoint="POSTapi-merchant-update"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>country_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="country_id"                data-endpoint="POSTapi-merchant-update"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>city_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="city_id"                data-endpoint="POSTapi-merchant-update"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-                <div style=" padding-left: 28px;  clear: unset;">
-            <b style="line-height: 2;"><code>area_id</code></b>&nbsp;&nbsp;
-<small>string</small>&nbsp;
-<i>optional</i> &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="area_id"                data-endpoint="POSTapi-merchant-update"
-               value=""
-               data-component="body">
-    <br>
-
-        </div>
-        </form>
-
                     <h2 id="endpoints-POSTapi-merchant-updatePassword">POST api/merchant/updatePassword</h2>
 
 <p>
@@ -3545,137 +3556,6 @@ You can check the Dev Tools console for debugging information.</code></pre>
             </div>
                         </form>
 
-                    <h2 id="endpoints-GETapi-merchant-profile">GET api/merchant/profile</h2>
-
-<p>
-</p>
-
-
-
-<span id="example-requests-GETapi-merchant-profile">
-<blockquote>Example request:</blockquote>
-
-
-<div class="bash-example">
-    <pre><code class="language-bash">curl --request GET \
-    --get "http://127.0.0.1:8000/api/merchant/profile" \
-    --header "Content-Type: application/json" \
-    --header "Accept: application/json"</code></pre></div>
-
-
-<div class="javascript-example">
-    <pre><code class="language-javascript">const url = new URL(
-    "http://127.0.0.1:8000/api/merchant/profile"
-);
-
-const headers = {
-    "Content-Type": "application/json",
-    "Accept": "application/json",
-};
-
-
-fetch(url, {
-    method: "GET",
-    headers,
-}).then(response =&gt; response.json());</code></pre></div>
-
-</span>
-
-<span id="example-responses-GETapi-merchant-profile">
-            <blockquote>
-            <p>Example response (401):</p>
-        </blockquote>
-                <details class="annotation">
-            <summary style="cursor: pointer;">
-                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
-            </summary>
-            <pre><code class="language-http">cache-control: no-cache, private
-content-type: application/json
- </code></pre></details>         <pre>
-
-<code class="language-json" style="max-height: 300px;">{
-    &quot;errors&quot;: [
-        {
-            &quot;key&quot;: 0,
-            &quot;error&quot;: &quot;Unauthenticated.&quot;
-        }
-    ]
-}</code>
- </pre>
-    </span>
-<span id="execution-results-GETapi-merchant-profile" hidden>
-    <blockquote>Received response<span
-                id="execution-response-status-GETapi-merchant-profile"></span>:
-    </blockquote>
-    <pre class="json"><code id="execution-response-content-GETapi-merchant-profile"
-      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
-</span>
-<span id="execution-error-GETapi-merchant-profile" hidden>
-    <blockquote>Request failed with error:</blockquote>
-    <pre><code id="execution-error-message-GETapi-merchant-profile">
-
-Tip: Check that you&#039;re properly connected to the network.
-If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
-You can check the Dev Tools console for debugging information.</code></pre>
-</span>
-<form id="form-GETapi-merchant-profile" data-method="GET"
-      data-path="api/merchant/profile"
-      data-authed="0"
-      data-hasfiles="0"
-      data-isarraybody="0"
-      autocomplete="off"
-      onsubmit="event.preventDefault(); executeTryOut('GETapi-merchant-profile', this);">
-    <h3>
-        Request&nbsp;&nbsp;&nbsp;
-                    <button type="button"
-                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-tryout-GETapi-merchant-profile"
-                    onclick="tryItOut('GETapi-merchant-profile');">Try it out ⚡
-            </button>
-            <button type="button"
-                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-canceltryout-GETapi-merchant-profile"
-                    onclick="cancelTryOut('GETapi-merchant-profile');" hidden>Cancel 🛑
-            </button>&nbsp;&nbsp;
-            <button type="submit"
-                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
-                    id="btn-executetryout-GETapi-merchant-profile"
-                    data-initial-text="Send Request 💥"
-                    data-loading-text="⏱ Sending..."
-                    hidden>Send Request 💥
-            </button>
-            </h3>
-            <p>
-            <small class="badge badge-green">GET</small>
-            <b><code>api/merchant/profile</code></b>
-        </p>
-                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Content-Type"                data-endpoint="GETapi-merchant-profile"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                                <div style="padding-left: 28px; clear: unset;">
-                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
-&nbsp;
- &nbsp;
- &nbsp;
-                <input type="text" style="display: none"
-                              name="Accept"                data-endpoint="GETapi-merchant-profile"
-               value="application/json"
-               data-component="header">
-    <br>
-<p>Example: <code>application/json</code></p>
-            </div>
-                        </form>
-
                     <h2 id="endpoints-POSTapi-merchant-storeService">POST api/merchant/storeService</h2>
 
 <p>
@@ -3706,7 +3586,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"images\": [
         {
             \"image\": \"http:\\/\\/kunze.biz\\/iste-laborum-eius-est-dolor.html\",
-            \"is_main\": true
+            \"is_main\": false
         }
     ],
     \"products\": [
@@ -3750,7 +3630,7 @@ let body = {
     "images": [
         {
             "image": "http:\/\/kunze.biz\/iste-laborum-eius-est-dolor.html",
-            "is_main": true
+            "is_main": false
         }
     ],
     "products": [
@@ -3954,7 +3834,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>true</code></p>
+<p>Example: <code>false</code></p>
                     </div>
                                     </details>
         </div>
@@ -4113,7 +3993,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"images\": [
         {
             \"image\": \"https:\\/\\/www.mueller.com\\/laborum-eius-est-dolor-dolores-minus-voluptatem\",
-            \"is_main\": false
+            \"is_main\": true
         }
     ],
     \"service_prices\": [
@@ -4156,7 +4036,7 @@ let body = {
     "images": [
         {
             "image": "https:\/\/www.mueller.com\/laborum-eius-est-dolor-dolores-minus-voluptatem",
-            "is_main": false
+            "is_main": true
         }
     ],
     "service_prices": [
@@ -4379,7 +4259,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
             <code>false</code>
         </label>
     <br>
-<p>Example: <code>false</code></p>
+<p>Example: <code>true</code></p>
                     </div>
                                     </details>
         </div>
@@ -5114,7 +4994,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Accept: application/json" \
     --data "{
     \"order_id\": \"consequatur\",
-    \"status\": \"completed\"
+    \"status\": \"cancelled\"
 }"
 </code></pre></div>
 
@@ -5131,7 +5011,7 @@ const headers = {
 
 let body = {
     "order_id": "consequatur",
-    "status": "completed"
+    "status": "cancelled"
 };
 
 fetch(url, {
@@ -5235,10 +5115,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="POSTapi-merchant-updateOrderStatusByMerchant"
-               value="completed"
+               value="cancelled"
                data-component="body">
     <br>
-<p>Validate that the order exists. Example: <code>completed</code></p>
+<p>Validate that the order exists. Example: <code>cancelled</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>accepted</code></li> <li><code>on_the_way</code></li> <li><code>on_progress</code></li> <li><code>completed</code></li> <li><code>cancelled</code></li></ul>
         </div>
@@ -5668,7 +5548,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     --header "Content-Type: application/json" \
     --header "Accept: application/json" \
     --data "{
-    \"status\": \"inactive\"
+    \"status\": \"active\"
 }"
 </code></pre></div>
 
@@ -5684,7 +5564,7 @@ const headers = {
 };
 
 let body = {
-    "status": "inactive"
+    "status": "active"
 };
 
 fetch(url, {
@@ -5776,10 +5656,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="status"                data-endpoint="PUTapi-merchant-status"
-               value="inactive"
+               value="active"
                data-component="body">
     <br>
-<p>Example: <code>inactive</code></p>
+<p>Example: <code>active</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>active</code></li> <li><code>inactive</code></li></ul>
         </div>
@@ -8798,7 +8678,7 @@ You can check the Dev Tools console for debugging information.</code></pre>
     \"country_id\": \"consequatur\",
     \"city_id\": \"consequatur\",
     \"area_id\": \"consequatur\",
-    \"is_verified\": 0,
+    \"is_verified\": 1,
     \"latitude\": \"mqeopfuudtdsufvyvddqa\",
     \"longitude\": \"mniihfqcoynlazghdtqtq\",
     \"password\": \"consequatur\"
@@ -8823,7 +8703,7 @@ let body = {
     "country_id": "consequatur",
     "city_id": "consequatur",
     "area_id": "consequatur",
-    "is_verified": 0,
+    "is_verified": 1,
     "latitude": "mqeopfuudtdsufvyvddqa",
     "longitude": "mniihfqcoynlazghdtqtq",
     "password": "consequatur"
@@ -8990,10 +8870,10 @@ You can check the Dev Tools console for debugging information.</code></pre>
  &nbsp;
                 <input type="text" style="display: none"
                               name="is_verified"                data-endpoint="POSTapi-auth-registerMerchant"
-               value="0"
+               value="1"
                data-component="body">
     <br>
-<p>Example: <code>0</code></p>
+<p>Example: <code>1</code></p>
 Must be one of:
 <ul style="list-style-type: square;"><li><code>0</code></li> <li><code>1</code></li></ul>
         </div>
@@ -11583,7 +11463,183 @@ x-ratelimit-remaining: 45
                 &quot;availability&quot;: {
                     &quot;days&quot;: [],
                     &quot;times&quot;: []
-                }
+                },
+                &quot;app_services&quot;: [
+                    {
+                        &quot;id&quot;: 1,
+                        &quot;name&quot;: &quot;الخدمة الاولى&quot;,
+                        &quot;description&quot;: &quot;&lt;p&gt;الخدمة الاولى&lt;/p&gt;&quot;,
+                        &quot;category_id&quot;: 1,
+                        &quot;category_name&quot;: &quot;first category&quot;,
+                        &quot;sub_category_id&quot;: 3,
+                        &quot;sub_category_name&quot;: &quot;xsax&quot;,
+                        &quot;images&quot;: [
+                            &quot;http://127.0.0.1:8000/storage//app-services/MVLz3wposZhhynoIZCbZ1rmyX6h4LJYCUxuCw3oT.jpg&quot;
+                        ],
+                        &quot;video_url&quot;: null,
+                        &quot;base_price&quot;: &quot;31.00&quot;,
+                        &quot;currency&quot;: &quot;JOD&quot;,
+                        &quot;price_type&quot;: &quot;fixed&quot;,
+                        &quot;discount&quot;: null,
+                        &quot;variants&quot;: [],
+                        &quot;availability_days&quot;: &quot;\&quot;[\\\&quot;Sunday\\\&quot;,\\\&quot;Monday\\\&quot;,\\\&quot;Tuesday\\\&quot;,\\\&quot;Wednesday\\\&quot;,\\\&quot;Thursday\\\&quot;]\&quot;&quot;,
+                        &quot;max_concurrent_orders&quot;: null,
+                        &quot;is_featured&quot;: false,
+                        &quot;is_online&quot;: true,
+                        &quot;status&quot;: &quot;active&quot;
+                    },
+                    {
+                        &quot;id&quot;: 2,
+                        &quot;name&quot;: &quot;Omar Alrantisi&quot;,
+                        &quot;description&quot;: &quot;&lt;p&gt;يصشي&lt;/p&gt;&quot;,
+                        &quot;category_id&quot;: 1,
+                        &quot;category_name&quot;: &quot;first category&quot;,
+                        &quot;sub_category_id&quot;: 3,
+                        &quot;sub_category_name&quot;: &quot;xsax&quot;,
+                        &quot;images&quot;: [
+                            &quot;http://127.0.0.1:8000/storage//app-services/Zi7LNzYdHUQPpT45lUxIYHy1a1KIKpObQP8WFHYf.jpg&quot;,
+                            &quot;http://127.0.0.1:8000/storage//app-services/uM8fnZZZUNaocmYTaQvxczGltkgyLH9GApIq2g62.jpg&quot;,
+                            &quot;http://127.0.0.1:8000/storage//app-services/vb5ofyKtAuD0em7VNod9B8dmZ5xgLzmU6eQ0JTAn.jpg&quot;
+                        ],
+                        &quot;video_url&quot;: &quot;https://www.youtube.com/watch?v=1IEGrjMC88M&quot;,
+                        &quot;base_price&quot;: &quot;50.00&quot;,
+                        &quot;currency&quot;: &quot;JOD&quot;,
+                        &quot;price_type&quot;: &quot;fixed&quot;,
+                        &quot;discount&quot;: null,
+                        &quot;variants&quot;: [],
+                        &quot;availability_days&quot;: &quot;\&quot;[\\\&quot;Sunday\\\&quot;,\\\&quot;Monday\\\&quot;,\\\&quot;Tuesday\\\&quot;,\\\&quot;Wednesday\\\&quot;,\\\&quot;Thursday\\\&quot;]\&quot;&quot;,
+                        &quot;max_concurrent_orders&quot;: null,
+                        &quot;is_featured&quot;: false,
+                        &quot;is_online&quot;: true,
+                        &quot;status&quot;: &quot;active&quot;
+                    },
+                    {
+                        &quot;id&quot;: 3,
+                        &quot;name&quot;: &quot;test&quot;,
+                        &quot;description&quot;: &quot;&lt;p&gt;xsax&lt;/p&gt;&quot;,
+                        &quot;category_id&quot;: 1,
+                        &quot;category_name&quot;: &quot;first category&quot;,
+                        &quot;sub_category_id&quot;: 3,
+                        &quot;sub_category_name&quot;: &quot;xsax&quot;,
+                        &quot;images&quot;: [
+                            &quot;http://127.0.0.1:8000/storage//app-services/EXAszNk72BDTfeFCKHfcNTeL6FX4LeC93bvXB8A7.jpg&quot;,
+                            &quot;http://127.0.0.1:8000/storage//app-services/v9DTJTeTqdjV9jjvObwcgMwzqByXezCOhAeRIS95.jpg&quot;
+                        ],
+                        &quot;video_url&quot;: null,
+                        &quot;base_price&quot;: &quot;312.00&quot;,
+                        &quot;currency&quot;: &quot;JOD&quot;,
+                        &quot;price_type&quot;: &quot;fixed&quot;,
+                        &quot;discount&quot;: null,
+                        &quot;variants&quot;: [
+                            {
+                                &quot;name&quot;: &quot;الساعات&quot;,
+                                &quot;type&quot;: &quot;single&quot;,
+                                &quot;required&quot;: &quot;required&quot;,
+                                &quot;options&quot;: [
+                                    {
+                                        &quot;name&quot;: &quot;1&quot;,
+                                        &quot;price&quot;: 0
+                                    },
+                                    {
+                                        &quot;name&quot;: &quot;2&quot;,
+                                        &quot;price&quot;: 0
+                                    },
+                                    {
+                                        &quot;name&quot;: &quot;3&quot;,
+                                        &quot;price&quot;: 0
+                                    }
+                                ]
+                            }
+                        ],
+                        &quot;availability_days&quot;: &quot;\&quot;[\\\&quot;Sunday\\\&quot;,\\\&quot;Monday\\\&quot;,\\\&quot;Tuesday\\\&quot;,\\\&quot;Wednesday\\\&quot;,\\\&quot;Thursday\\\&quot;]\&quot;&quot;,
+                        &quot;max_concurrent_orders&quot;: null,
+                        &quot;is_featured&quot;: false,
+                        &quot;is_online&quot;: true,
+                        &quot;status&quot;: &quot;active&quot;
+                    },
+                    {
+                        &quot;id&quot;: 5,
+                        &quot;name&quot;: &quot;خدمات النقل&quot;,
+                        &quot;description&quot;: &quot;خدمات النقل والانتقال&quot;,
+                        &quot;category_id&quot;: 2,
+                        &quot;category_name&quot;: &quot;second category&quot;,
+                        &quot;sub_category_id&quot;: null,
+                        &quot;sub_category_name&quot;: null,
+                        &quot;images&quot;: [],
+                        &quot;video_url&quot;: null,
+                        &quot;base_price&quot;: &quot;0.00&quot;,
+                        &quot;currency&quot;: &quot;JOD&quot;,
+                        &quot;price_type&quot;: &quot;fixed&quot;,
+                        &quot;discount&quot;: null,
+                        &quot;variants&quot;: [],
+                        &quot;availability_days&quot;: null,
+                        &quot;max_concurrent_orders&quot;: null,
+                        &quot;is_featured&quot;: false,
+                        &quot;is_online&quot;: true,
+                        &quot;status&quot;: &quot;active&quot;
+                    },
+                    {
+                        &quot;id&quot;: 20,
+                        &quot;name&quot;: &quot;كهرباء سيارات&quot;,
+                        &quot;description&quot;: &quot;&lt;p&gt;كهرباء سيارات كهرباء سيارات كهرباء سيارات كهرباء سيارات كهرباء سيارات كهرباء سيارات&lt;/p&gt;&quot;,
+                        &quot;category_id&quot;: 1,
+                        &quot;category_name&quot;: &quot;first category&quot;,
+                        &quot;sub_category_id&quot;: 3,
+                        &quot;sub_category_name&quot;: &quot;xsax&quot;,
+                        &quot;images&quot;: [
+                            &quot;http://127.0.0.1:8000/storage//app-services/7QVXpghxIZsNQ1WKLe8Rhqyt2KtUVXaFTi882Xy6.jpg&quot;,
+                            &quot;http://127.0.0.1:8000/storage//app-services/XqEv5GB4sQub8gIAgGCO1lDiOajMUemwp3ed39Tg.jpg&quot;
+                        ],
+                        &quot;video_url&quot;: null,
+                        &quot;base_price&quot;: &quot;10.00&quot;,
+                        &quot;currency&quot;: &quot;JOD&quot;,
+                        &quot;price_type&quot;: &quot;fixed&quot;,
+                        &quot;discount&quot;: null,
+                        &quot;variants&quot;: [
+                            {
+                                &quot;name&quot;: &quot;الساعات &quot;,
+                                &quot;type&quot;: &quot;single&quot;,
+                                &quot;required&quot;: &quot;required&quot;,
+                                &quot;options&quot;: [
+                                    {
+                                        &quot;name&quot;: &quot;999&quot;,
+                                        &quot;price&quot;: 9
+                                    },
+                                    {
+                                        &quot;name&quot;: &quot;555&quot;,
+                                        &quot;price&quot;: 555
+                                    }
+                                ]
+                            },
+                            {
+                                &quot;name&quot;: &quot;dqdqw&quot;,
+                                &quot;type&quot;: &quot;single&quot;,
+                                &quot;required&quot;: &quot;required&quot;,
+                                &quot;options&quot;: [
+                                    {
+                                        &quot;name&quot;: &quot;5555&quot;,
+                                        &quot;price&quot;: 33
+                                    },
+                                    {
+                                        &quot;name&quot;: &quot;11&quot;,
+                                        &quot;price&quot;: 22
+                                    }
+                                ]
+                            }
+                        ],
+                        &quot;availability_days&quot;: [
+                            &quot;Sunday&quot;,
+                            &quot;Monday&quot;,
+                            &quot;Tuesday&quot;,
+                            &quot;Wednesday&quot;,
+                            &quot;Thursday&quot;
+                        ],
+                        &quot;max_concurrent_orders&quot;: null,
+                        &quot;is_featured&quot;: true,
+                        &quot;is_online&quot;: true,
+                        &quot;status&quot;: &quot;active&quot;
+                    }
+                ]
             },
             {
                 &quot;id&quot;: 27,
@@ -11606,7 +11662,8 @@ x-ratelimit-remaining: 45
                 &quot;availability&quot;: {
                     &quot;days&quot;: [],
                     &quot;times&quot;: []
-                }
+                },
+                &quot;app_services&quot;: []
             },
             {
                 &quot;id&quot;: 25,
@@ -11629,7 +11686,8 @@ x-ratelimit-remaining: 45
                 &quot;availability&quot;: {
                     &quot;days&quot;: [],
                     &quot;times&quot;: []
-                }
+                },
+                &quot;app_services&quot;: []
             }
         ],
         &quot;pagination&quot;: {
@@ -12544,6 +12602,399 @@ You can check the Dev Tools console for debugging information.</code></pre>
 <p>Example: <code>consequatur</code></p>
         </div>
         </form>
+
+                <h1 id="merchant">Merchant</h1>
+
+    
+
+                                <h2 id="merchant-POSTapi-merchant-update">Update Merchant Profile</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Updates the authenticated merchant's information.</p>
+
+<span id="example-requests-POSTapi-merchant-update">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request POST \
+    "http://127.0.0.1:8000/api/merchant/update" \
+    --header "Content-Type: multipart/form-data" \
+    --header "Accept: application/json" \
+    --form "email=merchant@example.com"\
+    --form "name=My Restaurant"\
+    --form "latitude=31.9539"\
+    --form "longitude=35.9106"\
+    --form "country_id=1"\
+    --form "city_id=10"\
+    --form "area_id=50"\
+    --form "app_services[]=1"\
+    --form "profile_pic=@C:\Users\Dell\AppData\Local\Temp\phpA93C.tmp" </code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/merchant/update"
+);
+
+const headers = {
+    "Content-Type": "multipart/form-data",
+    "Accept": "application/json",
+};
+
+const body = new FormData();
+body.append('email', 'merchant@example.com');
+body.append('name', 'My Restaurant');
+body.append('latitude', '31.9539');
+body.append('longitude', '35.9106');
+body.append('country_id', '1');
+body.append('city_id', '10');
+body.append('area_id', '50');
+body.append('app_services[]', '1');
+body.append('profile_pic', document.querySelector('input[name="profile_pic"]').files[0]);
+
+fetch(url, {
+    method: "POST",
+    headers,
+    body,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-POSTapi-merchant-update">
+            <blockquote>
+            <p>Example response (200):</p>
+        </blockquote>
+                <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;success&quot;: true,
+    &quot;data&quot;: {
+        &quot;id&quot;: 1,
+        &quot;name&quot;: &quot;My Restaurant&quot;,
+        &quot;email&quot;: &quot;merchant@example.com&quot;
+    }
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-POSTapi-merchant-update" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-POSTapi-merchant-update"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-POSTapi-merchant-update"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-POSTapi-merchant-update" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-POSTapi-merchant-update">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-POSTapi-merchant-update" data-method="POST"
+      data-path="api/merchant/update"
+      data-authed="1"
+      data-hasfiles="1"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('POSTapi-merchant-update', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-POSTapi-merchant-update"
+                    onclick="tryItOut('POSTapi-merchant-update');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-POSTapi-merchant-update"
+                    onclick="cancelTryOut('POSTapi-merchant-update');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-POSTapi-merchant-update"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-black">POST</small>
+            <b><code>api/merchant/update</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="POSTapi-merchant-update"
+               value="multipart/form-data"
+               data-component="header">
+    <br>
+<p>Example: <code>multipart/form-data</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="POSTapi-merchant-update"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <h4 class="fancy-heading-panel"><b>Body Parameters</b></h4>
+        <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>email</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="email"                data-endpoint="POSTapi-merchant-update"
+               value="merchant@example.com"
+               data-component="body">
+    <br>
+<p>Merchant email. Example: <code>merchant@example.com</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>name</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="name"                data-endpoint="POSTapi-merchant-update"
+               value="My Restaurant"
+               data-component="body">
+    <br>
+<p>Merchant name. Example: <code>My Restaurant</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>latitude</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="latitude"                data-endpoint="POSTapi-merchant-update"
+               value="31.9539"
+               data-component="body">
+    <br>
+<p>Merchant latitude. Example: <code>31.9539</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>longitude</code></b>&nbsp;&nbsp;
+<small>string</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="longitude"                data-endpoint="POSTapi-merchant-update"
+               value="35.9106"
+               data-component="body">
+    <br>
+<p>Merchant longitude. Example: <code>35.9106</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>profile_pic</code></b>&nbsp;&nbsp;
+<small>file</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="file" style="display: none"
+                              name="profile_pic"                data-endpoint="POSTapi-merchant-update"
+               value=""
+               data-component="body">
+    <br>
+<p>Merchant profile image. Example: <code>C:\Users\Dell\AppData\Local\Temp\phpA93C.tmp</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>country_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="country_id"                data-endpoint="POSTapi-merchant-update"
+               value="1"
+               data-component="body">
+    <br>
+<p>Country ID. Example: <code>1</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>city_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="city_id"                data-endpoint="POSTapi-merchant-update"
+               value="10"
+               data-component="body">
+    <br>
+<p>City ID that belongs to the selected country. Example: <code>10</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>area_id</code></b>&nbsp;&nbsp;
+<small>integer</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="area_id"                data-endpoint="POSTapi-merchant-update"
+               value="50"
+               data-component="body">
+    <br>
+<p>Area ID that belongs to the selected city. Example: <code>50</code></p>
+        </div>
+                <div style=" padding-left: 28px;  clear: unset;">
+            <b style="line-height: 2;"><code>app_services</code></b>&nbsp;&nbsp;
+<small>integer[]</small>&nbsp;
+<i>optional</i> &nbsp;
+ &nbsp;
+                <input type="number" style="display: none"
+               step="any"               name="app_services[0]"                data-endpoint="POSTapi-merchant-update"
+               data-component="body">
+        <input type="number" style="display: none"
+               name="app_services[1]"                data-endpoint="POSTapi-merchant-update"
+               data-component="body">
+    <br>
+<p>App service IDs to link via app_service_merchant.</p>
+        </div>
+        </form>
+
+                    <h2 id="merchant-GETapi-merchant-profile">Merchant Profile</h2>
+
+<p>
+<small class="badge badge-darkred">requires authentication</small>
+</p>
+
+<p>Returns the authenticated merchant's profile including linked app services.</p>
+
+<span id="example-requests-GETapi-merchant-profile">
+<blockquote>Example request:</blockquote>
+
+
+<div class="bash-example">
+    <pre><code class="language-bash">curl --request GET \
+    --get "http://127.0.0.1:8000/api/merchant/profile" \
+    --header "Content-Type: application/json" \
+    --header "Accept: application/json"</code></pre></div>
+
+
+<div class="javascript-example">
+    <pre><code class="language-javascript">const url = new URL(
+    "http://127.0.0.1:8000/api/merchant/profile"
+);
+
+const headers = {
+    "Content-Type": "application/json",
+    "Accept": "application/json",
+};
+
+
+fetch(url, {
+    method: "GET",
+    headers,
+}).then(response =&gt; response.json());</code></pre></div>
+
+</span>
+
+<span id="example-responses-GETapi-merchant-profile">
+            <blockquote>
+            <p>Example response (401):</p>
+        </blockquote>
+                <details class="annotation">
+            <summary style="cursor: pointer;">
+                <small onclick="textContent = parentElement.parentElement.open ? 'Show headers' : 'Hide headers'">Show headers</small>
+            </summary>
+            <pre><code class="language-http">cache-control: no-cache, private
+content-type: application/json
+ </code></pre></details>         <pre>
+
+<code class="language-json" style="max-height: 300px;">{
+    &quot;errors&quot;: [
+        {
+            &quot;key&quot;: 0,
+            &quot;error&quot;: &quot;Unauthenticated.&quot;
+        }
+    ]
+}</code>
+ </pre>
+    </span>
+<span id="execution-results-GETapi-merchant-profile" hidden>
+    <blockquote>Received response<span
+                id="execution-response-status-GETapi-merchant-profile"></span>:
+    </blockquote>
+    <pre class="json"><code id="execution-response-content-GETapi-merchant-profile"
+      data-empty-response-text="<Empty response>" style="max-height: 400px;"></code></pre>
+</span>
+<span id="execution-error-GETapi-merchant-profile" hidden>
+    <blockquote>Request failed with error:</blockquote>
+    <pre><code id="execution-error-message-GETapi-merchant-profile">
+
+Tip: Check that you&#039;re properly connected to the network.
+If you&#039;re a maintainer of ths API, verify that your API is running and you&#039;ve enabled CORS.
+You can check the Dev Tools console for debugging information.</code></pre>
+</span>
+<form id="form-GETapi-merchant-profile" data-method="GET"
+      data-path="api/merchant/profile"
+      data-authed="1"
+      data-hasfiles="0"
+      data-isarraybody="0"
+      autocomplete="off"
+      onsubmit="event.preventDefault(); executeTryOut('GETapi-merchant-profile', this);">
+    <h3>
+        Request&nbsp;&nbsp;&nbsp;
+                    <button type="button"
+                    style="background-color: #8fbcd4; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-tryout-GETapi-merchant-profile"
+                    onclick="tryItOut('GETapi-merchant-profile');">Try it out ⚡
+            </button>
+            <button type="button"
+                    style="background-color: #c97a7e; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-canceltryout-GETapi-merchant-profile"
+                    onclick="cancelTryOut('GETapi-merchant-profile');" hidden>Cancel 🛑
+            </button>&nbsp;&nbsp;
+            <button type="submit"
+                    style="background-color: #6ac174; padding: 5px 10px; border-radius: 5px; border-width: thin;"
+                    id="btn-executetryout-GETapi-merchant-profile"
+                    data-initial-text="Send Request 💥"
+                    data-loading-text="⏱ Sending..."
+                    hidden>Send Request 💥
+            </button>
+            </h3>
+            <p>
+            <small class="badge badge-green">GET</small>
+            <b><code>api/merchant/profile</code></b>
+        </p>
+                <h4 class="fancy-heading-panel"><b>Headers</b></h4>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Content-Type</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Content-Type"                data-endpoint="GETapi-merchant-profile"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                                <div style="padding-left: 28px; clear: unset;">
+                <b style="line-height: 2;"><code>Accept</code></b>&nbsp;&nbsp;
+&nbsp;
+ &nbsp;
+ &nbsp;
+                <input type="text" style="display: none"
+                              name="Accept"                data-endpoint="GETapi-merchant-profile"
+               value="application/json"
+               data-component="header">
+    <br>
+<p>Example: <code>application/json</code></p>
+            </div>
+                        </form>
 
                 <h1 id="offers">Offers</h1>
 

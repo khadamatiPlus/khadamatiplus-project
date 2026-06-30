@@ -1,19 +1,19 @@
-name: 'App Services'
+name: 'Coupon Validation'
 description: ''
 endpoints:
   -
     custom: []
     httpMethods:
-      - GET
-    uri: api/app-services
+      - POST
+    uri: api/validate-coupon
     metadata:
       custom: []
-      groupName: 'App Services'
+      groupName: 'Coupon Validation'
       groupDescription: ''
       subgroup: ''
       subgroupDescription: ''
-      title: 'Get App Services'
-      description: 'Returns a list of active app services.'
+      title: 'Validate Coupon'
+      description: 'Validate whether a coupon code is active, not expired, and eligible for the provided order amount.'
       authenticated: false
       deprecated: false
     headers:
@@ -21,140 +21,34 @@ endpoints:
       Accept: application/json
     urlParameters: []
     cleanUrlParameters: []
-    queryParameters:
-      search:
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      code:
         custom: []
-        name: search
-        description: 'Search services by name, description, or tags.'
-        required: false
-        example: cleaning
+        name: code
+        description: 'The coupon code to validate.'
+        required: true
+        example: SAVE10
         type: string
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-      featured:
+      order_amount:
         custom: []
-        name: featured
-        description: 'Filter featured services only.'
-        required: false
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      category_id:
-        custom: []
-        name: category_id
-        description: 'Filter services by category ID.'
-        required: false
-        example: 5
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      sub_category_id:
-        custom: []
-        name: sub_category_id
-        description: 'Filter services by sub-category ID.'
-        required: false
-        example: 10
-        type: integer
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-      online:
-        custom: []
-        name: online
-        description: 'Filter online services only.'
-        required: false
-        example: true
-        type: boolean
-        enumValues: []
-        exampleWasSpecified: true
-        nullable: false
-        deprecated: false
-    cleanQueryParameters:
-      search: cleaning
-      featured: true
-      category_id: 5
-      sub_category_id: 10
-      online: true
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 200
-        content: |-
-          {
-            "success": true,
-            "data": [
-              {
-                "id": 1,
-                "name": "Cleaning Service",
-                "variants": [
-                  {
-                    "name": "Size",
-                    "options": [
-                      {
-                        "name": "Small",
-                        "value": "small",
-                        "discount_price": 10.50
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          }
-        headers: []
-        description: ''
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: 'api/app-services/{id}'
-    metadata:
-      custom: []
-      groupName: 'App Services'
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: 'Get App Service By ID'
-      description: 'Retrieve a single active app service by its ID.'
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters:
-      id:
-        custom: []
-        name: id
-        description: 'The ID of the app service.'
+        name: order_amount
+        description: 'The subtotal/order amount to validate against.'
         required: true
-        example: 1
-        type: integer
+        example: '100.00'
+        type: numeric
         enumValues: []
         exampleWasSpecified: true
         nullable: false
         deprecated: false
-    cleanUrlParameters:
-      id: 1
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
+    cleanBodyParameters:
+      code: SAVE10
+      order_amount: '100.00'
     fileParameters: []
     responses:
       -
@@ -163,33 +57,47 @@ endpoints:
         content: |-
           {
             "success": true,
+            "message": "Coupon validation successful",
             "data": {
-              "id": 1,
-              "name": "Cleaning Service",
-              "images": [
-                "http://127.0.0.1:8000/storage/app-services/image.jpg"
-              ]
+              "is_valid": true,
+              "code": "SAVE10",
+              "discount_type": "percentage",
+              "discount_value": 10,
+              "minimum_order_amount": 50,
+              "maximum_discount_amount": 20,
+              "reason": null
             }
           }
         headers: []
         description: ''
       -
         custom: []
-        status: 404
+        status: 200
         content: |-
           {
-            "success": false,
-            "message": "App Service not found"
+            "success": true,
+            "message": "Coupon validation successful",
+            "data": {
+              "is_valid": false,
+              "code": "SAVE10",
+              "discount_type": "percentage",
+              "discount_value": 10,
+              "minimum_order_amount": 100,
+              "maximum_discount_amount": 20,
+              "reason": "minimum_order_amount_not_met"
+            }
           }
         headers: []
         description: ''
       -
         custom: []
-        status: 500
+        status: 400
         content: |-
           {
-            "success": false,
-            "message": "Internal Server Error"
+            "error_type": "general",
+            "errors": [
+              {"key": "code", "error": "The coupon code is required."}
+            ]
           }
         headers: []
         description: ''

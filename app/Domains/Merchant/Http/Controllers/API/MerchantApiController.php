@@ -34,18 +34,61 @@ class MerchantApiController extends APIBaseController
     }
 
 
-    public function update(UpdateMerchantRequest $request): \Illuminate\Http\JsonResponse
+    /**
+     * Update Merchant Profile
+     *
+     * Updates the authenticated merchant's information.
+     *
+     * @group Merchant
+     * @authenticated
+     *
+     * @bodyParam name string Merchant name. Example: My Restaurant
+     * @bodyParam email string Merchant email. Example: merchant@example.com
+     * @bodyParam latitude string Merchant latitude. Example: 31.9539
+     * @bodyParam longitude string Merchant longitude. Example: 35.9106
+     * @bodyParam profile_pic file Merchant profile image.
+     * @bodyParam country_id integer Country ID. Example: 1
+     * @bodyParam city_id integer City ID that belongs to the selected country. Example: 10
+     * @bodyParam area_id integer Area ID that belongs to the selected city. Example: 50
+     * @bodyParam app_services integer[] App service IDs to link via app_service_merchant. Example: [1, 2]
+     *
+     * @response 200 {
+     *   "success": true,
+     *   "data": {
+     *     "id": 1,
+     *     "name": "My Restaurant",
+     *     "email": "merchant@example.com"
+     *   }
+     * }
+     */
+    public function update(UpdateMerchantRequest $request)
     {
-       ;
         return $this->successResponse(
-            (new MerchantTransformer)->transform($this->merchantService->update($request->user()->merchant_id,$request->validated()))
+            (new MerchantTransformer)->transform(
+                $this->merchantService->update(
+                    $request->user()->merchant_id,
+                    $request->validated()
+                )
+            )
         );
     }
 
-
+    /**
+     * Merchant Profile
+     *
+     * Returns the authenticated merchant's profile including linked app services.
+     *
+     * @group Merchant
+     * @authenticated
+     */
     public function profile()
     {
-        $merchant = auth()->user()->merchant->where('profile_id',auth()->id())->firstOrFail();
+        $merchant = Merchant::query()
+            ->with(['appServices.category', 'appServices.subCategory'])
+            ->where('id', auth()->user()->merchant_id)
+            ->where('profile_id', auth()->id())
+            ->firstOrFail();
+
         return $this->successResponse(
             (new MerchantTransformer)->transform($merchant)
         );

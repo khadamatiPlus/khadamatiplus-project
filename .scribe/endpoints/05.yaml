@@ -1,0 +1,199 @@
+name: Merchant
+description: ''
+endpoints:
+  -
+    custom: []
+    httpMethods:
+      - POST
+    uri: api/merchant/update
+    metadata:
+      custom: []
+      groupName: Merchant
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Update Merchant Profile'
+      description: "Updates the authenticated merchant's information."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: multipart/form-data
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters:
+      email:
+        custom: []
+        name: email
+        description: 'Merchant email.'
+        required: false
+        example: merchant@example.com
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      name:
+        custom: []
+        name: name
+        description: 'Merchant name.'
+        required: false
+        example: 'My Restaurant'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      latitude:
+        custom: []
+        name: latitude
+        description: 'Merchant latitude.'
+        required: false
+        example: '31.9539'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      longitude:
+        custom: []
+        name: longitude
+        description: 'Merchant longitude.'
+        required: false
+        example: '35.9106'
+        type: string
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      profile_pic:
+        custom: []
+        name: profile_pic
+        description: 'Merchant profile image.'
+        required: false
+        example: null
+        type: file
+        enumValues: []
+        exampleWasSpecified: false
+        nullable: false
+        deprecated: false
+      country_id:
+        custom: []
+        name: country_id
+        description: 'Country ID.'
+        required: false
+        example: 1
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      city_id:
+        custom: []
+        name: city_id
+        description: 'City ID that belongs to the selected country.'
+        required: false
+        example: 10
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      area_id:
+        custom: []
+        name: area_id
+        description: 'Area ID that belongs to the selected city.'
+        required: false
+        example: 50
+        type: integer
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+      app_services:
+        custom: []
+        name: app_services
+        description: 'App service IDs to link via app_service_merchant.'
+        required: false
+        example:
+          - 1
+          - 2
+        type: 'integer[]'
+        enumValues: []
+        exampleWasSpecified: true
+        nullable: false
+        deprecated: false
+    cleanBodyParameters:
+      email: merchant@example.com
+      name: 'My Restaurant'
+      latitude: '31.9539'
+      longitude: '35.9106'
+      country_id: 1
+      city_id: 10
+      area_id: 50
+      app_services:
+        - 1
+        - 2
+    fileParameters:
+      profile_pic: null
+    responses:
+      -
+        custom: []
+        status: 200
+        content: |-
+          {
+            "success": true,
+            "data": {
+              "id": 1,
+              "name": "My Restaurant",
+              "email": "merchant@example.com"
+            }
+          }
+        headers: []
+        description: ''
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null
+  -
+    custom: []
+    httpMethods:
+      - GET
+    uri: api/merchant/profile
+    metadata:
+      custom: []
+      groupName: Merchant
+      groupDescription: ''
+      subgroup: ''
+      subgroupDescription: ''
+      title: 'Merchant Profile'
+      description: "Returns the authenticated merchant's profile including linked app services."
+      authenticated: true
+      deprecated: false
+    headers:
+      Content-Type: application/json
+      Accept: application/json
+    urlParameters: []
+    cleanUrlParameters: []
+    queryParameters: []
+    cleanQueryParameters: []
+    bodyParameters: []
+    cleanBodyParameters: []
+    fileParameters: []
+    responses:
+      -
+        custom: []
+        status: 401
+        content: '{"errors":[{"key":0,"error":"Unauthenticated."}]}'
+        headers:
+          cache-control: 'no-cache, private'
+          content-type: application/json
+        description: null
+    responseFields: []
+    auth: []
+    controller: null
+    method: null
+    route: null

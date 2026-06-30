@@ -642,125 +642,6 @@ endpoints:
     custom: []
     httpMethods:
       - POST
-    uri: api/merchant/update
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters:
-      email:
-        custom: []
-        name: email
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      name:
-        custom: []
-        name: name
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      latitude:
-        custom: []
-        name: latitude
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      longitude:
-        custom: []
-        name: longitude
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      profile_pic:
-        custom: []
-        name: profile_pic
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      country_id:
-        custom: []
-        name: country_id
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      city_id:
-        custom: []
-        name: city_id
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-      area_id:
-        custom: []
-        name: area_id
-        description: ''
-        required: false
-        example: null
-        type: string
-        enumValues: []
-        exampleWasSpecified: false
-        nullable: false
-        deprecated: false
-    cleanBodyParameters: []
-    fileParameters: []
-    responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - POST
     uri: api/merchant/updatePassword
     metadata:
       custom: []
@@ -838,45 +719,6 @@ endpoints:
     cleanBodyParameters: []
     fileParameters: []
     responses: []
-    responseFields: []
-    auth: []
-    controller: null
-    method: null
-    route: null
-  -
-    custom: []
-    httpMethods:
-      - GET
-    uri: api/merchant/profile
-    metadata:
-      custom: []
-      groupName: Endpoints
-      groupDescription: ''
-      subgroup: ''
-      subgroupDescription: ''
-      title: ''
-      description: ''
-      authenticated: false
-      deprecated: false
-    headers:
-      Content-Type: application/json
-      Accept: application/json
-    urlParameters: []
-    cleanUrlParameters: []
-    queryParameters: []
-    cleanQueryParameters: []
-    bodyParameters: []
-    cleanBodyParameters: []
-    fileParameters: []
-    responses:
-      -
-        custom: []
-        status: 401
-        content: '{"errors":[{"key":0,"error":"Unauthenticated."}]}'
-        headers:
-          cache-control: 'no-cache, private'
-          content-type: application/json
-        description: null
     responseFields: []
     auth: []
     controller: null
@@ -1010,7 +852,7 @@ endpoints:
         name: 'images[].is_main'
         description: ''
         required: true
-        example: true
+        example: false
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1116,7 +958,7 @@ endpoints:
       images:
         -
           image: 'http://kunze.biz/iste-laborum-eius-est-dolor.html'
-          is_main: true
+          is_main: false
       products:
         -
           title: consequatur
@@ -1272,7 +1114,7 @@ endpoints:
         name: 'images[].is_main'
         description: ''
         required: false
-        example: false
+        example: true
         type: boolean
         enumValues: []
         exampleWasSpecified: false
@@ -1395,7 +1237,7 @@ endpoints:
       images:
         -
           image: 'https://www.mueller.com/laborum-eius-est-dolor-dolores-minus-voluptatem'
-          is_main: false
+          is_main: true
       service_prices:
         -
           title: sufvyvddqamniihfqcoyn
@@ -1647,7 +1489,7 @@ endpoints:
         name: status
         description: 'Validate that the order exists.'
         required: true
-        example: completed
+        example: cancelled
         type: string
         enumValues:
           - accepted
@@ -1671,7 +1513,7 @@ endpoints:
         deprecated: false
     cleanBodyParameters:
       order_id: consequatur
-      status: completed
+      status: cancelled
     fileParameters: []
     responses: []
     responseFields: []
@@ -1824,7 +1666,7 @@ endpoints:
         name: status
         description: ''
         required: true
-        example: inactive
+        example: active
         type: string
         enumValues:
           - active
@@ -1833,7 +1675,7 @@ endpoints:
         nullable: false
         deprecated: false
     cleanBodyParameters:
-      status: inactive
+      status: active
     fileParameters: []
     responses: []
     responseFields: []
@@ -3114,7 +2956,7 @@ endpoints:
         name: is_verified
         description: ''
         required: false
-        example: 0
+        example: 1
         type: string
         enumValues:
           - 0
@@ -3195,7 +3037,7 @@ endpoints:
       country_id: consequatur
       city_id: consequatur
       area_id: consequatur
-      is_verified: 0
+      is_verified: 1
       latitude: mqeopfuudtdsufvyvddqa
       longitude: mniihfqcoynlazghdtqtq
       password: consequatur
@@ -4130,7 +3972,7 @@ endpoints:
       -
         custom: []
         status: 200
-        content: '{"success":true,"message":"Request successful","data":{"data":[{"id":28,"mobile_number":"77774822129","email":"omaratef.alrantisi@gma22il.com","name":"Omar Alrantisi","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.75663764461394","latitude":"32.031697614044155","id_image":"C:\\xampp\\tmp\\phpD024.tmp","rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1781302668-1729023825_5504.jpg","services":[],"availability":{"days":[],"times":[]}},{"id":27,"mobile_number":"962790000000","email":"omaratef.alrantisi@gmail.c111om","name":"Merchant Name","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.930359","latitude":"31.98262841085299","id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1759862950-1676371260192.jpg","services":[],"availability":{"days":[],"times":[]}},{"id":25,"mobile_number":null,"email":null,"name":"Omar Alrantisi","city_id":1,"country_id":1,"area_id":null,"city_name":"Amman","country_name":"Jordan","area_name":null,"longitude":null,"latitude":null,"id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1759523863-51e38cea-d6c1-4bd0-ade7-5c1f9ec737a6.jpg","services":[],"availability":{"days":[],"times":[]}}],"pagination":{"total":3,"count":3,"per_page":10,"current_page":1,"total_pages":1}}}'
+        content: '{"success":true,"message":"Request successful","data":{"data":[{"id":28,"mobile_number":"77774822129","email":"omaratef.alrantisi@gma22il.com","name":"Omar Alrantisi","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.75663764461394","latitude":"32.031697614044155","id_image":"C:\\xampp\\tmp\\phpD024.tmp","rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1781302668-1729023825_5504.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[{"id":1,"name":"\u0627\u0644\u062e\u062f\u0645\u0629 \u0627\u0644\u0627\u0648\u0644\u0649","description":"<p>\u0627\u0644\u062e\u062f\u0645\u0629 \u0627\u0644\u0627\u0648\u0644\u0649</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/MVLz3wposZhhynoIZCbZ1rmyX6h4LJYCUxuCw3oT.jpg"],"video_url":null,"base_price":"31.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":2,"name":"Omar Alrantisi","description":"<p>\u064a\u0635\u0634\u064a</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/Zi7LNzYdHUQPpT45lUxIYHy1a1KIKpObQP8WFHYf.jpg","http://127.0.0.1:8000/storage//app-services/uM8fnZZZUNaocmYTaQvxczGltkgyLH9GApIq2g62.jpg","http://127.0.0.1:8000/storage//app-services/vb5ofyKtAuD0em7VNod9B8dmZ5xgLzmU6eQ0JTAn.jpg"],"video_url":"https://www.youtube.com/watch?v=1IEGrjMC88M","base_price":"50.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":3,"name":"test","description":"<p>xsax</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/EXAszNk72BDTfeFCKHfcNTeL6FX4LeC93bvXB8A7.jpg","http://127.0.0.1:8000/storage//app-services/v9DTJTeTqdjV9jjvObwcgMwzqByXezCOhAeRIS95.jpg"],"video_url":null,"base_price":"312.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[{"name":"\u0627\u0644\u0633\u0627\u0639\u0627\u062a","type":"single","required":"required","options":[{"name":"1","price":0},{"name":"2","price":0},{"name":"3","price":0}]}],"availability_days":"\"[\\\"Sunday\\\",\\\"Monday\\\",\\\"Tuesday\\\",\\\"Wednesday\\\",\\\"Thursday\\\"]\"","max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":5,"name":"\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0646\u0642\u0644","description":"\u062e\u062f\u0645\u0627\u062a \u0627\u0644\u0646\u0642\u0644 \u0648\u0627\u0644\u0627\u0646\u062a\u0642\u0627\u0644","category_id":2,"category_name":"second category","sub_category_id":null,"sub_category_name":null,"images":[],"video_url":null,"base_price":"0.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[],"availability_days":null,"max_concurrent_orders":null,"is_featured":false,"is_online":true,"status":"active"},{"id":20,"name":"\u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a","description":"<p>\u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a \u0643\u0647\u0631\u0628\u0627\u0621 \u0633\u064a\u0627\u0631\u0627\u062a</p>","category_id":1,"category_name":"first category","sub_category_id":3,"sub_category_name":"xsax","images":["http://127.0.0.1:8000/storage//app-services/7QVXpghxIZsNQ1WKLe8Rhqyt2KtUVXaFTi882Xy6.jpg","http://127.0.0.1:8000/storage//app-services/XqEv5GB4sQub8gIAgGCO1lDiOajMUemwp3ed39Tg.jpg"],"video_url":null,"base_price":"10.00","currency":"JOD","price_type":"fixed","discount":null,"variants":[{"name":"\u0627\u0644\u0633\u0627\u0639\u0627\u062a ","type":"single","required":"required","options":[{"name":"999","price":9},{"name":"555","price":555}]},{"name":"dqdqw","type":"single","required":"required","options":[{"name":"5555","price":33},{"name":"11","price":22}]}],"availability_days":["Sunday","Monday","Tuesday","Wednesday","Thursday"],"max_concurrent_orders":null,"is_featured":true,"is_online":true,"status":"active"}]},{"id":27,"mobile_number":"962790000000","email":"omaratef.alrantisi@gmail.c111om","name":"Merchant Name","city_id":1,"country_id":1,"area_id":1,"city_name":"Amman","country_name":"Jordan","area_name":"Abdoun","longitude":"35.930359","latitude":"31.98262841085299","id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1759862950-1676371260192.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[]},{"id":25,"mobile_number":null,"email":null,"name":"Omar Alrantisi","city_id":1,"country_id":1,"area_id":null,"city_name":"Amman","country_name":"Jordan","area_name":null,"longitude":null,"latitude":null,"id_image":null,"rating":null,"user_ratings_count":0,"profile_pic":"http://127.0.0.1:8000/storage//merchants/profile_pic/1759523863-51e38cea-d6c1-4bd0-ade7-5c1f9ec737a6.jpg","services":[],"availability":{"days":[],"times":[]},"app_services":[]}],"pagination":{"total":3,"count":3,"per_page":10,"current_page":1,"total_pages":1}}}'
         headers:
           cache-control: 'no-cache, private'
           content-type: application/json

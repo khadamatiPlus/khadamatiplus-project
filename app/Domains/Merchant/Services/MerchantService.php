@@ -165,7 +165,12 @@ class MerchantService extends BaseService
      */
     public function update($entity, array $data = [])
     {
+        $syncAppServices = array_key_exists('app_services', $data);
+        $appServices = $data['app_services'] ?? null;
         $data = array_filter($data);
+        if ($syncAppServices) {
+            $data['app_services'] = is_array($appServices) ? $appServices : [];
+        }
         $merchant = $this->getById($entity);
         $user = User::query()->where('id', $merchant->profile_id)->firstOrFail();
 
@@ -216,7 +221,7 @@ class MerchantService extends BaseService
             $updatedMerchant->appServices()->sync($data['app_services']);
         }
 
-        return $updatedMerchant;
+        return $updatedMerchant->load(['appServices.category', 'appServices.subCategory']);
     }
 
     /**

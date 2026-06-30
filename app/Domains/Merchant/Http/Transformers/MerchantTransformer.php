@@ -2,6 +2,7 @@
 
 namespace App\Domains\Merchant\Http\Transformers;
 
+use App\Domains\AppService\Http\Transformers\AppServiceTransformer;
 use App\Domains\Delivery\Models\Order;
 use App\Domains\Merchant\Models\Merchant;
 use App\Domains\Service\Http\Transformers\ServiceTransformer;
@@ -45,6 +46,9 @@ class MerchantTransformer
                 'days' => $merchant->availability->pluck('day')->unique()->values(),
                 'times' => $merchant->availability->pluck('time')->unique()->values(),
             ],
+            'app_services' => $merchant->appServices->map(function ($appService) {
+                return (new AppServiceTransformer())->transform($appService);
+            }),
 
             ];
     }

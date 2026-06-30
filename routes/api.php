@@ -29,6 +29,7 @@ use App\Domains\AppVersion\Http\Controllers\API\AppVersionApiController;
 use App\Domains\Highlight\Http\Controllers\API\HighlightApiController;
 use App\Domains\AppService\Http\Controllers\API\AppServiceApiController;
 use App\Domains\Offer\Http\Controllers\API\OfferApiController;
+use App\Domains\Coupon\Http\Controllers\API\CouponApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +67,7 @@ Route::group(['middleware' => ForceJsonResponse::class], function (){
 
             Route::get('getPageBySlug', [PageApiController::class, 'getPageBySlug']);
         });
+        Route::post('validate-coupon', [CouponApiController::class, 'validateCoupon']);
         Route::get('getBanners', [BannerApiController::class, 'getBanners']);
         Route::get('getIntroductions', [IntroductionApiController::class, 'getIntroductions']);
         Route::get('getHighlights', [HighlightApiController::class, 'getHighlights']);
