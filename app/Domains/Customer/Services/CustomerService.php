@@ -88,9 +88,14 @@ class CustomerService extends BaseService
             $customerUser = $customerUser->refresh();
 
         } catch (\Exception $e) {
-            report($e);
             DB::rollBack();
-            throw new GeneralException(__('There was a problem registering the Customer. Please try again.'));
+            report($e);
+
+            throw new GeneralException(
+                $e->getMessage() .
+                ' in ' . $e->getFile() .
+                ' on line ' . $e->getLine()
+            );
         }
 
         event(new UserCreated($customerUser));
