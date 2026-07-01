@@ -46,8 +46,9 @@ class AppServiceVariantResolver
             $resolvedOptions = [];
 
             foreach ($selectedOptionNames as $optionName) {
-                $option = collect($definition['options'] ?? [])->firstWhere('name', $optionName);
-
+                $option = collect($definition['options'] ?? [])->first(function ($opt) use ($optionName) {
+                    return trim($opt['name']) === trim($optionName);
+                });
                 if (!$option) {
                     throw new InvalidArgumentException(__('Invalid option :option for variant :variant.', [
                         'option' => $optionName,
@@ -59,7 +60,7 @@ class AppServiceVariantResolver
                 $optionsTotal += $unitPrice;
 
                 $resolvedOptions[] = [
-                    'name' => $optionName,
+                    'name' => trim($optionName),
                     'price' => round($unitPrice, 2),
                 ];
             }
