@@ -61,13 +61,49 @@ class OrderService extends BaseService
 
         $resolved = $this->variantResolver->resolve($appService, $data['variants']);
 
+        $totalPrice = $resolved['total_price'];
+        $couponId = null;
+
+        // Apply coupon discount if provided
+        if (!empty($data['coupon_code'])) {
+            $coupon = \App\Domains\Coupon\Models\Coupon::query()
+                ->where('code', $data['coupon_code'])
+                ->active()
+                ->valid()
+                ->notExpired()
+                ->first();
+
+            if ($coupon) {
+                $couponId = $coupon->id;
+
+                // Calculate discount based on coupon type
+                if ($coupon->discount_type === 'percentage') {
+                    $discountAmount = ($totalPrice * $coupon->discount_value) / 100;
+                } else {
+                    $discountAmount = $coupon->discount_value;
+                }
+
+                // Apply maximum discount limit if set
+                if ($coupon->maximum_discount_amount && $discountAmount > $coupon->maximum_discount_amount) {
+                    $discountAmount = $coupon->maximum_discount_amount;
+                }
+
+                $totalPrice = max(0, $totalPrice - $discountAmount);
+
+                // Increment coupon usage
+                $coupon->incrementUsage();
+            }
+        }
+
         return Order::create([
             'customer_id' => $customer->id,
             'app_service_id' => $appService->id,
             'selected_variants' => $resolved['selected_variants'],
             'merchant_id' => null,
             'price' => $resolved['price'],
-            'total_price' => $resolved['total_price'],
+            'total_price' => $totalPrice,
+            'payment_method' => $data['payment_method'] ?? null,
+            'coupon_id' => $couponId,
             'customer_phone' => $customer->defaultAddress->phone_number ?? '',
             'longitude' => $customer->defaultAddress->longitude ?? '',
             'latitude' => $customer->defaultAddress->latitude ?? '',

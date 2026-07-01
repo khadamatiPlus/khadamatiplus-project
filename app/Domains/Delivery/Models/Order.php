@@ -49,6 +49,8 @@ class Order extends BaseModel
         'updated_by_id',
         'price',
         'total_price',
+        'payment_method',
+        'coupon_id',
         'order_reference',
         'status',
         'day',
@@ -144,5 +146,10 @@ class Order extends BaseModel
     public function options()
     {
         return $this->belongsToMany(ServiceOption::class, 'order_service_option', 'order_id', 'service_option_id');
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(\App\Domains\Coupon\Models\Coupon::class, 'coupon_id');
     }
 }
