@@ -342,7 +342,7 @@ class UserService extends BaseService
             'active' => $data['active'] ?? true,
         ]);
 
-        $this->walletService->ensureWallet(User::class, $user->id, 'default');
+//        $this->walletService->ensureWallet(User::class, $user->id, 'default');
 
         return $user;
     }
