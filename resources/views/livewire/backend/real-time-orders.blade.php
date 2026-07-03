@@ -250,7 +250,11 @@
                                                 <br>
                                                 <small class="text-muted">
                                                     @foreach($order->selected_variants as $variant)
-                                                        <span class="badge badge-secondary">{{$variant}}</span>
+                                                        @if(is_array($variant))
+                                                            <span class="badge badge-secondary">{{ $variant['name'] ?? 'Variant' }}</span>
+                                                        @else
+                                                            <span class="badge badge-secondary">{{ $variant }}</span>
+                                                        @endif
                                                     @endforeach
                                                 </small>
                                             @endif
