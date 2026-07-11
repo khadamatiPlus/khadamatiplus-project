@@ -157,59 +157,158 @@ class LoginApiController extends APIBaseController
 
     public function sendOtp(Request $request)
     {
+        Log::info('========== SEND OTP START ==========');
+
         $request->validate([
             'country_code' => 'required',
             'mobile_number' => 'required',
         ]);
 
+        Log::info('Request validated', [
+            'country_code' => $request->country_code,
+            'mobile_number' => $request->mobile_number,
+        ]);
+
         $countryCode = $request->input('country_code');
         $mobileNumber = $request->input('mobile_number');
 
-        // Check if the mobile number starts with 962
+        // Build full phone number
         if (str_starts_with($mobileNumber, '962')) {
-            $fullNumber = $mobileNumber; // Use the mobile number as is
+            $fullNumber = $mobileNumber;
+            Log::info('Mobile already contains country code.');
         } else {
-            $fullNumber = $countryCode . $mobileNumber; // Append country code
+            $fullNumber = $countryCode . $mobileNumber;
+            Log::info('Country code appended.', [
+                'full_number' => $fullNumber,
+            ]);
         }
+
+        Log::info('Searching for user...', [
+            'mobile_number' => $mobileNumber,
+        ]);
 
         $user = User::where('mobile_number', $mobileNumber)->first();
 
         if (!$user) {
-            return response()->json(['message' => 'User not found'], 404);
+            Log::warning('User not found.', [
+                'mobile_number' => $mobileNumber,
+            ]);
+
+            return response()->json([
+                'message' => 'User not found'
+            ], 404);
         }
 
+        Log::info('User found.', [
+            'user_id' => $user->id,
+        ]);
+
         $otp = rand(100000, 999999);
+
+        Log::info('Generated OTP.', [
+            'otp' => $otp,
+        ]);
+
         $user->otp_code = $otp;
         $user->otp_expires_at = Carbon::now()->addMinutes(5);
+
         $user->save();
 
-        $message = "Your OTP code is $otp. It expires in 5 minutes.";
-        Log::info($fullNumber);
-        $this->smsService->sendSms($fullNumber, $message);
+        Log::info('OTP saved to database.', [
+            'user_id' => $user->id,
+            'expires_at' => $user->otp_expires_at,
+        ]);
 
-        return response()->json(['message' => 'OTP sent successfully']);
+        $message = "Your OTP code is $otp. It expires in 5 minutes.";
+
+        Log::info('Sending SMS...', [
+            'phone' => $fullNumber,
+            'message' => $message,
+        ]);
+
+        try {
+            $result = $this->smsService->sendSms($fullNumber, $message);
+
+            Log::info('SMS service response.', [
+                'response' => $result,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('SMS sending failed.', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            throw $e;
+        }
+
+        Log::info('========== SEND OTP END ==========');
+
+        return response()->json([
+            'message' => 'OTP sent successfully'
+        ]);
     }
+
     public function sendOtpRegister(Request $request)
     {
+        Log::info('========== SEND OTP REGISTER START ==========');
+
         $request->validate([
             'country_code' => 'required',
             'mobile_number' => 'required',
         ]);
+
+        Log::info('Request validated.', [
+            'country_code' => $request->country_code,
+            'mobile_number' => $request->mobile_number,
+        ]);
+
         $countryCode = $request->input('country_code');
         $mobileNumber = $request->input('mobile_number');
+
         if (str_starts_with($mobileNumber, '962')) {
-            $fullNumber = $mobileNumber; // Use the mobile number as is
+            $fullNumber = $mobileNumber;
+            Log::info('Mobile already contains country code.');
         } else {
-            $fullNumber = $countryCode . $mobileNumber; // Append country code
+            $fullNumber = $countryCode . $mobileNumber;
+            Log::info('Country code appended.', [
+                'full_number' => $fullNumber,
+            ]);
         }
+
         $otp = rand(100000, 999999);
+
+        Log::info('Generated OTP.', [
+            'otp' => $otp,
+        ]);
+
         $message = "Your OTP code is $otp. It expires in 5 minutes.";
-        Log::info($fullNumber);
-        $this->smsService->sendSms($fullNumber, $message);
 
-        return response()->json(['message' => 'OTP sent successfully']);
+        Log::info('Sending SMS...', [
+            'phone' => $fullNumber,
+            'message' => $message,
+        ]);
+
+        try {
+            $result = $this->smsService->sendSms($fullNumber, $message);
+
+            Log::info('SMS service response.', [
+                'response' => $result,
+            ]);
+        } catch (\Exception $e) {
+            Log::error('SMS sending failed.', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
+
+            throw $e;
+        }
+
+        Log::info('========== SEND OTP REGISTER END ==========');
+
+        return response()->json([
+            'message' => 'OTP sent successfully'
+        ]);
     }
-
 
 
     public function otpAuthenticate(Request $request)
