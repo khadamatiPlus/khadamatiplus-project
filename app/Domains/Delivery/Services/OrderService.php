@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
 class OrderService extends BaseService
@@ -170,6 +171,8 @@ class OrderService extends BaseService
                 $currentTime = now()->format('H:i:s');
 
                 if ($order->day !== $currentDay) {
+                    Log::info('oo');
+                    Log::info($currentDay);
                     throw new GeneralException(__('You can only accept this order on the scheduled day.'));
                 }
 
