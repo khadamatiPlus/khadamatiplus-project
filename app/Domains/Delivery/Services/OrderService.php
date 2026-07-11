@@ -163,20 +163,39 @@ class OrderService extends BaseService
                 throw new GeneralException(__('This order has already been assigned to another merchant.'));
             }
 
-            if ($order->merchant_id === null && $status === 'accepted') {
-                $order->merchant_id = $merchantId;
-                $order->merchant_accepted_at = now();
-            } elseif ($status === 'accepted' && !$order->merchant_accepted_at) {
-                $order->merchant_accepted_at = now();
+            if ($status === 'accepted') {
+
+                // Check order day and time
+                $currentDay = now()->format('l'); // Example: Saturday
+                $currentTime = now()->format('H:i:s');
+
+                if ($order->day !== $currentDay) {
+                    throw new GeneralException(__('You can only accept this order on the scheduled day.'));
+                }
+
+                if ($currentTime < $order->time) {
+                    throw new GeneralException(__('You cannot accept this order before the scheduled time.'));
+                }
+
+                if ($order->merchant_id === null) {
+                    $order->merchant_id = $merchantId;
+                    $order->merchant_accepted_at = now();
+                } elseif (!$order->merchant_accepted_at) {
+                    $order->merchant_accepted_at = now();
+                }
             }
 
             $order->status = $status;
             $order->save();
 
-            return $order->fresh(['appService.category', 'appService.subCategory', 'merchant.profile', 'customer.profile']);
+            return $order->fresh([
+                'appService.category',
+                'appService.subCategory',
+                'merchant.profile',
+                'customer.profile'
+            ]);
         });
     }
-
     public function updateStatusByCustomer(Order $order, int $customerId, string $status, ?string $notes = null): Order
     {
         if ((int) $order->customer_id !== $customerId) {

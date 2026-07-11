@@ -563,6 +563,8 @@
     "Select option type": "اختر نوع الخيار",
     "Select option value type": "اختر نوع قيمة الخيار",
     "Enter discount price": "أدخل سعر الخصم",
-    "You can only select app services from the same category or the same sub-category.": "يمكنك اختيار خدمات من نفس الفئة أو من نفس الفئة الفرعية فقط."
+    "You can only select app services from the same category or the same sub-category.": "يمكنك اختيار خدمات من نفس الفئة أو من نفس الفئة الفرعية فقط.",
+    "You can only accept this order on the scheduled day.": "لا يمكنك قبول هذا الطلب إلا في اليوم المحدد للموعد.",
+    "You cannot accept this order before the scheduled time.": "لا يمكنك قبول هذا الطلب قبل الوقت المحدد للموعد."
 
 }
