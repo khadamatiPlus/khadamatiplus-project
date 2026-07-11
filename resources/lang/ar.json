@@ -562,6 +562,7 @@
     "Enter option value": "أدخل قيمة الخيار",
     "Select option type": "اختر نوع الخيار",
     "Select option value type": "اختر نوع قيمة الخيار",
-    "Enter discount price": "أدخل سعر الخصم"
+    "Enter discount price": "أدخل سعر الخصم",
+    "You can only select app services from the same category or the same sub-category.": "يمكنك اختيار خدمات من نفس الفئة أو من نفس الفئة الفرعية فقط."
 
 }

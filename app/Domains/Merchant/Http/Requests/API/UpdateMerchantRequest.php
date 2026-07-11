@@ -2,6 +2,7 @@
 
 namespace App\Domains\Merchant\Http\Requests\API;
 
+use App\Domains\AppService\Models\AppService;
 use App\Domains\Lookups\Models\Area;
 use App\Domains\Lookups\Models\City;
 use App\Enums\Core\ErrorTypes;
@@ -72,7 +73,34 @@ class UpdateMerchantRequest extends JsonRequest
                     }
                 },
             ]:'',
-            'app_services' => $this->has('app_services') ? ['sometimes', 'array'] : '',
+            'app_services' => $this->has('app_services') ? [
+                'sometimes',
+                'array',
+                function ($attribute, $value, $fail) {
+                    if (!is_array($value) || count($value) < 2) {
+                        return;
+                    }
+
+                    $services = AppService::query()
+                        ->whereIn('id', $value)
+                        ->get(['id', 'category_id', 'sub_category_id']);
+
+                    if ($services->count() !== count($value)) {
+                        return;
+                    }
+
+                    $categoryIds = $services->pluck('category_id')->filter()->unique()->values();
+                    $subCategoryIds = $services->pluck('sub_category_id')->filter()->unique()->values();
+
+                    $sameCategory = $categoryIds->count() <= 1;
+                    $sameSubCategory = $services->whereNotNull('sub_category_id')->count() > 0
+                        && $subCategoryIds->count() <= 1;
+
+                    if (! $sameCategory && ! $sameSubCategory) {
+                        $fail(__('You can only select app services from the same category or the same sub-category.'));
+                    }
+                },
+            ] : '',
             'app_services.*' => $this->has('app_services') ? ['exists:app_services,id'] : '',
         ];
     }
