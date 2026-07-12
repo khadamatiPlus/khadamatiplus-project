@@ -34,6 +34,7 @@ class OrderTransformer
             'created_at' => $order->created_at,
             'customer_requested_at' => $order->customer_requested_at,
             'merchant_accepted_at' => $order->merchant_accepted_at,
+            'is_accepted' => !empty($order->merchant_accepted_at),
             'merchant_arrived_at' => $order->merchant_arrived_at,
             'merchant_started_trip_at' => $order->merchant_started_trip_at,
             'merchant_on_the_way_at' => $order->merchant_on_the_way_at,
