@@ -176,9 +176,9 @@ class OrderService extends BaseService
                     throw new GeneralException(__('You can only accept this order on the scheduled day.'));
                 }
 
-                if ($currentTime < $order->time) {
-                    throw new GeneralException(__('You cannot accept this order before the scheduled time.'));
-                }
+//                if ($currentTime < $order->time) {
+//                    throw new GeneralException(__('You cannot accept this order before the scheduled time.'));
+//                }
 
                 if ($order->merchant_id === null) {
                     $order->merchant_id = $merchantId;
