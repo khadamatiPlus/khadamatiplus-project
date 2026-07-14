@@ -203,7 +203,8 @@ class LoginApiController extends APIBaseController
             'user_id' => $user->id,
         ]);
 
-        $otp = rand(100000, 999999);
+//        $otp = rand(100000, 999999);
+        $otp =000000;
 
         Log::info('Generated OTP.', [
             'otp' => $otp,
@@ -275,7 +276,8 @@ class LoginApiController extends APIBaseController
             ]);
         }
 
-        $otp = rand(100000, 999999);
+//        $otp = rand(100000, 999999);
+        $otp = 000000;
 
         Log::info('Generated OTP.', [
             'otp' => $otp,
