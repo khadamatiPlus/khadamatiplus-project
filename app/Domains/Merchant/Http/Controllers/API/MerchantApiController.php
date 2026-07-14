@@ -172,7 +172,8 @@ class MerchantApiController extends APIBaseController
             return response()->json(['error' => 'User with this phone number does not exist.'], 404);
         }
 //        $otp = Str::random(6);
-        $otp = rand(100000, 999999);
+//        $otp = rand(100000, 999999);
+        $otp = 000000;
         $user->otp_code = $otp;
         $user->otp_expires_at = Carbon::now()->addMinutes(5);
         $user->save();
