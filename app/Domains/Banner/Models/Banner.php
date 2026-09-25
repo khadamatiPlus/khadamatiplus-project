@@ -8,6 +8,7 @@ use App\Domains\Auth\Models\User;
 
 class Banner extends BaseModel
 {
+    
     /**
      * The "type" of the auto-incrementing ID.
      *

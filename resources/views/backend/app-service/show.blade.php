@@ -18,6 +18,23 @@
         </x-slot>
 
         <x-slot name="body">
+            @php
+                $resolveImageUrl = function ($image) {
+                    if (empty($image)) {
+                        return '';
+                    }
+
+                    if (is_string($image) && str_starts_with($image, 'data:image/')) {
+                        return $image;
+                    }
+
+                    if (filter_var($image, FILTER_VALIDATE_URL)) {
+                        return $image;
+                    }
+
+                    return storageBaseLink($image);
+                };
+            @endphp
             <div class="row">
                 <div class="col-md-6">
                     <table class="table table-bordered">
@@ -117,7 +134,7 @@
                         <div class="row">
                             @foreach($appService->images as $image)
                                 <div class="col-md-4 mb-2">
-                                    <img src="{{ asset('storage/' . $image) }}" class="img-fluid rounded" style="width: 100%; height: 150px; object-fit: cover;">
+                                    <img src="{{ $resolveImageUrl($image) }}" class="img-fluid rounded" style="width: 100%; height: 150px; object-fit: cover;">
                                 </div>
                             @endforeach
                         </div>
@@ -161,12 +178,20 @@
                     @if($appService->variants && is_array($appService->variants))
                         @foreach($appService->variants as $variant)
                             <div class="card mb-2">
-                                <div class="card-header bg-light">
-                                    <strong>{{ $variant['name'] ?? __('Unnamed Variant') }}</strong>
-                                    <span class="badge bg-info ms-2">{{ $variant['type'] ?? 'single' }}</span>
-                                    <span class="badge {{ ($variant['required'] ?? 'required') == 'required' ? 'bg-warning' : 'bg-secondary' }} ms-1">
-                                        {{ ($variant['required'] ?? 'required') == 'required' ? __('Required') : __('Optional') }}
-                                    </span>
+                                <div class="card-header bg-light d-flex align-items-center justify-content-between gap-2">
+                                    <div>
+                                        <strong>{{ $variant['name'] ?? __('Unnamed Variant') }}</strong>
+                                        <span class="badge bg-info ms-2">{{ $variant['type'] ?? 'single' }}</span>
+                                        <span class="badge {{ ($variant['required'] ?? 'required') == 'required' ? 'bg-warning' : 'bg-secondary' }} ms-1">
+                                            {{ ($variant['required'] ?? 'required') == 'required' ? __('Required') : __('Optional') }}
+                                        </span>
+                                        @if(!empty($variant['description']))
+                                            <div class="text-muted small mt-1">{{ $variant['description'] }}</div>
+                                        @endif
+                                    </div>
+                                    @if(!empty($variant['image']))
+                                        <img src="{{ $resolveImageUrl($variant['image']) }}" alt="{{ $variant['name'] ?? 'Variant image' }}" style="width: 56px; height: 56px; object-fit: cover; border-radius: 6px;">
+                                    @endif
                                 </div>
                                 <div class="card-body p-2">
                                     @if(isset($variant['options']) && is_array($variant['options']))
@@ -174,6 +199,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>{{ __('Option Name') }}</th>
+                                                    <th>{{ __('Image') }}</th>
                                                     <th>{{ __('Additional Price') }}</th>
                                                     <th>{{ __('Discount Price') }}</th>
                                                 </tr>
@@ -182,10 +208,18 @@
                                                 @foreach($variant['options'] as $option)
                                                     <tr>
                                                         <td>{{ $option['name'] ?? '-' }}</td>
+                                                        <td>
+                                                            @if(!empty($option['image']))
+                                                                <img src="{{ $resolveImageUrl($option['image']) }}" alt="{{ $option['name'] ?? 'Option image' }}" style="width: 48px; height: 48px; object-fit: cover; border-radius: 6px;">
+                                                            @else
+                                                                <span class="text-muted">—</span>
+                                                            @endif
+                                                        </td>
                                                         <td>{{ $option['price'] ?? 0 }}</td>
                                                         <td>
                                                             {{ isset($option['discount_price']) && $option['discount_price'] != 0 ? $option['discount_price'] : '--' }}
-                                                        </td>                                                    </tr>
+                                                        </td>
+                                                    </tr>
                                                 @endforeach
                                             </tbody>
                                         </table>

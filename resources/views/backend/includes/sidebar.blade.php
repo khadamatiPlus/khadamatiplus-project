@@ -826,6 +826,23 @@
                 @endif
             </ul>
         </li>
+
+        @if (
+            $logged_in_user->hasAllAccess() ||
+            (
+                $logged_in_user->can('admin.sms-campaign.list') ||
+                $logged_in_user->can('admin.sms-campaign.store')
+            )
+        )
+            <li class="c-sidebar-nav-item">
+                <x-utils.link
+                    :href="route('admin.sms-campaign.index')"
+                    class="c-sidebar-nav-link"
+                    icon="c-sidebar-nav-icon cil-send"
+                    :text="__('SMS Campaigns')"
+                    :active="activeClass(Route::is('admin.sms-campaign.*'), 'c-active')"/>
+            </li>
+        @endif
         @if (
                        $logged_in_user->hasAllAccess() ||
                        (

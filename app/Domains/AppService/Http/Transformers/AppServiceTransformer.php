@@ -85,10 +85,46 @@ class AppServiceTransformer
 
         if (is_string($variants)) {
             $decoded = json_decode($variants, true);
-
-            return is_array($decoded) ? $decoded : [];
+            $variants = is_array($decoded) ? $decoded : [];
         }
 
-        return is_array($variants) ? $variants : [];
+        if (!is_array($variants)) {
+            return [];
+        }
+
+        return array_map(function ($variant) {
+            if (!is_array($variant)) {
+                return [];
+            }
+
+            $variant['image'] = $this->transformMediaValue($variant['image'] ?? null);
+
+            if (!empty($variant['options']) && is_array($variant['options'])) {
+                $variant['options'] = array_map(function ($option) {
+                    if (!is_array($option)) {
+                        return [];
+                    }
+
+                    $option['image'] = $this->transformMediaValue($option['image'] ?? null);
+
+                    return $option;
+                }, $variant['options']);
+            }
+
+            return $variant;
+        }, $variants);
+    }
+
+    private function transformMediaValue($media): ?string
+    {
+        if (empty($media)) {
+            return null;
+        }
+
+        if (filter_var($media, FILTER_VALIDATE_URL)) {
+            return $media;
+        }
+
+        return storageBaseLink($media);
     }
 }

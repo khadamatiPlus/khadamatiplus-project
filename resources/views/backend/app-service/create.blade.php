@@ -575,20 +575,26 @@
                 const optPrice = priceInput ? priceInput.value : '0';
                 const discountPriceInput = optRow.querySelector('.selected-option-discount-price');
                 const optDiscountPrice = discountPriceInput ? discountPriceInput.value : '0';
+                const optImage = document.getElementById(optId + '_image_data')?.value || '';
                 if (optName) {
                     options.push({
                         name: optName,
                         price: parseFloat(optPrice) || 0,
-                        discount_price: parseFloat(optDiscountPrice) || 0
+                        discount_price: parseFloat(optDiscountPrice) || 0,
+                        image: optImage || null
                     });
                 }
             });
 
             if (name) {
+                const variantImage = document.getElementById(id + '_variant_image_data')?.value || '';
+                const description = document.getElementById(id + '_description')?.value || '';
                 variants.push({
                     name: name,
                     type: type,
                     required: required,
+                    description: description || null,
+                    image: variantImage || null,
                     options: options
                 });
             }
@@ -635,7 +641,17 @@
           </select>
         </div>
       </div>
-      <div class="mb-2" style="font-size:0.83rem; font-weight:500; color:var(--text-muted)"><i class="bi bi-list-ul me-1"></i>الخيارات</div>
+      <div class="mt-3">
+        <label class="form-label">وصف المتغير <span class="text-muted fw-normal">(اختياري)</span></label>
+        <textarea class="form-control" rows="2" id="${id}_description" placeholder="اكتب وصفاً إضافياً لهذا المتغير..."></textarea>
+      </div>
+      <div class="mt-3">
+        <label class="form-label">صورة المتغير <span class="text-muted fw-normal">(اختياري)</span></label>
+        <input type="file" accept="image/*" class="form-control form-control-sm" id="${id}_variant_image" onchange="handleVariantImageInput('${id}', this)">
+        <input type="hidden" id="${id}_variant_image_data" value="">
+        <div id="${id}_variant_image_preview" class="mt-2"></div>
+      </div>
+      <div class="mb-2 mt-3" style="font-size:0.83rem; font-weight:500; color:var(--text-muted)"><i class="bi bi-list-ul me-1"></i>الخيارات</div>
       <div id="${id}_options"></div>
       <button type="button" class="btn-add-option mt-1" onclick="addOption('${id}')"><i class="bi bi-plus me-1"></i>إضافة خيار</button>
     </div>`;
@@ -652,6 +668,11 @@
         div.innerHTML = `
     <div class="option-name">
       <input type="text" class="form-control" placeholder="اسم الخيار (مثل: صغير، كبير...)" id="${optId}_n" style="font-size:0.85rem">
+      <div class="mt-2">
+        <input type="file" accept="image/*" class="form-control form-control-sm" id="${optId}_img" onchange="handleOptionImageInput('${optId}', this)">
+        <input type="hidden" id="${optId}_image_data" value="">
+        <div id="${optId}_image_preview" class="mt-2"></div>
+      </div>
     </div>
     <div class="price-input">
       <div class="input-group input-group-sm">
@@ -673,6 +694,44 @@
     <button class="btn-danger-soft" onclick="document.getElementById('${optId}').remove(); updatePreview()" title="حذف"><i class="bi bi-x-lg"></i></button>`;
         container.appendChild(div);
     }
+    function handleVariantImageInput(id, input) {
+        const preview = document.getElementById(id + '_variant_image_preview');
+        const hidden = document.getElementById(id + '_variant_image_data');
+        if (!input.files || !input.files[0]) {
+            if (hidden) hidden.value = '';
+            if (preview) preview.innerHTML = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (hidden) hidden.value = e.target.result;
+            if (preview) {
+                preview.innerHTML = `<img src="${e.target.result}" style="max-width: 120px; max-height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);">`;
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    function handleOptionImageInput(optId, input) {
+        const preview = document.getElementById(optId + '_image_preview');
+        const hidden = document.getElementById(optId + '_image_data');
+        if (!input.files || !input.files[0]) {
+            if (hidden) hidden.value = '';
+            if (preview) preview.innerHTML = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (hidden) hidden.value = e.target.result;
+            if (preview) {
+                preview.innerHTML = `<img src="${e.target.result}" style="max-width: 120px; max-height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);">`;
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
     // Initialize
     updatePreview();
 </script>

@@ -458,7 +458,17 @@
           </select>
         </div>
       </div>
-      <div class="mb-2" style="font-size:0.83rem; font-weight:500; color:var(--text-muted)"><i class="bi bi-list-ul me-1"></i>الخيارات</div>
+      <div class="mt-3">
+        <label class="form-label">وصف المتغير <span class="text-muted fw-normal">(اختياري)</span></label>
+        <textarea class="form-control" rows="2" id="${id}_description" placeholder="اكتب وصفاً إضافياً لهذا المتغير..."></textarea>
+      </div>
+      <div class="mt-3">
+        <label class="form-label">صورة المتغير <span class="text-muted fw-normal">(اختياري)</span></label>
+        <input type="file" accept="image/*" class="form-control form-control-sm" id="${id}_variant_image" onchange="handleVariantImageInput('${id}', this)">
+        <input type="hidden" id="${id}_variant_image_data" value="">
+        <div id="${id}_variant_image_preview" class="mt-2"></div>
+      </div>
+      <div class="mb-2 mt-3" style="font-size:0.83rem; font-weight:500; color:var(--text-muted)"><i class="bi bi-list-ul me-1"></i>الخيارات</div>
       <div id="${id}_options"></div>
       <button type="button" class="btn-add-option mt-1" onclick="addOption('${id}')"><i class="bi bi-plus me-1"></i>إضافة خيار</button>
     </div>`;
@@ -485,6 +495,11 @@
         div.innerHTML = `
     <div class="option-name">
       <input type="text" class="form-control" placeholder="اسم الخيار (مثل: صغير، كبير...)" id="${optId}_n" style="font-size:0.85rem">
+      <div class="mt-2">
+        <input type="file" accept="image/*" class="form-control form-control-sm" id="${optId}_img" onchange="handleOptionImageInput('${optId}', this)">
+        <input type="hidden" id="${optId}_image_data" value="">
+        <div id="${optId}_image_preview" class="mt-2"></div>
+      </div>
     </div>
     <div class="price-input">
       <div class="input-group input-group-sm">
@@ -509,6 +524,13 @@
         container.appendChild(div);
         console.log(`Option ${optId} appended to container`);
         return optId;
+    }
+
+    function getPreviewImageSrc(image) {
+        if (!image) return '';
+        if (image.startsWith('data:image/')) return image;
+        if (image.startsWith('http://') || image.startsWith('https://')) return image;
+        return '/storage/' + image.replace(/^\/+/, '');
     }
 
     function countChars(el, id, max) {
@@ -752,6 +774,7 @@
                 const optPrice = priceInput ? priceInput.value : '0';
                 const discountPriceInput = optRow.querySelector('.selected-option-discount-price');
                 const optDiscountPrice = discountPriceInput ? discountPriceInput.value : '0';
+                const optImage = document.getElementById(optId + '_image_data')?.value || '';
 
                 console.log(`Option ${optId} - name: ${optName}, price: ${optPrice}, discount_price: ${optDiscountPrice}`);
 
@@ -759,7 +782,8 @@
                     options.push({
                         name: optName,
                         price: parseFloat(optPrice) || 0,
-                        discount_price: parseFloat(optDiscountPrice) || 0
+                        discount_price: parseFloat(optDiscountPrice) || 0,
+                        image: optImage || null
                     });
                 }
             });
@@ -767,10 +791,14 @@
             console.log(`Variant ${id} has ${options.length} valid options`);
 
             if (name) {
+                const variantImage = document.getElementById(id + '_variant_image_data')?.value || '';
+                const description = document.getElementById(id + '_description')?.value || '';
                 variants.push({
                     name: name,
                     type: type,
                     required: required,
+                    description: description || null,
+                    image: variantImage || null,
                     options: options
                 });
                 console.log(`Added variant ${id} to variants array`);
@@ -851,6 +879,20 @@
             }
 
             // Load options
+            const descriptionInput = document.getElementById(id + '_description');
+            if (descriptionInput && variant.description) {
+                descriptionInput.value = variant.description;
+            }
+
+            const variantImageInput = document.getElementById(id + '_variant_image_data');
+            const variantPreview = document.getElementById(id + '_variant_image_preview');
+            if (variant.image && variantImageInput) {
+                variantImageInput.value = variant.image;
+            }
+            if (variant.image && variantPreview) {
+                variantPreview.innerHTML = `<img src="${getPreviewImageSrc(variant.image)}" style="max-width: 120px; max-height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);">`;
+            }
+
             if (variant.options && variant.options.length > 0) {
                 console.log(`Loading ${variant.options.length} options for variant ${id}`);
                 const optionsContainer = document.getElementById(id + '_options');
@@ -882,6 +924,14 @@
                         optDiscountPriceInput.value = option.discount_price || 0;
                         console.log(`Set option discount_price to: ${option.discount_price}`);
                     }
+                    const optImageInput = document.getElementById(optId + '_image_data');
+                    const optPreview = document.getElementById(optId + '_image_preview');
+                    if (option.image && optImageInput) {
+                        optImageInput.value = option.image;
+                    }
+                    if (option.image && optPreview) {
+                        optPreview.innerHTML = `<img src="${getPreviewImageSrc(option.image)}" style="max-width: 120px; max-height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);">`;
+                    }
                 });
             } else {
                 console.log(`No options to load for variant ${id}`);
@@ -893,6 +943,44 @@
 
     // Load existing variants on page load
     loadExistingVariants();
+
+    function handleVariantImageInput(id, input) {
+        const preview = document.getElementById(id + '_variant_image_preview');
+        const hidden = document.getElementById(id + '_variant_image_data');
+        if (!input.files || !input.files[0]) {
+            if (hidden) hidden.value = '';
+            if (preview) preview.innerHTML = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (hidden) hidden.value = e.target.result;
+            if (preview) {
+                preview.innerHTML = `<img src="${e.target.result}" style="max-width: 120px; max-height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);">`;
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+
+    function handleOptionImageInput(optId, input) {
+        const preview = document.getElementById(optId + '_image_preview');
+        const hidden = document.getElementById(optId + '_image_data');
+        if (!input.files || !input.files[0]) {
+            if (hidden) hidden.value = '';
+            if (preview) preview.innerHTML = '';
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            if (hidden) hidden.value = e.target.result;
+            if (preview) {
+                preview.innerHTML = `<img src="${e.target.result}" style="max-width: 120px; max-height: 80px; object-fit: cover; border-radius: 8px; border: 1px solid var(--border);">`;
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
 
     // Initialize
     renderTags();

@@ -8,6 +8,8 @@ use App\Domains\Lookups\Services\CategoryService;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AppServiceController extends Controller
 {
@@ -221,13 +223,12 @@ class AppServiceController extends Controller
             }
 
             // Handle variants
-            if ($request->has('variants') && !empty($request->variants)) {
+            if ($request->has('variants')) {
                 $variants = $request->variants;
-                // If variants is a string (already JSON encoded), decode it first
                 if (is_string($variants)) {
                     $variants = json_decode($variants, true);
                 }
-                $data['variants'] = $variants;
+                $data['variants'] = $this->processVariantPayload($variants);
             } else {
                 $data['variants'] = null;
             }
@@ -242,6 +243,75 @@ class AppServiceController extends Controller
             DB::rollBack();
             return back()->withInput()->withFlashDanger(__('Failed to update App Service: ' . $e->getMessage()));
         }
+    }
+
+    private function processVariantPayload($variants): ?array
+    {
+        if (empty($variants)) {
+            return null;
+        }
+
+        if (is_string($variants)) {
+            $variants = json_decode($variants, true);
+        }
+
+        if (!is_array($variants)) {
+            return null;
+        }
+
+        foreach ($variants as $variantIndex => $variant) {
+            if (!is_array($variant)) {
+                continue;
+            }
+
+            $variants[$variantIndex]['image'] = $this->processMediaValue($variant['image'] ?? null);
+
+            if (!empty($variant['options']) && is_array($variant['options'])) {
+                foreach ($variant['options'] as $optionIndex => $option) {
+                    if (!is_array($option)) {
+                        continue;
+                    }
+
+                    $variants[$variantIndex]['options'][$optionIndex]['image'] = $this->processMediaValue($option['image'] ?? null);
+                }
+            }
+        }
+
+        return $variants;
+    }
+
+    private function processMediaValue($media): ?string
+    {
+        if (empty($media)) {
+            return null;
+        }
+
+        if (is_string($media) && str_starts_with($media, 'data:image/')) {
+            return $this->storeBase64Image($media);
+        }
+
+        return is_string($media) ? $media : null;
+    }
+
+    private function storeBase64Image(string $image): ?string
+    {
+        if (!str_contains($image, ';base64,')) {
+            return null;
+        }
+
+        $mimeType = explode(';', $image)[0];
+        $extension = explode('/', $mimeType)[1] ?? 'png';
+        $base64Data = substr($image, strpos($image, ',') + 1);
+        $contents = base64_decode($base64Data, true);
+
+        if ($contents === false) {
+            return null;
+        }
+
+        $path = 'app-services/variants/' . Str::random(20) . '.' . $extension;
+        Storage::disk('public')->put($path, $contents);
+
+        return $path;
     }
 
     public function destroy(AppService $appService)
