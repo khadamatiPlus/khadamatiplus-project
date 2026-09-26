@@ -360,6 +360,10 @@ Route::group([
             Route::delete('delete', [CategoryController::class, 'destroy'])
                 ->name('delete')
                 ->middleware('permission:admin.lookups.category.delete');
+
+            Route::get('toggle-api-visibility', [CategoryController::class, 'toggleApiVisibility'])
+                ->name('toggleApiVisibility')
+                ->middleware('permission:admin.lookups.category.update');
         });
         Route::group(['prefix' => '{category}'], function () {
             Route::get('editTranslation', [CategoryController::class, 'editTranslation'])

@@ -27,7 +27,7 @@ class AppServiceService extends BaseService
      */
     public function getActiveAppServices()
     {
-        return $this->model->where('status', 'active')->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
+        return $this->model->where('status', 'active')->where('is_hidden_from_api', false)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
     }
 
     /**
@@ -37,13 +37,14 @@ class AppServiceService extends BaseService
      */
     public function getFeaturedAppServices()
     {
-        return $this->model->where('status', 'active')->where('is_featured', true)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
+        return $this->model->where('status', 'active')->where('is_hidden_from_api', false)->where('is_featured', true)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
     }
 
 
     public function searchAppServices(string $search): \Illuminate\Database\Eloquent\Builder
     {
-        return$this->model->where('status', 'active')
+        return $this->model->where('status', 'active')
+            ->where('is_hidden_from_api', false)
             ->where(function ($query) use ($search) {
                 $query->where('name', 'LIKE', "%{$search}%")
                     ->orWhere('description', 'LIKE', "%{$search}%")
@@ -58,7 +59,7 @@ class AppServiceService extends BaseService
      */
     public function getAppServicesByCategory($categoryId)
     {
-        return $this->model->where('status', 'active')->where('category_id', $categoryId)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
+        return $this->model->where('status', 'active')->where('is_hidden_from_api', false)->where('category_id', $categoryId)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
     }
 
     /**
@@ -69,7 +70,7 @@ class AppServiceService extends BaseService
      */
     public function getAppServicesBySubCategory($subCategoryId)
     {
-        return $this->model->where('status', 'active')->where('sub_category_id', $subCategoryId)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
+        return $this->model->where('status', 'active')->where('is_hidden_from_api', false)->where('sub_category_id', $subCategoryId)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
     }
 
     /**
@@ -79,6 +80,6 @@ class AppServiceService extends BaseService
      */
     public function getOnlineAppServices()
     {
-        return $this->model->where('status', 'active')->where('is_online', true)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
+        return $this->model->where('status', 'active')->where('is_hidden_from_api', false)->where('is_online', true)->with(['category', 'subCategory', 'createdBy', 'updatedBy']);
     }
 }

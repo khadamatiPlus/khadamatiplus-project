@@ -11,6 +11,7 @@
             <th>{{ __('Image') }}</th>
             <th>{{ __('Name') }}</th>
             <th>{{ __('Parent') }}</th>
+            <th>{{ __('API Visible') }}</th>
             <th>{{ __('Actions') }}</th>
         </tr>
         </thead>
@@ -26,6 +27,11 @@
                 </td>
                 <td>{{ $category->name }}</td>
                 <td>  {{ $category->parent->name??'------------' }}</td>
+                <td>
+                    <input type="checkbox" data-toggle="toggle" data-size="sm" data-onstyle="primary"
+                           onchange="toggleCategoryApiVisibility('{{ route('admin.lookups.category.toggleApiVisibility', $category) }}')"
+                           {{ ! $category->is_hidden_from_api ? 'checked' : '' }}>
+                </td>
                 <td>
                     @if ($logged_in_user->hasAllAccess() || $logged_in_user->can('admin.lookups.category.update'))
                         <x-utils.edit-button :href="route('admin.lookups.category.edit', $category)" />
@@ -45,3 +51,18 @@
     {{ $categories->links() }}
 </div>
 </div>
+
+<script>
+    function toggleCategoryApiVisibility(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function () {
+                location.reload();
+            },
+            error: function(xhr) {
+                alert(xhr.responseJSON?.message || 'Failed to update API visibility');
+            }
+        });
+    }
+</script>

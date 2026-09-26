@@ -40,6 +40,7 @@ class AppService extends BaseModel
         'is_featured',
         'is_urgent',
         'is_online',
+        'is_hidden_from_api',
         'status',
         'visibility',
         'created_by_id',
@@ -57,6 +58,7 @@ class AppService extends BaseModel
         'is_featured' => 'boolean',
         'is_urgent' => 'boolean',
         'is_online' => 'boolean',
+        'is_hidden_from_api' => 'boolean',
         'expiry_date' => 'date',
     ];
 

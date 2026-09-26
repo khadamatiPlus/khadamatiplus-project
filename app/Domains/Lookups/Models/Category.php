@@ -16,6 +16,7 @@ use App\Models\BaseModel;
  * @property string $image
  * @property boolean $status
  * @property boolean $is_featured
+ * @property boolean $is_hidden_from_api
  * @property string $created_at
  * @property string $updated_at
  * @property string $deleted_at
@@ -34,7 +35,13 @@ class Category extends BaseModel
     /**
      * @var array
      */
-    protected $fillable = ['sort_order','created_by_id','parent_id','name','name_ar','is_featured','updated_by_id', 'summary','summary_ar','status', 'image','created_at', 'updated_at', 'deleted_at'];
+    protected $fillable = ['sort_order','created_by_id','parent_id','name','name_ar','is_featured','is_hidden_from_api','updated_by_id', 'summary','summary_ar','status', 'image','created_at', 'updated_at', 'deleted_at'];
+
+    protected $casts = [
+        'is_featured' => 'boolean',
+        'is_hidden_from_api' => 'boolean',
+        'status' => 'boolean',
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

@@ -40,6 +40,9 @@ Route::group([
 
         Route::delete('delete', [AppServiceController::class, 'destroy'])
             ->name('delete');
+
+        Route::get('toggle-api-visibility', [AppServiceController::class, 'toggleApiVisibility'])
+            ->name('toggleApiVisibility');
     });
 
     Route::get('/', [AppServiceController::class, 'index'])

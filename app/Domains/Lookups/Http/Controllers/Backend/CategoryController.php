@@ -78,4 +78,16 @@ class CategoryController extends Controller
         $this->categoryService->destroy($category);
         return redirect()->back()->withFlashSuccess(__('The Category was successfully deleted.'));
     }
+
+    public function toggleApiVisibility(Category $category)
+    {
+        $category->update([
+            'is_hidden_from_api' => ! $category->is_hidden_from_api,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_hidden_from_api' => $category->is_hidden_from_api,
+        ]);
+    }
 }

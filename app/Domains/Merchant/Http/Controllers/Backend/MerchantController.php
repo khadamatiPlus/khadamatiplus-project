@@ -119,6 +119,19 @@ class MerchantController extends Controller
         $this->merchantService->updateStatus($request);
         return response()->json(true);
     }
+
+    public function toggleApiVisibility(Merchant $merchant)
+    {
+        $merchant->update([
+            'is_hidden_from_api' => ! $merchant->is_hidden_from_api,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_hidden_from_api' => $merchant->is_hidden_from_api,
+        ]);
+    }
+
     public function getCities($id){
         $cities=DB::table('cities')->where('country_id',$id)
             ->pluck('name','id');

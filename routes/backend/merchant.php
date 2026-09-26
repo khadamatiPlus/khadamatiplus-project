@@ -50,6 +50,10 @@ use App\Domains\Merchant\Http\Controllers\Backend\MerchantController;
             Route::delete('delete', [MerchantController::class, 'destroy'])
                 ->name('delete')
                 ->middleware('permission:admin.merchant.delete');
+
+            Route::get('toggle-api-visibility', [MerchantController::class, 'toggleApiVisibility'])
+                ->name('toggleApiVisibility')
+                ->middleware('permission:admin.merchant.update');
         });
 
         Route::get('/', [MerchantController::class, 'index'])

@@ -24,6 +24,24 @@ class PageService extends BaseService
         $this->model = $page;
     }
 
+    public function store(array $data = [])
+    {
+        if (empty($data['slug']) && ! empty($data['title'])) {
+            $data['slug'] = Page::generateUniqueSlug($data['title']);
+        }
+
+        return parent::store($data);
+    }
+
+    public function update($entity, array $data = [])
+    {
+        if (empty($data['slug']) && ! empty($data['title'])) {
+            $data['slug'] = Page::generateUniqueSlug($data['title'], $entity->id ?? null);
+        }
+
+        return parent::update($entity, $data);
+    }
+
     /**
      * @param $slug
      * @return mixed

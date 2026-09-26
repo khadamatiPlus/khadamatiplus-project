@@ -27,6 +27,7 @@
                             <th>{{ __('Category') }}</th>
                             <th>{{ __('Base Price') }}</th>
                             <th>{{ __('Status') }}</th>
+                            <th>{{ __('API Visible') }}</th>
                             <th>{{ __('Actions') }}</th>
                         </tr>
                     </thead>
@@ -41,6 +42,11 @@
                                     <span class="badge bg-{{ $appService->status == 'active' ? 'success' : 'secondary' }}">
                                         {{ $appService->status }}
                                     </span>
+                                </td>
+                                <td>
+                                    <input type="checkbox" data-toggle="toggle" data-size="sm" data-onstyle="primary"
+                                           onchange="toggleApiVisibility('{{ route('admin.app-service.toggleApiVisibility', $appService) }}')"
+                                           {{ ! $appService->is_hidden_from_api ? 'checked' : '' }}>
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.app-service.show', $appService) }}" class="btn btn-sm btn-info">{{ __('View') }}</a>
@@ -63,4 +69,21 @@
             </div>
         </x-slot>
     </x-backend.card>
+@endsection
+
+@section('footer-scripts')
+    <script>
+        function toggleApiVisibility(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function () {
+                    location.reload();
+                },
+                error: function(xhr) {
+                    alert(xhr.responseJSON?.message || 'Failed to update API visibility');
+                }
+            });
+        }
+    </script>
 @endsection

@@ -323,4 +323,16 @@ class AppServiceController extends Controller
             return back()->withFlashDanger(__('Failed to delete App Service: ' . $e->getMessage()));
         }
     }
+
+    public function toggleApiVisibility(AppService $appService)
+    {
+        $appService->update([
+            'is_hidden_from_api' => ! $appService->is_hidden_from_api,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'is_hidden_from_api' => $appService->is_hidden_from_api,
+        ]);
+    }
 }

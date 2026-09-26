@@ -48,9 +48,9 @@ class CategoryApiController extends APIBaseController
         try {
             // Filter to get only top-level categories where parent_id is null
             $categories = Category::sorted()
-                 // Start a query builder instance
-                ->whereNull('parent_id') // Add filter for parent_id = null
-                ->get() // Execute the query
+                ->whereNull('parent_id')
+                ->where('is_hidden_from_api', false)
+                ->get()
                 ->transform(function ($category) {
                     return (new CategoryTransformer())->transform($category);
                 });
@@ -108,6 +108,7 @@ class CategoryApiController extends APIBaseController
 
             $subCategories = $category->children()
                 ->sorted()
+                ->where('is_hidden_from_api', false)
                 ->get()
                 ->transform(function ($subCategory) {
                     return (new CategoryTransformer())->transform($subCategory);

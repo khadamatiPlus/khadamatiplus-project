@@ -6,6 +6,7 @@ use App\Domains\Lookups\Models\Traits\Attribute\PageAttribute;
 use App\Domains\Lookups\Models\Traits\Scope\PageScope;
 use App\Models\BaseModel;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Str;
 
 /**
  * @property integer $id
@@ -26,7 +27,6 @@ class Page extends BaseModel
         PageAttribute,
         SoftDeletes;
 
-
     /**
      * The "type" of the auto-incrementing ID.
      *
@@ -39,4 +39,34 @@ class Page extends BaseModel
      */
     protected $fillable = ['created_by_id', 'updated_by_id', 'title', 'title_ar', 'slug', 'description', 'description_ar', 'created_at', 'updated_at', 'deleted_at'];
 
+    protected static function booted(): void
+    {
+        static::creating(function (self $page) {
+            if (empty($page->slug)) {
+                $page->slug = self::generateUniqueSlug($page->title);
+            }
+        });
+
+        static::updating(function (self $page) {
+            if (empty($page->slug) && ! empty($page->title)) {
+                $page->slug = self::generateUniqueSlug($page->title, $page->getKey());
+            }
+        });
+    }
+
+    public static function generateUniqueSlug(?string $title, ?int $ignoreId = null): string
+    {
+        $base = Str::slug($title ?? 'page');
+        $slug = $base;
+        $counter = 2;
+
+        while (self::query()->where('slug', $slug)
+            ->when($ignoreId !== null, fn ($query) => $query->whereKeyNot($ignoreId))
+            ->exists()) {
+            $slug = $base . '-' . $counter;
+            $counter++;
+        }
+
+        return $slug;
+    }
 }

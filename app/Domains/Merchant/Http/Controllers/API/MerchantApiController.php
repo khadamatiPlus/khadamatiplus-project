@@ -276,7 +276,7 @@ class MerchantApiController extends APIBaseController
 
 
         // Base query to get services for the authenticated merchant
-        $query = Merchant::query();
+        $query = Merchant::query()->where('is_hidden_from_api', false);
 
         // Apply optional search filters if provided
         if ($request->has('search') && !empty($request->input('search'))) {
@@ -311,7 +311,7 @@ class MerchantApiController extends APIBaseController
     public function getMerchantById($id)
     {
         // Fetch the merchant by ID
-        $merchant = Merchant::find($id);
+        $merchant = Merchant::query()->where('is_hidden_from_api', false)->find($id);
 
         // Check if the merchant exists
         if (!$merchant) {

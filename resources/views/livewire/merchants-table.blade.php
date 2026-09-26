@@ -29,6 +29,7 @@
             <th>{{ __('City') }}</th>
             <th>{{ __('Image') }}</th>
             <th>{{ __('Approve') }}</th>
+            <th>{{ __('API Visible') }}</th>
             <th>{{ __('Actions') }}</th>
         </tr>
         </thead>
@@ -55,6 +56,11 @@
                 </td>
                 <td>
                     <input type="checkbox" name="is_verified" id="is_verified" data-toggle="toggle" data-size="sm" data-onstyle="primary" onchange="changeCheckBox({{$merchant->id}})" value="{{ old($merchant->is_verified) ?? ($merchant->is_verified == 0)?'no':'yes'}}" {{$merchant->is_verified == 1 ? 'checked' : ''}}>
+                </td>
+                <td>
+                    <input type="checkbox" data-toggle="toggle" data-size="sm" data-onstyle="primary"
+                           onchange="toggleMerchantApiVisibility('{{ route('admin.merchant.toggleApiVisibility', $merchant) }}')"
+                           {{ ! $merchant->is_hidden_from_api ? 'checked' : '' }}>
                 </td>
                 <td>
                     @if ($logged_in_user->hasAllAccess() || $logged_in_user->can('admin.merchant.show'))
@@ -87,5 +93,18 @@
                 alert(xhr.message);
             }
         })
+    }
+
+    function toggleMerchantApiVisibility(url) {
+        $.ajax({
+            url: url,
+            type: 'GET',
+            success: function () {
+                location.reload();
+            },
+            error: function(xhr) {
+                alert(xhr.responseJSON?.message || 'Failed to update API visibility');
+            }
+        });
     }
 </script>
